@@ -1,0 +1,25 @@
+{
+  "name": "ceres",
+  "private": "true",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "run-p build:watch serve",
+    "serve": "http-server -o -c-1",
+    "build": "rollup --config ./rollup.config.js",
+    "build:watch": "rollup --config ./rollup.config.js --watch"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "eslint": "^9.17.0",
+    "globals": "^15.13.0",
+    "http-server": "^14.1.1",
+    "npm-run-all": "^4.1.5",
+    "rollup": "^4.28.1",
+    "tslib": "^2.8.1",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.1"
+  }
+}
