@@ -1,5 +1,8 @@
 import { Store } from "./store";
 
+type Stringifiable = { toString: () => string };
+type StringLike = Stringifiable | Store<Stringifiable>;
+
 type Build = () => void;
 type Attach = (parent: HTMLElement, anchor?: HTMLElement) => void;
 type Detach = () => void;
@@ -16,10 +19,29 @@ function isRenderable(object: unknown): object is Renderable {
     return (object as Renderable).__brand === "renderable";
 }
 
+interface ReactiveString {
+    strings: TemplateStringsArray;
+    values: (StringLike)[];
+
+    __brand: "reactive_string";
+}
+
+function isReactiveString(object: unknown): object is ReactiveString {
+    return (object as ReactiveString).__brand === "reactive_string";
+}
+
+export function format(strings: TemplateStringsArray, ...values: Array<StringLike>) {
+    return {
+        strings,
+        values,
+
+        __brand: "reactive_string"
+    } as ReactiveString;
+}
+
 type Tag = keyof HTMLElementTagNameMap;
 type Props = undefined;
-type Stringifiable = { toString: () => string };
-type Child = Stringifiable | Store<Stringifiable> | Renderable;
+type Child = StringLike | Renderable;
 
 export function createRenderable(
     type: Tag,
@@ -38,9 +60,26 @@ export function createRenderable(
                 child.build();
                 child.attach(root);
                 disposables.push(child.detach);
+            } else if (isReactiveString(child)) {
+                const { strings, values } = child;
+
+                root.insertBefore(document.createTextNode(strings[0]), null);
+                for (const index in values) {
+                    const value = values[index];
+                    if (value instanceof Store) {
+                        const node = document.createTextNode(value.value.toString());
+                        disposables.push(value.watch((next) => {
+                            node.textContent = next.toString();
+                        }));
+                        root.insertBefore(node, null);
+                    } else {
+                        root.insertBefore(document.createTextNode(value.toString()), null);
+                    }
+                    root.insertBefore(document.createTextNode(strings[+index + 1]), null);
+                }
             } else if (child instanceof Store) {
-                disposables.push(child.watch((value) => {
-                    root!.textContent = value.toString();
+                disposables.push(child.watch((next) => {
+                    root!.textContent = next.toString();
                 }));
             } else {
                 root.textContent = child.toString();
