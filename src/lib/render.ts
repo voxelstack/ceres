@@ -14,22 +14,19 @@ interface Renderable {
 
     __brand: "renderable";
 }
-
 function isRenderable(object: unknown): object is Renderable {
     return (object as Renderable).__brand === "renderable";
 }
 
 interface ReactiveString {
     strings: TemplateStringsArray;
-    values: (StringLike)[];
+    values: StringLike[];
 
     __brand: "reactive_string";
 }
-
 function isReactiveString(object: unknown): object is ReactiveString {
     return (object as ReactiveString).__brand === "reactive_string";
 }
-
 export function format(strings: TemplateStringsArray, ...values: Array<StringLike>) {
     return {
         strings,
@@ -105,7 +102,6 @@ export function createRenderable(
         __brand: "renderable"
     };
 }
-
 export function render(renderable: Renderable, parent: HTMLElement, anchor?: HTMLElement) {
     renderable.build();
     renderable.attach(parent, anchor);
