@@ -1,3 +1,4 @@
+import { Props, Tag } from "./props";
 import { Store } from "./store";
 
 type Stringifiable = { toString: () => string };
@@ -36,13 +37,11 @@ export function format(strings: TemplateStringsArray, ...values: Array<StringLik
     } as ReactiveString;
 }
 
-type Tag = keyof HTMLElementTagNameMap;
-type Props = undefined;
 type Child = StringLike | Renderable;
 
 export function createRenderable(
     type: Tag,
-    props: Props,
+    props?: Props<Tag>,
     ...children: Child[]
 ): Renderable {
     let disposables: Array<() => void>;
