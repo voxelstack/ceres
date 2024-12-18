@@ -1,4 +1,5 @@
-import { LiteralOrReactive, Props, Styles, Tag } from "./props";
+import { EventType } from "./event";
+import { Props, Reactive, Tag } from "./props";
 import { DerivedStore, Store, ValueCallback } from "./store";
 
 type Stringifiable = { toString: () => string };
@@ -39,7 +40,7 @@ export function format(strings: TemplateStringsArray, ...values: Array<StringLik
 
 type Child = StringLike | Renderable;
 
-function watchProp(value: LiteralOrReactive<any>, onValue: ValueCallback<any>) {
+function watchProp(value: Reactive<any>, onValue: ValueCallback<any>) {
     if (isReactiveString(value)) {
         const { strings, values } = value;
         const { observables, unfilteredIndices } = values
@@ -77,7 +78,7 @@ function watchProp(value: LiteralOrReactive<any>, onValue: ValueCallback<any>) {
 }
 export function createRenderable(
     type: Tag,
-    props?: Props<Tag>,
+    props: Props<Tag> = {},
     ...children: Child[]
 ): Renderable {
     let disposables: Array<() => void>;
@@ -87,10 +88,10 @@ export function createRenderable(
         disposables = [];
         root = document.createElement(type);
 
-        for (const [k, v] of Object.entries(props ?? {})) {
+        for (const [k, v] of Object.entries(props)) {
             if (k === "style") {
-                const styles = props?.[k as keyof Props<Tag>];
-                for (const [sk, sv] of Object.entries(styles ?? {})) {
+                const styles = props?.[k as keyof Props<Tag>] ?? {};
+                for (const [sk, sv] of Object.entries(styles)) {
                     const dispose = watchProp(sv, (value) => {
                         root!.style.setProperty(sk, value);
                     });
@@ -98,7 +99,21 @@ export function createRenderable(
                         disposables.push(dispose);
                 }                
             } else if (k.startsWith("on")) {
-                // TODO Events.
+                const type = k.slice(2) as EventType;
+                const dispose = watchProp(v, (value, previous) => {
+                    if (previous) {
+                        const { listener: pl, options: po } = previous;
+                        root!.removeEventListener(type, pl, po);
+                    }
+
+                    const { listener, options } = value;
+                    root!.addEventListener(type, listener, options);
+                    disposables.push(() => {
+                        root!.removeEventListener(type, listener, options);
+                    });
+                });
+                if (dispose)
+                    disposables.push(dispose);
             } else {
                 const dispose = watchProp(v, (value) => {
                     root!.setAttribute(k, value);
