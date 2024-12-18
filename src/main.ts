@@ -6,6 +6,7 @@ const jp = new AtomicStore("セレス・ファウナ・");
 const count = new AtomicStore(0);
 const upper = new DerivedStore([en], ([e]) => e.toUpperCase());
 const double = new DerivedStore([count], ([c]) => 2 * c);
+const color = new DerivedStore([count], ([c]) => ["darkgreen", "darkolivegreen", "darkkhaki"][c % 3]);
 const tubers = new MapStore<{ gen: { promise: {
     name: string,
     mark: string
@@ -35,7 +36,7 @@ setInterval(() => jp.value = scroll(jp.value), 500);
 setInterval(() => ++count.value, 500);
 
 render(
-    createRenderable("div", undefined,
+    createRenderable("div", { id: format`colored-${color}`, style: { color } },
         createRenderable("h1", undefined, en),
         createRenderable("h1", undefined, upper),
         createRenderable("h1", undefined, jp),
@@ -47,3 +48,5 @@ render(
     ),
     document.body
 );
+
+// TODO Extract common types into separate file.

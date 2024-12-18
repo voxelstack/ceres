@@ -7,6 +7,7 @@
  * (Really fun to write.)
  */
 
+import { ReactiveString, StringLike } from "./render";
 import { type Store } from "./store";
 
 // https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-421529650
@@ -27,16 +28,18 @@ type OmitReadOnly<T> = {
     ]: T[Key]
 };
 
-type TODO = undefined;
 type PlainAttribute = string | number | boolean | null | PlainAttribute[];
-type LiteralOrStore<T> = T | Store<T>;
-type EventHandler = TODO;
-type Style = OmitReadOnly<{
+export type LiteralOrReactive<T> = ReactiveString | T | Store<T>;
+// TODO Events.
+type EventHandler = undefined;
+export type Styles = OmitReadOnly<{
     [StyleKey in keyof CSSStyleDeclaration
         as CSSStyleDeclaration[StyleKey] extends PlainAttribute ?
               StyleKey
             : never
-    ]: LiteralOrStore<CSSStyleDeclaration[StyleKey]>
+    ]: CSSStyleDeclaration[StyleKey] extends string ?
+          LiteralOrReactive<StringLike>
+        : LiteralOrReactive<CSSStyleDeclaration[StyleKey]>
 }>;
 
 export type Tag = keyof HTMLElementTagNameMap;
@@ -44,9 +47,11 @@ export type Props<ElementTag extends Tag> = Partial<OmitNever<OmitReadOnly<{
     [Attribute in keyof HTMLElementTagNameMap[ElementTag]]:
         Attribute extends string ?
               HTMLElementTagNameMap[ElementTag][Attribute] extends PlainAttribute ?
-                  LiteralOrStore<HTMLElementTagNameMap[ElementTag][Attribute]>
+                  HTMLElementTagNameMap[ElementTag][Attribute] extends string ?
+                    LiteralOrReactive<StringLike>
+                  : LiteralOrReactive<HTMLElementTagNameMap[ElementTag][Attribute]>
                 : Attribute extends `on${infer _}` ?
                       EventHandler
                     : never
             : never
-}>> | { style: Partial<Style>}>;
+}>> | { style: Partial<Styles>}>;

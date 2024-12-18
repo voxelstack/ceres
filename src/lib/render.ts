@@ -1,14 +1,14 @@
-import { Props, Tag } from "./props";
-import { Store } from "./store";
+import { LiteralOrReactive, Props, Styles, Tag } from "./props";
+import { DerivedStore, Store, ValueCallback } from "./store";
 
 type Stringifiable = { toString: () => string };
-type StringLike = Stringifiable | Store<Stringifiable>;
+export type StringLike = Stringifiable | Store<Stringifiable>;
 
 type Build = () => void;
 type Attach = (parent: HTMLElement, anchor?: HTMLElement) => void;
 type Detach = () => void;
 
-interface Renderable {
+export interface Renderable {
     build: Build;
     attach: Attach;
     detach: Detach;
@@ -19,7 +19,7 @@ function isRenderable(object: unknown): object is Renderable {
     return (object as Renderable).__brand === "renderable";
 }
 
-interface ReactiveString {
+export interface ReactiveString {
     strings: TemplateStringsArray;
     values: StringLike[];
 
@@ -39,6 +39,42 @@ export function format(strings: TemplateStringsArray, ...values: Array<StringLik
 
 type Child = StringLike | Renderable;
 
+function watchProp(value: LiteralOrReactive<any>, onValue: ValueCallback<any>) {
+    if (isReactiveString(value)) {
+        const { strings, values } = value;
+        const { observables, unfilteredIndices } = values
+            .reduce<{
+                observables: Store<any>[],
+                unfilteredIndices: number[]
+            }>((acc, value, index) => {
+                if (value instanceof Store) {
+                    acc.observables.push(value);
+                } else {
+                    acc.unfilteredIndices.push(index);
+                }
+                return acc;
+            }, { observables: [], unfilteredIndices: [] });
+        const reactiveString = new DerivedStore(observables, (reactiveValues) => {
+            let result = strings[0];
+            let unfilteredIndex = 0;
+            for (let index = 0; index < values.length; ++index) {
+                if (unfilteredIndices[unfilteredIndex] === index) {
+                    result += values[index];
+                    ++unfilteredIndex;
+                } else {
+                    result += reactiveValues.shift();
+                }
+                result += strings[index + 1];
+            }
+            return result;
+        });
+        return reactiveString.watch(onValue);
+    } else if (value instanceof Store) {
+        return value.watch(onValue);
+    } else {
+        onValue(value);
+    }
+}
 export function createRenderable(
     type: Tag,
     props?: Props<Tag>,
@@ -50,6 +86,27 @@ export function createRenderable(
     const build: Build = () => {
         disposables = [];
         root = document.createElement(type);
+
+        for (const [k, v] of Object.entries(props ?? {})) {
+            if (k === "style") {
+                const styles = props?.[k as keyof Props<Tag>];
+                for (const [sk, sv] of Object.entries(styles ?? {})) {
+                    const dispose = watchProp(sv, (value) => {
+                        root!.style.setProperty(sk, value);
+                    });
+                    if (dispose)
+                        disposables.push(dispose);
+                }                
+            } else if (k.startsWith("on")) {
+                // TODO Events.
+            } else {
+                const dispose = watchProp(v, (value) => {
+                    root!.setAttribute(k, value);
+                });
+                if (dispose)
+                    disposables.push(dispose);
+            }
+        }
 
         for (const child of children) {
             if (isRenderable(child)) {

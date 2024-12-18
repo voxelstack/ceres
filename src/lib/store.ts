@@ -1,6 +1,6 @@
-type ChangeCallback<T> = (next: T, previous: T) => void;
-type ValueCallback<T> = (next: T, previous?: T) => void;
-type Dispose = () => void;
+export type ChangeCallback<T> = (next: T, previous: T) => void;
+export type ValueCallback<T> = (next: T, previous?: T) => void;
+export type Dispose = () => void;
 
 export abstract class Store<T> {
     protected subscribers: ChangeCallback<T>[];
@@ -130,18 +130,18 @@ export class MapStore<T extends MapStorage> extends Store<T> {
     }
 }
 
-type StoredType<Store extends AtomStore<any>> = Store extends AtomStore<infer T> ? T : never;
+type StoredType<S extends Store<any>> = S extends AtomStore<infer T> ? T : never;
 type StoredTypes<
-    Stores extends Array<AtomStore<any>>,
+    Stores extends Array<Store<any>>,
     Values extends Array<any> = []
-> = Stores extends [infer Head extends AtomStore<any>, ...infer Tail extends Array<AtomStore<any>>] ?
+> = Stores extends [infer Head extends Store<any>, ...infer Tail extends Array<Store<any>>] ?
       StoredTypes<Tail, [...Values, StoredType<Head>]>
     : Values
 ;
-type Aggregator<Stores extends Array<AtomStore<any>>, T> = (values: StoredTypes<Stores>) => T;
+type Aggregator<Stores extends Array<Store<any>>, T> = (values: StoredTypes<Stores>) => T;
 
-export class DerivedStore<const Stores extends Array<AtomStore<any>>, T> extends Store<T> {
-    private stores: AtomStore<any>[];
+export class DerivedStore<const Stores extends Array<Store<any>>, T> extends Store<T> {
+    private stores: Store<any>[];
     private aggregator: Aggregator<Stores, T>;
     private disposables: Dispose[];
     private connected: boolean;
