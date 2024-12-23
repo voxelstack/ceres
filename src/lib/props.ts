@@ -5,11 +5,10 @@
  * (I don't have the time to automate it either.)
  * (And I wanted to do it like this.)
  * (Really fun to write.)
- * (Should be on render.ts, but I want it separate for this disclaimer.)
  */
 
 import { EventHandler, EventType } from "./event";
-import { ReactiveString, StringLike } from "./render";
+import { ReactiveString } from "./renderable";
 import { type Store } from "./store";
 
 // https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-421529650
@@ -31,6 +30,8 @@ type OmitReadOnly<T> = {
 };
 
 type PlainAttribute = string | number | boolean | null | PlainAttribute[];
+type Stringifiable = { toString: () => string };
+export type StringLike = Stringifiable | Store<Stringifiable>;
 export type LiteralOrStore<T> = T | Store<T>;
 export type Reactive<T> = ReactiveString | LiteralOrStore<T>;
 export type Styles = OmitReadOnly<{
@@ -53,7 +54,7 @@ export type Props<ElementTag extends Tag> = Partial<OmitNever<OmitReadOnly<{
                     : Reactive<HTMLElementTagNameMap[ElementTag][Attribute]>
                 : Attribute extends `on${infer Event}` ?
                     Event extends EventType ?
-                          LiteralOrStore<EventHandler<Event>>
+                          EventHandler<Event>
                         : never
                     : never
             : never

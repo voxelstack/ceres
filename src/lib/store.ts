@@ -39,94 +39,13 @@ export class AtomStore<T> extends Store<T> {
         return this.stored;
     }
     set value(next: T) {
+        if (next === this.stored) {
+            return;
+        }
+
         const previous = this.stored;
         this.stored = next;
         this.notify(previous);
-    }
-}
-
-
-type MapStorage = Record<string, unknown>;
-type Join<Path extends string, Base extends string = ""> =
-    Base extends "" ?
-      `${Path}`
-    : `${Base}.${Path}`
-;
-type FlatKeys<
-    Model extends MapStorage,
-    BasePath extends string = "",
-    FlattenedKeys extends "" = never
-> = Model extends MapStorage ? {
-    [Key in keyof Model]: Key extends string ?
-          Model[Key] extends MapStorage ?
-              FlatKeys<Model[Key], Join<Key, BasePath>, FlattenedKeys>
-            : Join<Key, BasePath>
-        : never
-    }[keyof Model] | FlattenedKeys | BasePath
-    : FlattenedKeys
-;
-type PathType<
-    Model,
-    Path
-> = Path extends keyof Model ?
-      Model[Path]
-    : Path extends `${infer Head}.${infer Tail}` ?
-          Head extends keyof Model ?
-              PathType<Required<Model[Head]>, Tail>
-            : never
-        : never
-;
-
-export class MapStore<T extends MapStorage> extends Store<T> {
-    private storage: T;
-    private keySubscribers: {
-        [Key in FlatKeys<T>]?: Array<ChangeCallback<PathType<T, Key>>>
-    };
-
-    constructor(value: T) {
-        super();
-        this.storage = value;
-        this.keySubscribers = {};
-    }
-
-    get value(): T {
-        return this.storage;
-    }
-
-    getKey<Key extends FlatKeys<T>>(key: Key) {
-        const { container, propKey } = this.findKey(key);
-        return container[propKey] as PathType<T, Key>;
-    }
-    setKey<Key extends FlatKeys<T>>(key: Key, value: PathType<T, Key>) {
-        const { container, propKey } = this.findKey(key);
-        const previous = container[propKey] as PathType<T, Key>;
-        container[propKey] = value;
-        this.notifyKey(key, value, previous);
-    }
-
-    subscribeKey<Key extends FlatKeys<T>>(key: Key, onChange: ChangeCallback<PathType<T, Key>>) {
-        this.keySubscribers[key] = this.keySubscribers[key] ?? [];
-        this.keySubscribers[key].push(onChange);
-        return () => {
-            this.keySubscribers[key] = this.keySubscribers[key]?.filter((it) => it !== onChange);
-        };
-    }
-    watchKey<Key extends FlatKeys<T>>(key: Key, onValue: ValueCallback<PathType<T, Key>>) {
-        onValue(this.getKey(key));
-        return this.subscribeKey(key, onValue);
-    }
-
-    private findKey<Key extends FlatKeys<T>>(key: Key) {
-        const segments = key.split(".");
-        const [propKey] = segments.splice(-1);
-        let container: MapStorage = this.storage;
-        for (const segment of segments) {
-            container = container[segment] as MapStorage;
-        }
-        return { container, propKey };
-    }
-    private notifyKey<Key extends FlatKeys<T>>(key: Key, next: PathType<T, Key> , previous: PathType<T, Key>) {
-        this.keySubscribers[key]?.forEach((onChange) => onChange(next, previous));
     }
 }
 
@@ -166,8 +85,9 @@ export class DerivedStore<const Stores extends Array<Store<any>>, T> extends Sto
         const unsubscribe = super.subscribe(onChange);
         return () => {
             unsubscribe();
-            if (this.subscribers.length === 0)
+            if (this.subscribers.length === 0) {
                 this.disconnect();
+            }
         };
     }
 
