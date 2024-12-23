@@ -1,3 +1,4 @@
+import { isDirective } from "./directives";
 import { EventType } from "./event";
 import { Props, Reactive, Tag } from "./props";
 import { DerivedStore, Store, ValueCallback } from "./store";
@@ -5,9 +6,9 @@ import { DerivedStore, Store, ValueCallback } from "./store";
 type Stringifiable = { toString: () => string };
 export type StringLike = Stringifiable | Store<Stringifiable>;
 
-type Build = () => void;
-type Attach = (parent: HTMLElement, anchor?: HTMLElement) => void;
-type Detach = () => void;
+export type Build = () => void;
+export type Attach = (parent: Node, anchor?: Node) => void;
+export type Detach = () => void;
 
 export interface Renderable {
     build: Build;
@@ -124,7 +125,7 @@ export function createRenderable(
         }
 
         for (const child of children) {
-            if (isRenderable(child)) {
+            if (isRenderable(child) || isDirective(child)) {
                 child.build();
                 child.attach(root);
                 disposables.push(child.detach);
@@ -172,8 +173,4 @@ export function createRenderable(
 
         __brand: "renderable"
     };
-}
-export function render(renderable: Renderable, parent: HTMLElement, anchor?: HTMLElement) {
-    renderable.build();
-    renderable.attach(parent, anchor);
 }

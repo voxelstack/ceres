@@ -1,5 +1,6 @@
+import { $if } from "./lib/directives";
 import { createEventHandler } from "./lib/event";
-import { render, createRenderable, format } from "./lib/render";
+import { createRenderable, format } from "./lib/render";
 import { AtomStore, derive, DerivedStore, MapStore } from "./lib/store";
 
 const en = new AtomStore("Ceres・Fauna・");
@@ -37,25 +38,35 @@ setInterval(() => en.value = scroll(en.value), 500);
 setInterval(() => jp.value = scroll(jp.value), 500);
 setInterval(() => ++count.value, 500);
 
-render(
-    createRenderable("div", { id: format`colored-${color}`, style: { color } },
-        createRenderable("h1", undefined, en),
-        createRenderable("h1", undefined, upper),
-        createRenderable("h1", undefined, jp),
+const gen = new AtomStore(3);
+setInterval(() => gen.value = ++gen.value % 5, 2000);
 
-        createRenderable("div", undefined, format`ticks: ${count}`),
-        createRenderable("div", undefined, format`double: ${double}`),
+const app = createRenderable("div", { id: format`colored-${color}`, style: { color } },
+    createRenderable("h1", undefined, en),
+    createRenderable("h1", undefined, upper),
+    createRenderable("h1", undefined, jp),
 
-        createRenderable("span", undefined, double),
+    createRenderable("div", undefined, format`ticks: ${count}`),
+    createRenderable("div", undefined, format`double: ${double}`),
 
-        createRenderable("div", undefined,
-            createRenderable("span", undefined, derive(
-                [dir], ([d]) => d > 0 ? "left" : "right"
-            )),
-            createRenderable("button", {
-                onclick: createEventHandler(() => dir.value *= -1)
-            }, "flip"),
-        ),        
+    createRenderable("span", undefined, double),
+
+    createRenderable("div", undefined,
+        createRenderable("span", undefined, derive(
+            [dir], ([d]) => d > 0 ? "left" : "right"
+        )),
+        createRenderable("button", {
+            onclick: createEventHandler(() => dir.value *= -1)
+        }, "flip"),
     ),
-    document.body
+
+    createRenderable("div", undefined,
+        $if(derive([gen], ([g]) => g === 1), createRenderable("span", undefined, "ame")).
+        $elseif(derive([gen], ([g]) => g === 2), createRenderable("span", undefined, "sana")).
+        $elseif(derive([gen], ([g]) => g === 3), createRenderable("span", undefined, "fuwamoco")).
+        $elseif(derive([gen], ([g]) => g === 4), createRenderable("span", undefined, "cc")).
+        $else(createRenderable("span", undefined, "soon"))            
+    ),
 );
+app.build();
+app.attach(document.body);

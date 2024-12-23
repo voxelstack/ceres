@@ -139,7 +139,6 @@ type StoredTypes<
     : Values
 ;
 type Aggregator<Stores extends Array<Store<any>>, T> = (values: StoredTypes<Stores>) => T;
-
 export class DerivedStore<const Stores extends Array<Store<any>>, T> extends Store<T> {
     private stores: Store<any>[];
     private aggregator: Aggregator<Stores, T>;
@@ -181,7 +180,8 @@ export class DerivedStore<const Stores extends Array<Store<any>>, T> extends Sto
             return store.subscribe(() => {
                 const previous = this.cache;
                 this.cache = this.aggregate();
-                this.notify(previous);
+                if (this.cache !== previous)
+                    this.notify(previous);
             });
         });
         this.connected = true;
