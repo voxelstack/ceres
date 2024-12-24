@@ -8,7 +8,7 @@
  */
 
 import { EventHandler, EventType } from "./event";
-import { ReactiveString } from "./renderable";
+import { ReactiveString } from "./reactive_string";
 import { type Store } from "./store";
 
 // https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-421529650

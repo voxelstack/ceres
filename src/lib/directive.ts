@@ -1,60 +1,140 @@
-import { Renderable } from "./renderable";
-import { Store } from "./store";
+import { ConditionalRenderable, Renderable } from "./renderable";
+import { derive, Store } from "./store";
 
-abstract class Directive extends Renderable {}
+abstract class Directive extends Renderable { }
 
-interface ConditionalRenderable {
-    condition: Store<boolean>;
-    renderable: Renderable;
+export function createIf(
+    condition: Store<boolean>,
+    renderable: Renderable
+): Pick<DirectiveIf, "createElseIf" | "createElse"> {
+    return new DirectiveIf([{ condition, renderable }]);
 }
 class DirectiveIf extends Directive {
+    private marker!: Node;
+    private visible?: Renderable;
+
     constructor(
-        protected chain: ConditionalRenderable[] = [],
-        protected orElse?: Renderable,
+        private chain: ConditionalRenderable[] = [],
+        private orElse?: Renderable
     ) {
-        super((parent, anchor) => {
-            const { chain, orElse } = this;
-            const disposables = [];
-            let visible: Renderable | undefined;
-            
-            const marker = document.createTextNode("");
-            parent.insertBefore(marker, anchor ?? null);
+        super();
+    }
+    override mount(parent: Node, anchor?: Node) {
+        this.marker = document.createTextNode("");
+        parent.insertBefore(this.marker, anchor ?? null);
 
-            function onChange() {
-                const previous = visible;
-                visible = undefined;
-                // TODO Track which condition is true and don't check them all on change.
-                for (const { condition, renderable } of chain) {
-                    if (condition.value) {
-                        visible = renderable;
-                        break;
-                    }
-                }
-                if (!visible) {
-                    visible = orElse;
-                }
+        const { marker, chain, orElse, disposables } = this;
+        let { visible } = this;
 
-                if (previous !== visible) {
-                    previous?.detach();
-                    visible?.attach(parent, marker);
+        function onChange() {
+            const previous = visible;
+            visible = undefined;
+
+            // TODO Track which condition is currently true and don't check them all on change.
+            for (const { condition, renderable } of chain) {
+                if (condition.value) {
+                    visible = renderable;
+                    break;
                 }
             }
-            disposables.push(...chain.map(({ condition }) => condition.subscribe(onChange)));
-            onChange();
+            if (visible === undefined) {
+                visible = orElse;
+            }
 
-            return disposables;
-        });
+            if (previous !== visible) {
+                previous?.unmount();
+                visible?.mount(marker.parentElement!, marker);
+            }
+        }
+        disposables.push(...chain.map(({ condition }) => condition.subscribe(onChange)));
+        onChange();
+    }
+    override move(parent: Node, anchor?: Node) {
+        parent.insertBefore(this.marker, anchor ?? null);
+        return this.visible?.move(parent, this.marker);
+    }
+    override unmount() {
+        super.unmount();
+        
+        const { marker, visible } = this;
+        marker.parentElement?.removeChild(marker)
+        visible?.unmount();
     }
 
-    $elseif(condition: Store<boolean>, renderable: Renderable) {
+    createElseIf(
+        condition: Store<boolean>,
+        renderable: Renderable
+    ): Pick<DirectiveIf, "createElseIf" | "createElse"> {
         this.chain.push({ condition, renderable });
         return this;
     }
-    $else(orElse: Renderable): Omit<DirectiveIf, "elseif" | "else"> {
+    createElse(orElse: Renderable): Omit<DirectiveIf, "createElseIf" | "createElse"> {
         this.orElse = orElse;
         return this;
     }
 }
-export function $if(condition: Store<boolean>, renderable: Renderable): Pick<DirectiveIf, "$elseif" | "$else"> {
-    return new DirectiveIf([{ condition, renderable }]);
+
+export function createEach<T>(entries: Store<Array<T>>, render: (entry: T) => Renderable) {
+    return new DirectiveEach(derive([entries], ([e]) => new Set<T>(e)), render);
+}
+class DirectiveEach<T> extends Directive {
+    private marker!: Node;
+    private registry!: Map<T, Renderable>;
+    private order!: Array<T>;
+
+    constructor(
+        private entries: Store<Set<T>>,
+        private render: (entry: T) => Renderable
+    ) {
+        super();
+    }
+
+    override mount(parent: Node, anchor?: Node): void {
+        this.registry = new Map();
+        this.marker = document.createTextNode("");
+        parent.insertBefore(this.marker, anchor ?? null);
+
+        const { marker, registry, entries, render } =  this;
+        
+        entries.watch((next, previous) => {
+            const added = previous ? next.difference(previous) : next;
+            const removed = previous?.difference(next);
+
+            added.forEach((value) => {
+                if (!registry.has(value)) {
+                    const fragment = render(value);
+                    fragment.mount(parent, anchor);
+                    registry.set(value, fragment);
+                }
+            });
+            removed?.forEach((value) => {
+                registry.get(value)!.unmount();
+                registry.delete(value);
+            });
+
+            this.order = Array.from(next).reverse();
+            let last: Node = marker;
+            this.order.forEach((value) => {
+                last = registry.get(value)!.move(marker.parentElement!, last)!;
+            });
+        });
+    }
+    override move(parent: Node, anchor?: Node) {
+        const { marker, order, registry } = this;
+
+        parent.insertBefore(this.marker, anchor ?? null);
+
+        let last = marker;
+        order.forEach((value) => {
+            last = registry.get(value)!.move(marker.parentElement!, last)!;
+        });
+        return last;
+    }
+    override unmount() {
+        super.unmount();
+
+        const { marker, registry } = this;
+        marker.parentElement?.removeChild(marker);
+        registry.forEach((renderable) => renderable.unmount());
+    }
 }

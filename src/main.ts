@@ -1,6 +1,7 @@
-import { $if } from "./lib/directive";
+import { createComponent } from "./lib/component";
+import { createEach, createIf } from "./lib/directive";
 import { createEventHandler } from "./lib/event";
-import { createRenderable, format } from "./lib/renderable";
+import { createText, format } from "./lib/reactive_string";
 import { AtomStore, derive, DerivedStore } from "./lib/store";
 
 const en = new AtomStore("Ceres・Fauna・");
@@ -22,29 +23,47 @@ setInterval(() => ++count.value, 500);
 const gen = new AtomStore(1);
 setInterval(() => gen.value = ++gen.value % 5, 2000);
 
-const app = createRenderable("div", { id: format`colored-${color}`, style: { color } },
-    createRenderable("h1", undefined, en),
-    createRenderable("h1", undefined, upper),
-    createRenderable("h1", undefined, jp),
+const us = new AtomStore(["saplings", "takos", "sanalites", "otomos"]);
 
-    createRenderable("div", undefined, format`ticks: ${count}`),
-    createRenderable("div", undefined, format`double: ${double}`),
+const app = createComponent("div", { id: format`colored-${color}`, style: { color } },
+    createComponent("h1", undefined, en),
+    createComponent("h1", undefined, upper),
+    createComponent("h1", undefined, jp),
 
-    createRenderable("span", undefined, double),
+    createComponent("div", undefined, format`ticks: ${count}`),
+    createComponent("div", undefined, format`double: ${double}`),
 
-    createRenderable("div", undefined,
-        createRenderable("span", undefined, derive(
+    createComponent("span", undefined, double),
+
+    createComponent("div", undefined,
+        createComponent("span", undefined, derive(
             [dir], ([d]) => d > 0 ? "left" : "right"
         )),
-        createRenderable("button", {
+        createComponent("button", {
             onclick: createEventHandler(() => dir.value *= -1)
         }, "flip"),
     ),
 
-    $if(derive([gen], ([g]) => g === 1), createRenderable("span", undefined, "ame")).
-    $elseif(derive([gen], ([g]) => g === 2), createRenderable("span", undefined, "sana")).
-    $elseif(derive([gen], ([g]) => g === 3), createRenderable("span", undefined, "fuwamoco")).
-    $elseif(derive([gen], ([g]) => g === 4), createRenderable("span", undefined, "cc")).
-    $else(createRenderable("span", undefined, "soon"))
+    createIf(derive([gen], ([g]) => g === 1), createComponent("span", undefined, "ame")).
+    createElseIf(derive([gen], ([g]) => g === 2), createComponent("span", undefined, "sana")).
+    createElseIf(derive([gen], ([g]) => g === 3), createComponent("span", undefined, "fwmc")).
+    createElseIf(derive([gen], ([g]) => g === 4), createComponent("span", undefined, "cc")).
+    createElse(createComponent("span", undefined, "soon")),
+
+    createComponent("div", undefined,
+        createEach(
+            us,
+            (name) => createComponent("span", { style: { display: "block", color: "red" }}, name)
+        ),
+        createComponent("button", { onclick: createEventHandler(() => us.value = us.value.toSorted())}, "???"),
+        createComponent("button", { onclick: createEventHandler(() => {
+            const victim = us.value[Math.floor(Math.random() * us.value.length)];
+            us.value = us.value.filter((value) => value !== victim);
+            console.log(us.value);
+        })}, "---"),
+    ),
+
+    createComponent("br"),
+    createText(format`${color}`),
 );
-app.attach(document.body);
+app.mount(document.body);
