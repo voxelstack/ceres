@@ -56,10 +56,7 @@ const app = createComponent("div", { id: format`colored-${color}`, style: { colo
             (name) => createComponent("span", {
                 onmount: createEventHandler((node) => {
                     console.log("mount", node);
-
-                    return () => {
-                        console.log("unmount", node);
-                    };
+                    return () => console.log("unmount", node);
                 }),
                 style: { display: "block", color: "red" }
             }, name)
@@ -71,7 +68,10 @@ const app = createComponent("div", { id: format`colored-${color}`, style: { colo
         })}, "---"),
     ),
 
-    createComponent("br"),
+    // createKey(gen, createComponent("br", { onmount: createEventHandler((node) => {
+    //     console.log("mount", node);
+    //     return () => console.log("unmount", node);
+    // })})),
     createText(format`${color}`),
 );
 app.mount(document.body);

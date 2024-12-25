@@ -59,6 +59,8 @@ class ReactiveText extends Renderable {
     }
 
     override mount(parent: Node, anchor?: Node) {
+        super.mount(parent, anchor);
+
         this.nodes = [];
 
         const { nodes, reactiveString: { strings, values }, disposables } = this;

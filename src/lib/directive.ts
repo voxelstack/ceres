@@ -20,6 +20,8 @@ class DirectiveIf extends Directive {
         super();
     }
     override mount(parent: Node, anchor?: Node) {
+        super.mount(parent, anchor);
+
         this.marker = document.createTextNode("");
         parent.insertBefore(this.marker, anchor ?? null);
 
@@ -90,6 +92,8 @@ class DirectiveEach<T> extends Directive {
     }
 
     override mount(parent: Node, anchor?: Node): void {
+        super.mount(parent, anchor);
+
         this.registry = new Map();
         this.marker = document.createTextNode("");
         parent.insertBefore(this.marker, anchor ?? null);
@@ -136,5 +140,44 @@ class DirectiveEach<T> extends Directive {
         const { marker, registry } = this;
         marker.parentElement?.removeChild(marker);
         registry.forEach((renderable) => renderable.unmount());
+    }
+}
+
+export function createKey<T>(key: Store<T>, renderable: Renderable) {
+    return new DirectiveKey(key, renderable);
+}
+class DirectiveKey<T> extends Directive {
+    private marker!: Node;
+
+    constructor(
+        private key: Store<T>,
+        private renderable: Renderable
+    ) {
+        super();
+    }
+
+    override mount(parent: Node, anchor?: Node) {
+        super.mount(parent, anchor);
+
+        this.marker = document.createTextNode("");
+        parent.insertBefore(this.marker, anchor ?? null);
+
+        const { marker, key, renderable, disposables } = this;
+
+        disposables.push(key.subscribe(() => {
+            renderable.unmount();
+            renderable.mount(parent, marker);
+        }));
+        renderable.mount(parent, marker);
+    }
+    override move(parent: Node, anchor?: Node) {
+        return this.renderable.move(parent, anchor);
+    }
+    override unmount() {
+        super.unmount();
+
+        const { marker, renderable } = this;
+        marker.parentElement?.removeChild(marker);
+        renderable.unmount();
     }
 }

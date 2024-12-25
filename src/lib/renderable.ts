@@ -5,13 +5,13 @@ export type Child = StringLike | Renderable;
 export type Disposable = () => void;
 
 export abstract class Renderable {
-    protected disposables: Disposable[];
+    protected disposables!: Disposable[];
     
-    constructor() {
-        this.disposables = [];
-    }
+    constructor() { }
 
-    abstract mount(parent: Node, anchor?: Node): void;
+    mount(parent: Node, anchor?: Node): void {
+        this.disposables = [];
+    };
     abstract move(parent: Node, anchor?: Node): Node | undefined;
     unmount(): void {
         // TODO Override on derived classes to release members.

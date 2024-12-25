@@ -24,6 +24,8 @@ class Component<Type extends Tag> extends Renderable {
     }
 
     override mount(parent: Node, anchor?: Node) {
+        super.mount(parent, anchor);
+
         this.root = document.createElement(this.type);
         this.handlers = {};
 
