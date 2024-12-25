@@ -1,5 +1,5 @@
 import { createComponent } from "./lib/component";
-import { createEach, createIf } from "./lib/directive";
+import { createAwait, createEach, createIf } from "./lib/directive";
 import { createEventHandler } from "./lib/event";
 import { createText, format } from "./lib/reactive_string";
 import { AtomStore, derive, DerivedStore } from "./lib/store";
@@ -73,5 +73,14 @@ const app = createComponent("div", { id: format`colored-${color}`, style: { colo
     //     return () => console.log("unmount", node);
     // })})),
     createText(format`${color}`),
+
+    createComponent("div", undefined,
+        createAwait(
+            fetch("https://imissfauna.com/api/v2/past_stream").then((res) => res.json()),
+            createComponent("span", undefined, "Loading...")
+        ).
+        createThen((result: object) => createComponent("pre", undefined, JSON.stringify(result, null, 8))).
+        createCatch(() => createComponent("span", undefined, "ohno"))
+    ),
 );
 app.mount(document.body);

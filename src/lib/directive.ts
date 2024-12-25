@@ -171,7 +171,8 @@ class DirectiveKey<T> extends Directive {
         renderable.mount(parent, marker);
     }
     override move(parent: Node, anchor?: Node) {
-        return this.renderable.move(parent, anchor);
+        parent.insertBefore(this.marker, anchor ?? null);
+        return this.renderable?.move(parent, this.marker);
     }
     override unmount() {
         super.unmount();
@@ -179,5 +180,81 @@ class DirectiveKey<T> extends Directive {
         const { marker, renderable } = this;
         marker.parentElement?.removeChild(marker);
         renderable.unmount();
+    }
+}
+
+// TODO Maybe change to Store<Promise<T>> | Promise<T>.
+export function createAwait<T>(promise: Promise<T>, pending?: Renderable) {
+    return new DirectiveAwait(promise, pending);
+}
+class DirectiveAwait<T> extends Renderable {
+    private marker!: Node;
+    private onSettled?: (value: T) => Renderable;
+    private onError?: (error: unknown) => Renderable;
+    private visible?: Renderable;
+
+    constructor(
+        private promise: Promise<T>,
+        private pending?: Renderable
+    ) {
+        super();
+    }
+
+    override mount(parent: Node, anchor?: Node): void {
+        super.mount(parent, anchor);
+
+        this.marker = document.createTextNode("");
+        parent.insertBefore(this.marker, anchor ?? null);
+
+        const { marker, onSettled, onError, promise, pending } = this;
+        let { visible } = this;
+
+        if (pending) {
+            visible = pending;
+            visible.mount(parent, marker);
+        }
+
+        if (onSettled) {
+            promise.then((value) => {
+                visible?.unmount();
+                
+                const settled = onSettled(value);
+                visible = settled;
+                visible.mount(parent, marker);
+            });
+        }
+        if (onError) {
+            promise.catch((reason) => {
+                visible?.unmount();
+
+                const error = onError(reason);
+                visible = error;
+                visible.mount(parent, marker);
+            });
+        }
+    }
+    override move(parent: Node, anchor?: Node) {
+        parent.insertBefore(this.marker, anchor ?? null);
+        return this.visible?.move(parent, this.marker);
+    }
+    override unmount() {
+        super.unmount();
+
+        const { marker, visible } = this;
+        marker.parentElement?.removeChild(marker);
+        visible?.unmount();
+    }
+
+    createThen(
+        onSettled: (value: T) => Renderable
+    ): Pick<DirectiveAwait<T>, "createCatch"> {
+        this.onSettled = onSettled;
+        return this;
+    }
+    createCatch(
+        onError: (error: unknown) => Renderable
+    ): Omit<DirectiveAwait<T>, "createThen" | "createCatch"> {
+        this.onError = onError;
+        return this;
     }
 }
