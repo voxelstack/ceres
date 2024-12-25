@@ -53,13 +53,21 @@ const app = createComponent("div", { id: format`colored-${color}`, style: { colo
     createComponent("div", undefined,
         createEach(
             us,
-            (name) => createComponent("span", { style: { display: "block", color: "red" }}, name)
+            (name) => createComponent("span", {
+                onmount: createEventHandler((node) => {
+                    console.log("mount", node);
+
+                    return () => {
+                        console.log("unmount", node);
+                    };
+                }),
+                style: { display: "block", color: "red" }
+            }, name)
         ),
         createComponent("button", { onclick: createEventHandler(() => us.value = us.value.toSorted())}, "???"),
         createComponent("button", { onclick: createEventHandler(() => {
             const victim = us.value[Math.floor(Math.random() * us.value.length)];
             us.value = us.value.filter((value) => value !== victim);
-            console.log(us.value);
         })}, "---"),
     ),
 

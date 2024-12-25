@@ -58,4 +58,4 @@ export type Props<ElementTag extends Tag> = Partial<OmitNever<OmitReadOnly<{
                         : never
                     : never
             : never
-}>> | { style: Partial<Styles>}>;
+}>> | { style: Partial<Styles>}> | { onmount?: EventHandler<"mount"> };

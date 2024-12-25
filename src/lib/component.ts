@@ -1,3 +1,4 @@
+import { EventHandler, EventType } from "./event";
 import { Props, Reactive, Tag } from "./props";
 import { ReactiveString } from "./reactive_string";
 import { Child, Renderable } from "./renderable";
@@ -12,6 +13,7 @@ export function createComponent<Type extends Tag>(
 }
 class Component<Type extends Tag> extends Renderable {
     protected root!: HTMLElement;
+    protected handlers!: Partial<Record<EventType, EventHandler<any>>>;
 
     constructor(
         private type: Type,
@@ -23,33 +25,44 @@ class Component<Type extends Tag> extends Renderable {
 
     override mount(parent: Node, anchor?: Node) {
         this.root = document.createElement(this.type);
+        this.handlers = {};
 
-        const { root, props, children } = this;
+        const { root, handlers, props, children, disposables } = this;
 
         for (const [k, v] of Object.entries(props)) {
-            if (k === "style") { 
+            if (k === "style") {
                 const style = props[k as keyof Props<Type>] ?? {};
                 for (const [sk, sv] of Object.entries(style)) {
                     const dispose = watchProp(sv, (value) => {
                         root.style.setProperty(sk, value.toString());
                     });
-                    if(dispose) {
-                        this.disposables.push(dispose);
+                    if (dispose) {
+                        disposables.push(dispose);
                     }
                 }
             } else if (k.startsWith("on")) {
-                const type = k.substring(2);
-                const { listener, options } = v;
-                root.addEventListener(type, listener, options);
-                this.disposables.push(() => {
-                    root.removeEventListener(type, listener, options);
-                });
+                const type = k.substring(2) as EventType;
+
+                switch (type) {
+                    case "mount": {
+                        handlers["mount"] = v;
+                        break;
+                    }
+                    default: {
+                        const { listener, options } = v;
+    
+                        root.addEventListener(type, listener, options);
+                        disposables.push(() => {
+                            root.removeEventListener(type, listener, options);
+                        });
+                    }
+                }
             } else {
                 const dispose = watchProp(v, (value) => {
                     root.setAttribute(k, value);
                 })
                 if (dispose) {
-                    this.disposables.push(dispose);
+                    disposables.push(dispose);
                 }
             }
         }
@@ -57,13 +70,13 @@ class Component<Type extends Tag> extends Renderable {
         for (const child of children) {
             if (child instanceof Renderable) {
                 child.mount(root);
-                this.disposables.push(child.unmount.bind(child));
+                disposables.push(child.unmount.bind(child));
             } else if (child instanceof ReactiveString) {
                 const reactiveText = child.toRenderable();
                 reactiveText.mount(root);
-                this.disposables.push(reactiveText.unmount.bind(reactiveText));
+                disposables.push(reactiveText.unmount.bind(reactiveText));
             } else if (child instanceof Store) {
-                this.disposables.push(child.watch((next) => {
+                disposables.push(child.watch((next) => {
                     root.textContent = next.toString();
                 }));
             } else {
@@ -72,6 +85,10 @@ class Component<Type extends Tag> extends Renderable {
         }
 
         parent.insertBefore(root, anchor ?? null);
+        const onunmount = handlers["mount"]?.listener(root);
+        if (onunmount) {
+            disposables.push(onunmount);
+        }
     }
     override move(parent: Node, anchor?: Node) {
         parent.insertBefore(this.root, anchor ?? null);
