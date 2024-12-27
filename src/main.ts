@@ -104,6 +104,12 @@ const app = createComponent("div", { id: format`colored-${color}`, style: { colo
         createComponent("input", { id: "b", value: "b", type: "checkbox", bind: { checked: createBind(checkboxes, "checkGroup") } }),
         createComponent("label", { htmlFor: "c" }, "c"),
         createComponent("input", { id: "c", value: "c", type: "checkbox", bind: { checked: createBind(checkboxes, "checkGroup") } }),
+        createComponent("label", { htmlFor: "d" }, "d"),
+        createComponent("input", { id: "d", value: "d", type: "checkbox", bind: { checked: createBind(checkboxes, "checkGroup") } }),
+        createComponent("label", { htmlFor: "e" }, "e"),
+        createComponent("input", { id: "e", value: "e", type: "checkbox", bind: { checked: createBind(checkboxes, "checkGroup") } }),
+        createComponent("label", { htmlFor: "f" }, "f"),
+        createComponent("input", { id: "f", value: "f", type: "checkbox", bind: { checked: createBind(checkboxes, "checkGroup") } }),
     ),
     createComponent("fieldset", {},
         createComponent("label", { htmlFor: "a" }, "a"),
@@ -126,9 +132,19 @@ const app = createComponent("div", { id: format`colored-${color}`, style: { colo
         }
     }),
 
-    createComponent("h1", undefined, en),
-    createComponent("h1", undefined, upper),
-    createComponent("h1", undefined, jp),
+    createComponent("h1", {
+        className: format`${color}`,
+    }, en),
+    createComponent("h1", {
+        className: multiple,
+    }, upper),
+    createComponent("h1", {
+        className: derive([multiple], ([m]) => {
+            return Object.fromEntries(options.map(({ value })=> [
+                value, m.includes(value)
+            ]))
+        })
+    }, jp),
 
     createComponent("div", undefined, format`ticks: ${count}`),
     createComponent("div", undefined, format`double: ${double}`),

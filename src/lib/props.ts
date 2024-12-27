@@ -12,23 +12,15 @@ import { EventHandler, EventType } from "./event";
 import { ReactiveString } from "./reactive_string";
 import { type Store } from "./store";
 
-// https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-421529650
-type Equals<X, Y, WhenTrue = true, WhenFalse = false> =
-    (<T>() => T extends X ? 1 : 2) extends
-    (<T>() => T extends Y ? 1 : 2) ? WhenTrue : WhenFalse;
-type OmitNever<T> = {
-    [Key in keyof T as T[Key] extends never ? never : Key]: T[Key]
-};
-type OmitReadOnly<T> = {
-    [Key in keyof T
-        as Equals<
-            { [L in Key]: T[L]},
-            { -readonly [M in Key]: T[M]},
-            Key,
-            never
-        >
-    ]: T[Key]
-};
+export type Props<ElementTag extends Tag> = Partial<
+    Attributes<ElementTag> & {
+        className: Classes;
+        style: Styles;
+        bind: Binds<ElementTag>;
+        use: Actions;
+        on: Handlers<ElementTag>;
+    }>
+;
 
 type PlainAttribute = string | number | boolean | null | PlainAttribute[];
 type Stringifiable = { toString: () => string };
@@ -39,12 +31,18 @@ export type Tag = keyof HTMLElementTagNameMap;
 
 export type Styles = Partial<{
     [
-        StyleKey in keyof CSSStyleDeclaration
+        StyleKey in keyof Omit<CSSStyleDeclaration, "className">
         as CSSStyleDeclaration[StyleKey] extends PlainAttribute ? StyleKey : never
     ]: CSSStyleDeclaration[StyleKey] extends string ?
           Reactive<StringLike>
         : Reactive<CSSStyleDeclaration[StyleKey]>
 }>;
+
+export type Classes =
+    | LiteralOrStore<Stringifiable>
+    | LiteralOrStore<Array<string>>
+    | LiteralOrStore<Record<string, boolean>>
+;
 
 // https://github.com/microsoft/TypeScript/issues/40689
 export type Handlers<ElementTag extends Tag> = Partial<{
@@ -59,7 +57,7 @@ export type Handlers<ElementTag extends Tag> = Partial<{
 
 export type Attributes<ElementTag extends Tag> = Partial<{
     [
-        Attribute in keyof OmitReadOnly<Omit<HTMLElementTagNameMap[ElementTag], "style">>
+        Attribute in keyof OmitReadOnly<Omit<HTMLElementTagNameMap[ElementTag], "style" | "className">>
         as Attribute extends `on${infer _}` ?
               never
             : HTMLElementTagNameMap[ElementTag][Attribute] extends PlainAttribute ?
@@ -83,11 +81,20 @@ export type Binds<ElementTag extends Tag> = ElementTag extends keyof HTMLElement
     : GlobalBinds
 ;
 
-export type Props<ElementTag extends Tag> = Partial<
-    Attributes<ElementTag> & {
-        style: Styles;
-        bind: Binds<ElementTag>;
-        use: Actions;
-        on: Handlers<ElementTag>;
-    }>
-;
+// https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-421529650
+type Equals<X, Y, WhenTrue = true, WhenFalse = false> =
+    (<T>() => T extends X ? 1 : 2) extends
+    (<T>() => T extends Y ? 1 : 2) ? WhenTrue : WhenFalse;
+type OmitNever<T> = {
+    [Key in keyof T as T[Key] extends never ? never : Key]: T[Key]
+};
+type OmitReadOnly<T> = {
+    [Key in keyof T
+        as Equals<
+            { [L in Key]: T[L]},
+            { -readonly [M in Key]: T[M]},
+            Key,
+            never
+        >
+    ]: T[Key]
+};

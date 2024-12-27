@@ -1,5 +1,5 @@
 import { attributeBinders, Bind, BindRead, DimensionBinder, dimensionBinders, HTMLElementBindMap, HTMLElementDimensionBinds } from "./bind";
-import { Actions, Attributes, Binds, Handlers, Props, Reactive, Styles, Tag } from "./props";
+import { Actions, Attributes, Binds, Classes, Handlers, Props, Reactive, Styles, Tag } from "./props";
 import { ReactiveString } from "./reactive_string";
 import { Child, Renderable } from "./renderable";
 import { Store, ValueCallback } from "./store";
@@ -46,8 +46,9 @@ class Component<const ElementTag extends Tag> extends Renderable {
             }
         }
 
-        const { style, on, use, bind, ...attributes } = this.props;
+        const { style, className, on, use, bind, ...attributes } = this.props;
         this.attachStyles(style);
+        this.attachClass(className);
         this.attachEventHandlers(on);
         this.attachBinds(bind);
         this.attachAttributes(attributes as Attributes<ElementTag>);
@@ -73,6 +74,55 @@ class Component<const ElementTag extends Tag> extends Renderable {
             if (dispose) {
                 this.disposables.push(dispose);
             }
+        }
+    }
+    private attachClass(className?: Classes) {
+        if (className === undefined) {
+            return;
+        }
+
+        const dispose = watchProp(className, (next, previous) => {
+            if (typeof next === "string") {
+                this.root.className = next;
+            } else if (Array.isArray(next)) {
+                const prev: string[] = previous ?? [];
+                next.forEach((clazz) => {
+                    const prevIndex = prev.findIndex((it) => it === clazz);
+                    if (prevIndex === -1) {
+                        this.root.classList.add(clazz);
+                    } else {
+                        prev.splice(prevIndex, 1);
+                    }
+                });
+                prev.forEach((c) => {
+                    this.root.classList.remove(c);
+                });
+            } else {
+                const prev: Record<string, boolean> = previous ?? {};
+                Object.entries(next).forEach(([clazz, enabled]) => {
+                    if (enabled) {
+                        if (!prev[clazz]) {
+                            this.root.classList.add(clazz);
+                        } else {
+                            delete prev[clazz];
+                        }
+                    } else {
+                        if (prev[clazz]) {
+                            this.root.classList.remove(clazz);
+                        } else {
+                            delete prev[clazz];
+                        }
+                    }
+                });
+                Object.entries(prev).forEach(([clazz, enabled]) => {
+                    if (enabled) {
+                        this.root.classList.remove(clazz);
+                    }
+                });
+            }
+        });
+        if (dispose) {
+            this.disposables.push(dispose);
         }
     }
     private attachEventHandlers(on?: Handlers<ElementTag>) {
