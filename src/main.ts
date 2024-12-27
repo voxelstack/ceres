@@ -1,5 +1,5 @@
 import { $transform } from "./lib/bind";
-import { $boundary, $component, $fragment } from "./lib/component";
+import { $boundary, $component, $fragment, $head } from "./lib/component";
 import { $await, $each, $if } from "./lib/directive";
 import { $handler } from "./lib/event";
 import { $text, $format } from "./lib/reactive_string";
@@ -62,6 +62,10 @@ function makeQuery() {
 const query = $state(makeQuery());
 
 const app = $component("div", { id: $format`colored-${color}`, style: { color } },
+    $head($component("title", undefined,
+        $derived([selected], ([s]) => options.find(({ value }) => value === s)?.label))
+    ),
+
     $component("input", {
         type: "checkbox",
         bind: { checked }

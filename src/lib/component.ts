@@ -299,3 +299,12 @@ class Boundary extends Fragment {
         }
     }
 }
+
+export function $head(...children: Child[]) {
+    return new Head(children);
+}
+class Head extends Fragment {
+    override mount() {
+        super.mount(document.head);
+    }
+}
