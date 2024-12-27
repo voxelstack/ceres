@@ -9,7 +9,7 @@ type Transformer<DomType, BindType> = {
     toDom: DomTransformer<DomType, BindType>;
 };
 
-export function createBind<
+export function $transform<
     T extends keyof Transformers,
     DomType = Transformers[T] extends Transformer<infer DomType,  infer _> ? DomType : never,
     BindType = Transformers[T] extends Transformer<infer _,  infer BindType> ? BindType : never,

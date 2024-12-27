@@ -1,17 +1,17 @@
-import { createBind } from "./lib/bind";
-import { createComponent, createFragment } from "./lib/component";
-import { createAwait, createEach, createIf } from "./lib/directive";
-import { createEventHandler } from "./lib/event";
-import { createText, format } from "./lib/reactive_string";
-import { AtomStore, derive, DerivedStore } from "./lib/store";
+import { $transform } from "./lib/bind";
+import { $component, $fragment } from "./lib/component";
+import { $await, $each, $if } from "./lib/directive";
+import { $handler } from "./lib/event";
+import { $text, $format } from "./lib/reactive_string";
+import { $derived, $state } from "./lib/store";
 
-const en = new AtomStore("Ceres・Fauna・");
-const jp = new AtomStore("セレス・ファウナ・");
-const count = new AtomStore(0);
-const upper = new DerivedStore([en], ([e]) => e.toUpperCase());
-const double = new DerivedStore([count], ([c]) => 2 * c);
-const color = new DerivedStore([count], ([c]) => ["darkgreen", "darkolivegreen", "darkkhaki"][c % 3]);
-const dir = new AtomStore(1);
+const en = $state("Ceres・Fauna・");
+const jp = $state("セレス・ファウナ・");
+const count = $state(0);
+const upper = $derived([en], ([e]) => e.toUpperCase());
+const double = $derived([count], ([c]) => 2 * c);
+const color = $derived([count], ([c]) => ["darkgreen", "darkolivegreen", "darkkhaki"][c % 3]);
+const dir = $state(1);
 
 function scroll(str: string) {
     return `${str.slice(dir.value)}${str.slice(0, dir.value)}`;
@@ -21,18 +21,18 @@ setInterval(() => en.value = scroll(en.value), 500);
 setInterval(() => jp.value = scroll(jp.value), 500);
 setInterval(() => ++count.value, 500);
 
-const gen = new AtomStore(1);
+const gen = $state(1);
 setInterval(() => gen.value = ++gen.value % 5, 2000);
 
-const us = new AtomStore(["saplings", "takos", "sanalites", "otomos"]);
+const us = $state(["saplings", "takos", "sanalites", "otomos"]);
 
-const checked = new AtomStore(true);
+const checked = $state(true);
 checked.watch(console.log);
-const mapped = new AtomStore("enabled");
+const mapped = $state("enabled");
 mapped.watch(console.log);
-const text = new AtomStore("hehehe");
+const text = $state("hehehe");
 text.watch(console.log);
-const numeric = new AtomStore(20);
+const numeric = $state(20);
 numeric.watch(console.log);
 
 const options = [
@@ -42,31 +42,31 @@ const options = [
     { value: "grimmy", label: "Grimmy" },
     { value: "koseki_bijou", label: "Koseki Bijou" },
 ];
-const selected = new AtomStore(options[2].value);
+const selected = $state(options[2].value);
 selected.watch(console.log);
-const multiple = new AtomStore([options[2].value, options[3].value])
+const multiple = $state([options[2].value, options[3].value])
 multiple.watch(console.log);
 
 const groups = ["a", "b", "c", "d", "e", "f", "g"];
-const radio = new AtomStore("a");
+const radio = $state("a");
 radio.watch(console.log);
-const checkboxes = new AtomStore(["b", "c"]);
+const checkboxes = $state(["b", "c"]);
 checkboxes.watch(console.log);
 
-const w = new AtomStore(32);
+const w = $state(32);
 w.watch(console.log);
 
 function makeQuery() {
     return fetch("https://imissfauna.com/api/v2/past_stream").then((res) => res.json());
 }
-const query = new AtomStore(makeQuery());
+const query = $state(makeQuery());
 
-const app = createComponent("div", { id: format`colored-${color}`, style: { color } },
-    createComponent("input", {
+const app = $component("div", { id: $format`colored-${color}`, style: { color } },
+    $component("input", {
         type: "checkbox",
         bind: { checked }
     }),
-    createComponent("input", {
+    $component("input", {
         type: "checkbox",
         bind: {
             checked: {
@@ -76,49 +76,49 @@ const app = createComponent("div", { id: format`colored-${color}`, style: { colo
             }
         }
     }),
-    createComponent("input", {
+    $component("input", {
         type: "text",
         bind: { value: text }
     }),
-    createComponent("input", {
+    $component("input", {
         type: "number",
-        bind: { value: createBind(numeric, "integer") }
+        bind: { value: $transform(numeric, "integer") }
     }),
-    createComponent("input", {
+    $component("input", {
         type: "range",
         min: 0,
         max: 100,
         step: 20,
-        bind: { value: createBind(numeric, "integer") }
+        bind: { value: $transform(numeric, "integer") }
     }),
 
-    createComponent("select", { bind: { value: selected }}, createEach(
+    $component("select", { bind: { value: selected }}, $each(
         options,
-        ({ label, value }) => createComponent("option", { value }, label)
+        ({ label, value }) => $component("option", { value }, label)
     )),
-    createComponent("select", { multiple: true, bind: { value: createBind(multiple, "multiselect") }},
-        createEach(
+    $component("select", { multiple: true, bind: { value: $transform(multiple, "multiselect") }},
+        $each(
             options,
-            ({ label, value }) => createComponent("option", { value }, label)
+            ({ label, value }) => $component("option", { value }, label)
         )
     ),
 
-    createComponent("fieldset", undefined, createEach(
+    $component("fieldset", undefined, $each(
         groups,
-        (entry) => createFragment(
-            createComponent("label", { htmlFor: entry }, entry),
-            createComponent("input", { id: entry, value: entry, type: "checkbox", bind: { checked: createBind(checkboxes, "checkGroup") } }),
+        (entry) => $fragment(
+            $component("label", { htmlFor: entry }, entry),
+            $component("input", { id: entry, value: entry, type: "checkbox", bind: { checked: $transform(checkboxes, "checkGroup") } }),
         )
     )),
-    createComponent("fieldset", undefined, createEach(
+    $component("fieldset", undefined, $each(
         groups,
-        (entry) => createFragment(
-            createComponent("label", { htmlFor: entry }, entry),
-            createComponent("input", { id: entry, value: entry, type: "radio", bind: { checked: createBind(radio, "radioGroup") } }),
+        (entry) => $fragment(
+            $component("label", { htmlFor: entry }, entry),
+            $component("input", { id: entry, value: entry, type: "radio", bind: { checked: $transform(radio, "radioGroup") } }),
         )
     )),
 
-    createComponent("span", {
+    $component("span", {
         style: { display: "block", width: `${w.value}px`, height: "32px", background: "red" },
         bind: { contentWidth: w },
         use: {
@@ -130,44 +130,44 @@ const app = createComponent("div", { id: format`colored-${color}`, style: { colo
         }
     }),
 
-    createComponent("h1", {
-        className: format`${color}`,
+    $component("h1", {
+        className: $format`${color}`,
     }, en),
-    createComponent("h1", {
+    $component("h1", {
         className: multiple,
     }, upper),
-    createComponent("h1", {
-        className: derive([multiple], ([m]) => {
+    $component("h1", {
+        className: $derived([multiple], ([m]) => {
             return Object.fromEntries(options.map(({ value })=> [
                 value, m.includes(value)
             ]))
         })
     }, jp),
 
-    createComponent("div", undefined, format`ticks: ${count}`),
-    createComponent("div", undefined, format`double: ${double}`),
+    $component("div", undefined, $format`ticks: ${count}`),
+    $component("div", undefined, $format`double: ${double}`),
 
-    createComponent("span", undefined, double),
+    $component("span", undefined, double),
 
-    createComponent("div", undefined,
-        createComponent("span", undefined, derive(
+    $component("div", undefined,
+        $component("span", undefined, $derived(
             [dir], ([d]) => d > 0 ? "left" : "right"
         )),
-        createComponent("button", {
-            on: {click: createEventHandler(() => dir.value *= -1)}
+        $component("button", {
+            on: {click: $handler(() => dir.value *= -1)}
         }, "flip"),
     ),
 
-    createIf(derive([gen], ([g]) => g === 1), createComponent("span", undefined, "ame")).
-    createElseIf(derive([gen], ([g]) => g === 2), createComponent("span", undefined, "sana")).
-    createElseIf(derive([gen], ([g]) => g === 3), createComponent("span", undefined, "fwmc")).
-    createElseIf(derive([gen], ([g]) => g === 4), createComponent("span", undefined, "cc")).
-    createElse(createComponent("span", undefined, "soon")),
+    $if($derived([gen], ([g]) => g === 1), $component("span", undefined, "ame")).
+    $elseif($derived([gen], ([g]) => g === 2), $component("span", undefined, "sana")).
+    $elseif($derived([gen], ([g]) => g === 3), $component("span", undefined, "fwmc")).
+    $elseif($derived([gen], ([g]) => g === 4), $component("span", undefined, "cc")).
+    $else($component("span", undefined, "soon")),
 
-    createComponent("div", undefined,
-        createEach(
+    $component("div", undefined,
+        $each(
             us,
-            (name) => createComponent("span", {
+            (name) => $component("span", {
                 use: {
                     mount: (node) => {
                         console.log("mount", node);
@@ -177,28 +177,28 @@ const app = createComponent("div", { id: format`colored-${color}`, style: { colo
                 style: { display: "block", color: "red" }
             }, name)
         ),
-        createComponent("button", { on: { click: createEventHandler(() => us.value = us.value.toSorted())}}, "???"),
-        createComponent("button", { on: { click: createEventHandler(() => {
+        $component("button", { on: { click: $handler(() => us.value = us.value.toSorted())}}, "???"),
+        $component("button", { on: { click: $handler(() => {
             const victim = us.value[Math.floor(Math.random() * us.value.length)];
             us.value = us.value.filter((value) => value !== victim);
         })}}, "---"),
     ),
 
-    createText(format`${color}`),
+    $text($format`${color}`),
 
-    createComponent("div", undefined,
-        createAwait(query, createComponent("span", undefined, "Loading...")).
-        createThen((result: object) => createComponent("div", undefined,
-            createComponent("pre", undefined, JSON.stringify(result, null, 8)),
-            createComponent("button", {
-                on: { click: createEventHandler(() => query.value = makeQuery()) }
+    $component("div", undefined,
+        $await(query, $component("span", undefined, "Loading...")).
+        $then((result: object) => $component("div", undefined,
+            $component("pre", undefined, JSON.stringify(result, null, 8)),
+            $component("button", {
+                on: { click: $handler(() => query.value = makeQuery()) }
             },
             "retry"
         ))).
-        createCatch(() => createComponent("div", undefined,
-            createComponent("span", undefined, "ohno"),
-            createComponent("button", {
-                on: { click: createEventHandler(() => query.value = makeQuery()) }
+        $catch(() => $component("div", undefined,
+            $component("span", undefined, "ohno"),
+            $component("button", {
+                on: { click: $handler(() => query.value = makeQuery()) }
             },
             "retry"
         ))),

@@ -27,6 +27,9 @@ export abstract class Store<T> {
     }
 }
 
+export function $state<T>(value: T) {
+    return new AtomStore(value);
+}
 export class AtomStore<T> extends Store<T> {
     protected stored: T;
 
@@ -112,7 +115,7 @@ export class DerivedStore<const Stores extends Array<Store<any>>, T> extends Sto
         this.connected = false;
     }
 }
-export function derive<
+export function $derived<
     const Stores extends Array<Store<any>>, T
 >(stores: Stores, aggregator: Aggregator<Stores, T>) {
     return new DerivedStore(stores, aggregator);

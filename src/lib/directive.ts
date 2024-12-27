@@ -4,10 +4,10 @@ import { Store } from "./store";
 
 abstract class Directive extends Renderable { }
 
-export function createIf(
+export function $if(
     condition: LiteralOrStore<boolean>,
     renderable: Renderable
-): Pick<DirectiveIf, "createElseIf" | "createElse"> {
+): Pick<DirectiveIf, "$elseif" | "$else"> {
     return new DirectiveIf([{ condition, renderable }]);
 }
 class DirectiveIf extends Directive {
@@ -70,20 +70,20 @@ class DirectiveIf extends Directive {
         visible?.unmount();
     }
 
-    createElseIf(
+    $elseif(
         condition: LiteralOrStore<boolean>,
         renderable: Renderable
-    ): Pick<DirectiveIf, "createElseIf" | "createElse"> {
+    ): Pick<DirectiveIf, "$elseif" | "$else"> {
         this.chain.push({ condition, renderable });
         return this;
     }
-    createElse(orElse: Renderable): Omit<DirectiveIf, "createElseIf" | "createElse"> {
+    $else(orElse: Renderable): Omit<DirectiveIf, "$elseif" | "$else"> {
         this.orElse = orElse;
         return this;
     }
 }
 
-export function createEach<T>(
+export function $each<T>(
     entries: LiteralOrStore<Array<T>>,
     render: (entry: T) => Renderable
 ) {
@@ -161,7 +161,7 @@ class DirectiveEach<T> extends Directive {
     }
 }
 
-export function createKey<T>(key: Store<T>, renderable: Renderable) {
+export function $key<T>(key: Store<T>, renderable: Renderable) {
     return new DirectiveKey(key, renderable);
 }
 class DirectiveKey<T> extends Directive {
@@ -201,7 +201,7 @@ class DirectiveKey<T> extends Directive {
     }
 }
 
-export function createAwait<T>(promise: LiteralOrStore<Promise<T>>, pending?: Renderable) {
+export function $await<T>(promise: LiteralOrStore<Promise<T>>, pending?: Renderable) {
     return new DirectiveAwait(promise, pending);
 }
 class DirectiveAwait<T> extends Renderable {
@@ -271,15 +271,15 @@ class DirectiveAwait<T> extends Renderable {
         visible?.unmount();
     }
 
-    createThen(
+    $then(
         onSettled: (value: T) => Renderable
-    ): Pick<DirectiveAwait<T>, "createCatch"> {
+    ): Pick<DirectiveAwait<T>, "$catch"> {
         this.onSettled = onSettled;
         return this;
     }
-    createCatch(
+    $catch(
         onError: (error: unknown) => Renderable
-    ): Omit<DirectiveAwait<T>, "createThen" | "createCatch"> {
+    ): Omit<DirectiveAwait<T>, "$then" | "$catch"> {
         this.onError = onError;
         return this;
     }

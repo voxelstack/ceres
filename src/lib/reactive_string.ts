@@ -2,7 +2,7 @@ import { StringLike } from "./props";
 import { Renderable } from "./renderable";
 import { DerivedStore, Store } from "./store";
 
-export function format(strings: TemplateStringsArray, ...values: StringLike[]) {
+export function $format(strings: TemplateStringsArray, ...values: StringLike[]) {
     return new ReactiveString(strings, values);
 }
 export class ReactiveString {
@@ -46,7 +46,7 @@ export class ReactiveString {
     }
 }
 
-export function createText(reactiveString: ReactiveString) {
+export function $text(reactiveString: ReactiveString) {
     return new ReactiveText(reactiveString);
 }
 class ReactiveText extends Renderable {

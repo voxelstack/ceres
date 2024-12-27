@@ -4,7 +4,7 @@ import { ReactiveString } from "./reactive_string";
 import { Child, Renderable } from "./renderable";
 import { Store, ValueCallback } from "./store";
 
-export function createComponent<Type extends Tag>(
+export function $component<Type extends Tag>(
     type: Type,
     props: Props<Type> = {},
     ...children: Child[]
@@ -208,7 +208,7 @@ function watchProp(value: Reactive<any>, onValue: ValueCallback<any>) {
     }
 }
 
-export function createFragment(...children: Child[]) {
+export function $fragment(...children: Child[]) {
     return new Fragment(children);
 }
 type Mover = (parent: Node, anchor?: Node) => Node | undefined;

@@ -3,7 +3,7 @@ export interface EventHandler<T extends EventType> {
     listener: (ev: HTMLElementEventMap[T]) => any;
     options?: boolean | AddEventListenerOptions;
 }
-export function createEventHandler<T extends EventType>(
+export function $handler<T extends EventType>(
     listener: (ev: HTMLElementEventMap[T]) => any,
     options?: boolean | AddEventListenerOptions
 ): EventHandler<T> {
