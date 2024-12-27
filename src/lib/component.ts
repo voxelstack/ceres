@@ -1,4 +1,4 @@
-import { binders, HTMLElementBindMap } from "./bind";
+import { attributeBinders, Bind, BindRead, DimensionBinder, dimensionBinders, HTMLElementBindMap, HTMLElementDimensionBinds } from "./bind";
 import { Actions, Attributes, Binds, Handlers, Props, Reactive, Styles, Tag } from "./props";
 import { ReactiveString } from "./reactive_string";
 import { Child, Renderable } from "./renderable";
@@ -12,6 +12,8 @@ export function createComponent<Type extends Tag>(
     return new Component(type, props, children);
 }
 class Component<const ElementTag extends Tag> extends Renderable {
+    private resizeObserver?: ResizeObserver;
+    private resizeWatchers?: DimensionBinder[];
     protected root!: HTMLElement;
 
     constructor(
@@ -85,13 +87,44 @@ class Component<const ElementTag extends Tag> extends Renderable {
     }
     private attachBinds(bind?: Binds<ElementTag>) {
         for (const [key, value] of Object.entries(bind ?? {})) {
-            console.log(key, value)
-            const elementBinders = binders[this.type as keyof HTMLElementBindMap];
-            const binder = elementBinders[key as keyof typeof elementBinders];
-            const dispose = binder(this.root as any, value);
-            if (dispose) {
-                this.disposables.push(...dispose);
+            switch (key) {
+                case "clientWidth":
+                case "clientHeight":
+                case "contentWidth":
+                case "contentHeight":
+                    this.attachDimensionBind(key, value);
+                    break;
+                default:
+                    this.attachAttributeBind(key, value);
             }
+        }
+    }
+    private attachDimensionBind(key: keyof HTMLElementDimensionBinds, value: BindRead<number>) {
+        if (this.resizeObserver === undefined) {
+            this.resizeObserver = new ResizeObserver((entries) => {
+                entries.forEach((entry) => this.resizeWatchers?.forEach((watcher) => watcher(entry, value)));
+            });
+            this.resizeObserver.observe(this.root);
+        }        
+
+        this.resizeWatchers = this.resizeWatchers ?? [];
+        this.resizeWatchers.push((entry) => {
+            dimensionBinders[key](entry, value);
+        });
+
+        this.disposables.push(() => {
+            this.resizeObserver?.unobserve(this.root);
+            this.resizeObserver = undefined;
+            this.resizeWatchers = undefined;
+        });
+    }
+    private attachAttributeBind(key: any, value: Bind<any>) {
+        const elementBinders = attributeBinders[this.type as keyof HTMLElementBindMap];
+        const binder = elementBinders[key as keyof typeof elementBinders];
+        
+        const dispose = binder(this.root as any, value);
+        if (dispose) {
+            this.disposables.push(...dispose);
         }
     }
     private attachAttributes(attributes?: Attributes<ElementTag>) {
@@ -111,7 +144,6 @@ class Component<const ElementTag extends Tag> extends Renderable {
                 this.disposables.push(dispose);
             }
         }
-        
     }
 }
 function watchProp(value: Reactive<any>, onValue: ValueCallback<any>) {

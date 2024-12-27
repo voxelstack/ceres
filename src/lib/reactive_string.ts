@@ -66,7 +66,6 @@ class ReactiveText extends Renderable {
         const { nodes, reactiveString: { strings, values }, disposables } = this;
         const fragment = document.createDocumentFragment();
 
-        
         for (const index in values) {
             let node = document.createTextNode(strings[index]);
             fragment.insertBefore(node, null);

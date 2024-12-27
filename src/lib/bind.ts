@@ -25,6 +25,10 @@ export type Bind<DomType, BindType = DomType> = AtomStore<DomType> | {
     toBind: BindTransformer<DomType, BindType>;
     toDom: DomTransformer<DomType, BindType>;
 };
+export type BindRead<DomType, BindType = DomType> = AtomStore<DomType> | {
+    store: AtomStore<BindType>;
+    toBind: BindTransformer<DomType, BindType>;
+};
 interface Transformers {
     integer: Transformer<string, number>;
     float: Transformer<string, number>;
@@ -90,7 +94,7 @@ export interface HTMLElementBindMap {
         value: string
     }
 }
-type Binder<
+type AttributeBinder<
     Type extends Tag,
     DomType,
     BindType = DomType
@@ -98,29 +102,29 @@ type Binder<
     node: HTMLElementTagNameMap[Type],
     bind: Bind<DomType, BindType>
 ) => Disposable[] | void;
-type Binders = {
+type AttributeBinders = {
     [Key in keyof HTMLElementBindMap]: {
         [BindName in keyof HTMLElementBindMap[Key]]:
-            Binder<Key, HTMLElementTagNameMap[Key][BindName], HTMLElementBindMap[Key][BindName]>;
+            AttributeBinder<Key, HTMLElementTagNameMap[Key][BindName], HTMLElementBindMap[Key][BindName]>;
     }
 };
-export const binders: Binders = {
+export const attributeBinders: AttributeBinders = {
     input: {
-        checked: createDomBinder("checked", "change"),
-        value: createDomBinder("value", "input"),
+        checked: createAttributeBinder("checked", "change"),
+        value: createAttributeBinder("value", "input"),
     },
     select: {
-        value: createDomBinder("value", "change")
+        value: createAttributeBinder("value", "change")
     }
 };
-function createDomBinder<
+function createAttributeBinder<
     Type extends Tag,
     Attribute extends keyof HTMLElementTagNameMap[Type],
     BindType
 >(
     attribute: Attribute,
     event: keyof Handlers<Type>
-): Binder<Type, HTMLElementTagNameMap[Type][Attribute], BindType> {
+): AttributeBinder<Type, HTMLElementTagNameMap[Type][Attribute], BindType> {
     return function (node, bind) {
         const disposables: Disposable[] = [];
 
@@ -160,4 +164,47 @@ function createDomBinder<
     }
 }
 
-export type GlobalBinds = { todo?: undefined };
+export interface HTMLElementDimensionBinds {
+    clientWidth?: BindRead<number>;
+    clientHeight?: BindRead<number>;
+    contentWidth?: BindRead<number>;
+    contentHeight?: BindRead<number>;
+}
+export type GlobalBinds = HTMLElementDimensionBinds;
+
+export type DimensionBinder = (entry: ResizeObserverEntry, bind: BindRead<number>) => void;
+type DimensionBinders = {
+    [Key in keyof HTMLElementDimensionBinds]-?: DimensionBinder;
+};
+export const dimensionBinders: DimensionBinders = {
+    clientWidth: createDimensionBinder("clientWidth"),
+    clientHeight: createDimensionBinder("clientHeight"),
+    contentWidth: createDimensionBinder("contentWidth"),
+    contentHeight: createDimensionBinder("contentHeight"),
+}
+function createDimensionBinder(key: keyof HTMLElementDimensionBinds): DimensionBinder {
+    return function (entry, bind) {
+        let value;
+        switch (key) {
+            case "clientWidth":
+                value = entry.borderBoxSize[0].inlineSize;
+                break;
+            case "clientHeight":
+                value = entry.borderBoxSize[0].blockSize;
+                break;
+            case "contentWidth":
+                value = entry.contentBoxSize[0].inlineSize;
+                break;
+            case "contentHeight":
+                value = entry.contentBoxSize[0].blockSize;
+                break;
+        }
+
+        if (bind instanceof AtomStore) {
+            bind.value = value;
+        } else {
+            const { store, toBind } = bind;
+            store.value = toBind(value, store.value, entry.target);
+        }
+    }
+}

@@ -52,6 +52,9 @@ radio.watch(console.log)
 const checkboxes = new AtomStore(["b", "c"]);
 checkboxes.watch(console.log)
 
+const w = new AtomStore(32);
+w.watch(console.log)
+
 const app = createComponent("div", { id: format`colored-${color}`, style: { color } },
     createComponent("input", {
         type: "checkbox",
@@ -110,6 +113,18 @@ const app = createComponent("div", { id: format`colored-${color}`, style: { colo
         createComponent("label", { htmlFor: "c" }, "c"),
         createComponent("input", { id: "c", value: "c", type: "radio", bind: { checked: createBind(radio, "radioGroup") } }),
     ),
+
+    createComponent("span", {
+        style: { display: "block", width: `${w.value}px`, height: "32px", background: "red" },
+        bind: { contentWidth: w },
+        use: {
+            grow: (node) => {
+                setTimeout(() => {
+                    (node as HTMLElement).style.width = "64px";
+                }, 2000);
+            }
+        }
+    }),
 
     createComponent("h1", undefined, en),
     createComponent("h1", undefined, upper),
