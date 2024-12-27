@@ -1,5 +1,5 @@
 import { attributeBinders, Bind, BindRead, DimensionBinder, dimensionBinders, HTMLElementBindMap, HTMLElementDimensionBinds } from "./bind";
-import { Actions, Attributes, Binds, Classes, Handlers, Props, Reactive, Styles, Tag } from "./props";
+import { Actions, Attributes, Binds, Classes, Handlers, Props, Reactive, Stringifiable, Styles, Tag } from "./props";
 import { ReactiveString } from "./reactive_string";
 import { Child, Renderable } from "./renderable";
 import { Store, ValueCallback } from "./store";
@@ -29,6 +29,9 @@ class Component<const ElementTag extends Tag> extends Renderable {
         this.root = document.createElement(this.type);
 
         const { root, children, disposables } = this;
+        function createText(next: Stringifiable) {
+            root.textContent = next.toString();
+        }
         for (const child of children) {
             if (child instanceof Renderable) {
                 child.mount(root);
@@ -38,11 +41,9 @@ class Component<const ElementTag extends Tag> extends Renderable {
                 reactiveText.mount(root);
                 disposables.push(reactiveText.unmount.bind(reactiveText));
             } else if (child instanceof Store) {
-                disposables.push(child.watch((next) => {
-                    root.textContent = next.toString();
-                }));
+                disposables.push(child.watch(createText));
             } else {
-                root.textContent = child.toString();
+                createText(child.toString());
             }
         }
 
@@ -204,5 +205,72 @@ function watchProp(value: Reactive<any>, onValue: ValueCallback<any>) {
         return value.watch(onValue);
     } else {
         onValue(value);
+    }
+}
+
+export function createFragment(...children: Child[]) {
+    return new Fragment(children);
+}
+type Mover = (parent: Node, anchor?: Node) => Node | undefined;
+class Fragment extends Renderable {
+    private marker!: Node;
+    private movers!: Array<Mover>;
+
+    constructor(
+        private children: Child[]
+    ) {
+        super();
+    }
+
+    override mount(parent: Node, anchor?: Node) {
+        super.mount(parent, anchor);
+
+        const fragment = document.createDocumentFragment();
+        this.movers = [];
+        this.marker = document.createTextNode("");
+        parent.insertBefore(this.marker, anchor ?? null);
+
+        const { movers, children, disposables } = this;
+        function createText(next: Stringifiable) {
+            const text = document.createTextNode(next.toString());
+            fragment.insertBefore(text, null);
+            disposables.push(() => parent.removeChild(text));
+            movers.unshift((parent, anchor) => parent.insertBefore(text, anchor ?? null));
+        }
+        for (const child of children) {
+            if (child instanceof Renderable) {
+                child.mount(fragment);
+                disposables.push(child.unmount.bind(child));
+                movers.unshift(child.move.bind(child));
+            } else if (child instanceof ReactiveString) {
+                const reactiveText = child.toRenderable();
+                reactiveText.mount(fragment);
+                disposables.push(reactiveText.unmount.bind(reactiveText));
+                movers.unshift(reactiveText.move.bind(reactiveText));
+            } else if (child instanceof Store) {
+                disposables.push(child.watch(createText));
+            } else {
+                createText(child.toString());
+            }
+        }
+
+        parent.insertBefore(fragment, anchor ?? null);
+    }
+    override move(parent: Node, anchor?: Node) {
+        const { marker } = this;
+
+        parent.insertBefore(this.marker, anchor ?? null);
+
+        let last = marker;
+        this.movers.forEach((mover) => {
+            last = mover(parent, last) ?? last;
+        });
+        return last;
+    }
+    override unmount() {
+        super.unmount();
+
+        const { marker } = this;
+        marker.parentElement?.removeChild(marker);
     }
 }

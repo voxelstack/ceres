@@ -66,7 +66,7 @@ class DirectiveIf extends Directive {
         super.unmount();
         
         const { marker, visible } = this;
-        marker.parentElement?.removeChild(marker)
+        marker.parentElement?.removeChild(marker);
         visible?.unmount();
     }
 
@@ -146,7 +146,8 @@ class DirectiveEach<T> extends Directive {
         parent.insertBefore(this.marker, anchor ?? null);
 
         let last = marker;
-        this.entries.value.toReversed().forEach((value) => {
+        const entries = this.entries instanceof Store ? this.entries.value : this.entries;
+        entries.toReversed().forEach((value) => {
             last = registry.get(value)!.move(marker.parentElement!, last) ?? last;
         });
         return last;

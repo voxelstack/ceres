@@ -1,5 +1,5 @@
 import { createBind } from "./lib/bind";
-import { createComponent } from "./lib/component";
+import { createComponent, createFragment } from "./lib/component";
 import { createAwait, createEach, createIf } from "./lib/directive";
 import { createEventHandler } from "./lib/event";
 import { createText, format } from "./lib/reactive_string";
@@ -105,14 +105,14 @@ const app = createComponent("div", { id: format`colored-${color}`, style: { colo
 
     createComponent("fieldset", undefined, createEach(
         groups,
-        (entry) => createComponent("span", undefined,
+        (entry) => createFragment(
             createComponent("label", { htmlFor: entry }, entry),
             createComponent("input", { id: entry, value: entry, type: "checkbox", bind: { checked: createBind(checkboxes, "checkGroup") } }),
         )
     )),
     createComponent("fieldset", undefined, createEach(
         groups,
-        (entry) => createComponent("span", undefined,
+        (entry) => createFragment(
             createComponent("label", { htmlFor: entry }, entry),
             createComponent("input", { id: entry, value: entry, type: "radio", bind: { checked: createBind(radio, "radioGroup") } }),
         )

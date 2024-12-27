@@ -23,7 +23,7 @@ export type Props<ElementTag extends Tag> = Partial<
 ;
 
 type PlainAttribute = string | number | boolean | null | PlainAttribute[];
-type Stringifiable = { toString: () => string };
+export type Stringifiable = { toString: () => string };
 export type StringLike = Stringifiable | Store<Stringifiable>;
 export type LiteralOrStore<T> = T | Store<T>;
 export type Reactive<T> = ReactiveString | LiteralOrStore<T>;
