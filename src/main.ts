@@ -1,5 +1,5 @@
 import { $transform } from "./lib/bind";
-import { $component, $fragment } from "./lib/component";
+import { $boundary, $component, $fragment } from "./lib/component";
 import { $await, $each, $if } from "./lib/directive";
 import { $handler } from "./lib/event";
 import { $text, $format } from "./lib/reactive_string";
@@ -114,9 +114,15 @@ const app = $component("div", { id: $format`colored-${color}`, style: { color } 
         groups,
         (entry) => $fragment(
             $component("label", { htmlFor: entry }, entry),
-            $component("input", { id: entry, value: entry, type: "radio", bind: { checked: $transform(radio, "radioGroup") } }),
+            $component("input", { id: entry, value: entry, type: "radio", bind: { checked: $transform(radio, "radioGroup") }}),
         )
     )),
+
+    $boundary(
+        $component("span", undefined, "oh noes, something blew up"),
+
+        $component("span", { use: { explode: () => { throw new Error("kaboom"); }}})
+    ),
 
     $component("span", {
         style: { display: "block", width: `${w.value}px`, height: "32px", background: "red" },

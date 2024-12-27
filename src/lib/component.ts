@@ -274,3 +274,28 @@ class Fragment extends Renderable {
         marker.parentElement?.removeChild(marker);
     }
 }
+
+export function $boundary(error: Renderable, ...children: Child[]) {
+    return new Boundary(error, children);
+}
+class Boundary extends Fragment {
+    constructor(
+        private error: Renderable,
+        children: Child[]
+    ) {
+        super(children);
+    }
+
+    override mount(parent: Node, anchor?: Node) {
+        try {
+            super.mount(parent, anchor);
+        } catch (err: unknown) {
+            console.error(err);
+            super.unmount();
+            
+            const { error } = this;
+            error.mount(parent, anchor);
+            this.disposables = [() => error.unmount.bind(error)];
+        }
+    }
+}
