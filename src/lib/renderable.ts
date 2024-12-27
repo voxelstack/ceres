@@ -1,5 +1,4 @@
-import { StringLike } from "./props";
-import { Store } from "./store";
+import { LiteralOrStore, StringLike } from "./props";
 
 export type Child = StringLike | Renderable;
 export type Disposable = () => void;
@@ -19,7 +18,6 @@ export abstract class Renderable {
     }
 }
 export interface ConditionalRenderable {
-    // TODO boolean | Store<boolean>
-    condition: Store<boolean>;
+    condition: LiteralOrStore<boolean>;
     renderable: Renderable;
 }

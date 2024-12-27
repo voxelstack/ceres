@@ -6,7 +6,7 @@ import { Store } from "./store";
 abstract class Directive extends Renderable { }
 
 export function createIf(
-    condition: Store<boolean>,
+    condition: LiteralOrStore<boolean>,
     renderable: Renderable
 ): Pick<DirectiveIf, "createElseIf" | "createElse"> {
     return new DirectiveIf([{ condition, renderable }]);
@@ -34,9 +34,8 @@ class DirectiveIf extends Directive {
             const previous = visible;
             visible = undefined;
 
-            // TODO Track which condition is currently true and don't check them all on change.
             for (const { condition, renderable } of chain) {
-                if (condition.value) {
+                if (condition instanceof Store ? condition.value : condition) {
                     visible = renderable;
                     break;
                 }
@@ -50,7 +49,14 @@ class DirectiveIf extends Directive {
                 visible?.mount(marker.parentElement!, marker);
             }
         }
-        disposables.push(...chain.map(({ condition }) => condition.subscribe(onChange)));
+        const firstLiteralTrue = chain.findIndex(({ condition }) => !(condition instanceof Store) && condition);
+        disposables.push(...chain
+            // Renderables that come after a literal true will never be rendered,
+            // so don't watch them.
+            .slice(0, firstLiteralTrue === -1 ? undefined : firstLiteralTrue)
+            .filter(({ condition }) => condition instanceof Store)
+            .map(({ condition }) => (condition as Store<unknown>).subscribe(onChange))
+        );
         onChange();
     }
     override move(parent: Node, anchor?: Node) {
@@ -66,7 +72,7 @@ class DirectiveIf extends Directive {
     }
 
     createElseIf(
-        condition: Store<boolean>,
+        condition: LiteralOrStore<boolean>,
         renderable: Renderable
     ): Pick<DirectiveIf, "createElseIf" | "createElse"> {
         this.chain.push({ condition, renderable });
