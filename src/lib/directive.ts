@@ -1,5 +1,6 @@
+import { LiteralOrStore } from "./props";
 import { ConditionalRenderable, Renderable } from "./renderable";
-import { derive, Store } from "./store";
+import { Store } from "./store";
 
 // TODO Make directives accept LiteralOrStore<T> instead of Store<T>
 abstract class Directive extends Renderable { }
@@ -77,7 +78,7 @@ class DirectiveIf extends Directive {
     }
 }
 
-export function createEach<T>(entries: Store<Array<T>>, render: (entry: T) => Renderable) {
+export function createEach<T>(entries: LiteralOrStore<Array<T>>, render: (entry: T) => Renderable) {
     return new DirectiveEach(entries, render);
 }
 class DirectiveEach<T> extends Directive {
@@ -85,7 +86,7 @@ class DirectiveEach<T> extends Directive {
     private registry!: Map<T, Renderable>;
 
     constructor(
-        private entries: Store<Array<T>>,
+        private entries: LiteralOrStore<Array<T>>,
         private render: (entry: T) => Renderable
     ) {
         super();
@@ -99,8 +100,8 @@ class DirectiveEach<T> extends Directive {
         parent.insertBefore(this.marker, anchor ?? null);
 
         const { marker, registry, entries, render } =  this;
-        
-        entries.watch((next, previous) => {
+
+        function createRenderables(next: Array<T>, previous?: Array<T>) {
             const prev: Array<T> = previous ?? [];
             next.forEach((value) => {
                 const prevIndex = prev.findIndex((it) => it === value);
@@ -111,17 +112,25 @@ class DirectiveEach<T> extends Directive {
                 } else {
                     prev.splice(prevIndex, 1);
                 }
+                prev.forEach((value) => {
+                    registry.get(value)?.unmount();
+                    registry.delete(value);
+                });
             });
-            prev.forEach((value) => {
-                registry.get(value)?.unmount();
-                registry.delete(value);
-            });
+        }
 
-            let last: Node = marker;
-            next.toReversed().forEach((value) => {
-                last = registry.get(value)!.move(marker.parentElement!, last) ?? last;
+        if (entries instanceof Store) {
+            entries.watch((next, previous) => {
+                createRenderables(next, previous);
+                
+                let last: Node = marker;
+                next.toReversed().forEach((value) => {
+                    last = registry.get(value)!.move(marker.parentElement!, last) ?? last;
+                });
             });
-        });
+        } else {
+            createRenderables(entries);
+        }
     }
     override move(parent: Node, anchor?: Node) {
         const { marker, registry } = this;

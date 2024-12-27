@@ -47,6 +47,7 @@ selected.watch(console.log)
 const multiple = new AtomStore([options[2].value, options[3].value])
 multiple.watch(console.log)
 
+const groups = ["a", "b", "c", "d", "e", "f", "g"];
 const radio = new AtomStore("a");
 radio.watch(console.log)
 const checkboxes = new AtomStore(["b", "c"]);
@@ -86,39 +87,31 @@ const app = createComponent("div", { id: format`colored-${color}`, style: { colo
         bind: { value: createBind(numeric, "integer") }
     }),
 
-    createComponent("select", { bind: { value: selected }},
-        ...options.map(({ label, value }) => createComponent("option", {
-            value,
-        }, label))
-    ),
+    createComponent("select", { bind: { value: selected }}, createEach(
+        options,
+        ({ label, value }) => createComponent("option", { value }, label)
+    )),
     createComponent("select", { multiple: true, bind: { value: createBind(multiple, "multiselect") }},
-        ...options.map(({ label, value }) => createComponent("option", {
-            value,
-        }, label))
+        createEach(
+            options,
+            ({ label, value }) => createComponent("option", { value }, label)
+        )
     ),
 
-    createComponent("fieldset", {},
-        createComponent("label", { htmlFor: "a" }, "a"),
-        createComponent("input", { id: "a", value: "a", type: "checkbox", bind: { checked: createBind(checkboxes, "checkGroup") } }),
-        createComponent("label", { htmlFor: "b" }, "b"),
-        createComponent("input", { id: "b", value: "b", type: "checkbox", bind: { checked: createBind(checkboxes, "checkGroup") } }),
-        createComponent("label", { htmlFor: "c" }, "c"),
-        createComponent("input", { id: "c", value: "c", type: "checkbox", bind: { checked: createBind(checkboxes, "checkGroup") } }),
-        createComponent("label", { htmlFor: "d" }, "d"),
-        createComponent("input", { id: "d", value: "d", type: "checkbox", bind: { checked: createBind(checkboxes, "checkGroup") } }),
-        createComponent("label", { htmlFor: "e" }, "e"),
-        createComponent("input", { id: "e", value: "e", type: "checkbox", bind: { checked: createBind(checkboxes, "checkGroup") } }),
-        createComponent("label", { htmlFor: "f" }, "f"),
-        createComponent("input", { id: "f", value: "f", type: "checkbox", bind: { checked: createBind(checkboxes, "checkGroup") } }),
-    ),
-    createComponent("fieldset", {},
-        createComponent("label", { htmlFor: "a" }, "a"),
-        createComponent("input", { id: "a", value: "a", type: "radio", bind: { checked: createBind(radio, "radioGroup") } }),
-        createComponent("label", { htmlFor: "b" }, "b"),
-        createComponent("input", { id: "b", value: "b", type: "radio", bind: { checked: createBind(radio, "radioGroup") } }),
-        createComponent("label", { htmlFor: "c" }, "c"),
-        createComponent("input", { id: "c", value: "c", type: "radio", bind: { checked: createBind(radio, "radioGroup") } }),
-    ),
+    createComponent("fieldset", undefined, createEach(
+        groups,
+        (entry) => createComponent("span", undefined,
+            createComponent("label", { htmlFor: entry }, entry),
+            createComponent("input", { id: entry, value: entry, type: "checkbox", bind: { checked: createBind(checkboxes, "checkGroup") } }),
+        )
+    )),
+    createComponent("fieldset", undefined, createEach(
+        groups,
+        (entry) => createComponent("span", undefined,
+            createComponent("label", { htmlFor: entry }, entry),
+            createComponent("input", { id: entry, value: entry, type: "radio", bind: { checked: createBind(radio, "radioGroup") } }),
+        )
+    )),
 
     createComponent("span", {
         style: { display: "block", width: `${w.value}px`, height: "32px", background: "red" },
