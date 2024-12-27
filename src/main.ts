@@ -43,18 +43,23 @@ const options = [
     { value: "koseki_bijou", label: "Koseki Bijou" },
 ];
 const selected = new AtomStore(options[2].value);
-selected.watch(console.log)
+selected.watch(console.log);
 const multiple = new AtomStore([options[2].value, options[3].value])
-multiple.watch(console.log)
+multiple.watch(console.log);
 
 const groups = ["a", "b", "c", "d", "e", "f", "g"];
 const radio = new AtomStore("a");
-radio.watch(console.log)
+radio.watch(console.log);
 const checkboxes = new AtomStore(["b", "c"]);
-checkboxes.watch(console.log)
+checkboxes.watch(console.log);
 
 const w = new AtomStore(32);
-w.watch(console.log)
+w.watch(console.log);
+
+function makeQuery() {
+    return fetch("https://imissfauna.com/api/v2/past_stream").then((res) => res.json());
+}
+const query = new AtomStore(makeQuery());
 
 const app = createComponent("div", { id: format`colored-${color}`, style: { color } },
     createComponent("input", {
@@ -182,12 +187,21 @@ const app = createComponent("div", { id: format`colored-${color}`, style: { colo
     createText(format`${color}`),
 
     createComponent("div", undefined,
-        createAwait(
-            fetch("https://imissfauna.com/api/v2/past_stream").then((res) => res.json()),
-            createComponent("span", undefined, "Loading...")
-        ).
-        createThen((result: object) => createComponent("pre", undefined, JSON.stringify(result, null, 8))).
-        createCatch(() => createComponent("span", undefined, "ohno"))
+        createAwait(query, createComponent("span", undefined, "Loading...")).
+        createThen((result: object) => createComponent("div", undefined,
+            createComponent("pre", undefined, JSON.stringify(result, null, 8)),
+            createComponent("button", {
+                on: { click: createEventHandler(() => query.value = makeQuery()) }
+            },
+            "retry"
+        ))).
+        createCatch(() => createComponent("div", undefined,
+            createComponent("span", undefined, "ohno"),
+            createComponent("button", {
+                on: { click: createEventHandler(() => query.value = makeQuery()) }
+            },
+            "retry"
+        ))),
     ),
 );
 app.mount(document.body);

@@ -2,7 +2,6 @@ import { LiteralOrStore } from "./props";
 import { ConditionalRenderable, Renderable } from "./renderable";
 import { Store } from "./store";
 
-// TODO Make directives accept LiteralOrStore<T> instead of Store<T>
 abstract class Directive extends Renderable { }
 
 export function createIf(
@@ -84,7 +83,10 @@ class DirectiveIf extends Directive {
     }
 }
 
-export function createEach<T>(entries: LiteralOrStore<Array<T>>, render: (entry: T) => Renderable) {
+export function createEach<T>(
+    entries: LiteralOrStore<Array<T>>,
+    render: (entry: T) => Renderable
+) {
     return new DirectiveEach(entries, render);
 }
 class DirectiveEach<T> extends Directive {
@@ -198,8 +200,7 @@ class DirectiveKey<T> extends Directive {
     }
 }
 
-// TODO Maybe change to Store<Promise<T>> | Promise<T>.
-export function createAwait<T>(promise: Promise<T>, pending?: Renderable) {
+export function createAwait<T>(promise: LiteralOrStore<Promise<T>>, pending?: Renderable) {
     return new DirectiveAwait(promise, pending);
 }
 class DirectiveAwait<T> extends Renderable {
@@ -209,7 +210,7 @@ class DirectiveAwait<T> extends Renderable {
     private visible?: Renderable;
 
     constructor(
-        private promise: Promise<T>,
+        private promise: LiteralOrStore<Promise<T>>,
         private pending?: Renderable
     ) {
         super();
@@ -224,28 +225,37 @@ class DirectiveAwait<T> extends Renderable {
         const { marker, onSettled, onError, promise, pending } = this;
         let { visible } = this;
 
-        if (pending) {
-            visible = pending;
-            visible.mount(parent, marker);
-        }
-
-        if (onSettled) {
-            promise.then((value) => {
+        function onValue(next: Promise<T>) {
+            if (pending) {
                 visible?.unmount();
                 
-                const settled = onSettled(value);
-                visible = settled;
+                visible = pending;
                 visible.mount(parent, marker);
-            });
+            }
+    
+            if (onSettled) {
+                next.then((value) => {
+                    visible?.unmount();
+                    
+                    const settled = onSettled(value);
+                    visible = settled;
+                    visible.mount(parent, marker);
+                });
+            }
+            if (onError) {
+                next.catch((reason) => {
+                    visible?.unmount();
+    
+                    const error = onError(reason);
+                    visible = error;
+                    visible.mount(parent, marker);
+                });
+            }
         }
-        if (onError) {
-            promise.catch((reason) => {
-                visible?.unmount();
-
-                const error = onError(reason);
-                visible = error;
-                visible.mount(parent, marker);
-            });
+        if (promise instanceof Store) {
+            this.disposables.push(promise.watch(onValue));
+        } else {
+            onValue(promise);
         }
     }
     override move(parent: Node, anchor?: Node) {
