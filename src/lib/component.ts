@@ -25,12 +25,6 @@ class Component<const ElementTag extends Tag> extends Renderable {
     override mount(parent: Node, anchor?: Node) {
         super.mount(parent, anchor);
         this.root = document.createElement(this.type);
- 
-        const { style, on, use, bind, ...attributes } = this.props;
-        this.attachStyles(style);
-        this.attachEventHandlers(on);
-        this.attachBinds(bind);
-        this.attachAttributes(attributes as Attributes<ElementTag>);
 
         const { root, children, disposables } = this;
         for (const child of children) {
@@ -49,6 +43,12 @@ class Component<const ElementTag extends Tag> extends Renderable {
                 root.textContent = child.toString();
             }
         }
+
+        const { style, on, use, bind, ...attributes } = this.props;
+        this.attachStyles(style);
+        this.attachEventHandlers(on);
+        this.attachBinds(bind);
+        this.attachAttributes(attributes as Attributes<ElementTag>);
 
         parent.insertBefore(root, anchor ?? null);
         this.runActions(use);

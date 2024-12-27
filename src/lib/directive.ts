@@ -1,6 +1,7 @@
 import { ConditionalRenderable, Renderable } from "./renderable";
 import { derive, Store } from "./store";
 
+// TODO Make directives accept LiteralOrStore<T> instead of Store<T>
 abstract class Directive extends Renderable { }
 
 export function createIf(
