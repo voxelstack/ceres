@@ -1,3 +1,4 @@
+import { createBind } from "./lib/bind";
 import { createComponent } from "./lib/component";
 import { createAwait, createEach, createIf } from "./lib/directive";
 import { createEventHandler } from "./lib/event";
@@ -25,7 +26,46 @@ setInterval(() => gen.value = ++gen.value % 5, 2000);
 
 const us = new AtomStore(["saplings", "takos", "sanalites", "otomos"]);
 
+const checked = new AtomStore(true);
+checked.watch(console.log);
+const mapped = new AtomStore("enabled");
+mapped.watch(console.log);
+const text = new AtomStore("hehehe");
+text.watch(console.log);
+const numeric = new AtomStore(20);
+numeric.watch(console.log);
+
 const app = createComponent("div", { id: format`colored-${color}`, style: { color } },
+    createComponent("input", {
+        type: "checkbox",
+        bind: { checked }
+    }),
+    createComponent("input", {
+        type: "checkbox",
+        bind: {
+            checked: {
+                store: mapped, 
+                toBind: (dom) => dom ? "enabled" : "disabled",
+                toDom: (bind) => bind === "enabled"
+            }
+        }
+    }),
+    createComponent("input", {
+        type: "text",
+        bind: { value: text }
+    }),
+    createComponent("input", {
+        type: "number",
+        bind: { value: createBind(numeric, "integer") }
+    }),
+    createComponent("input", {
+        type: "range",
+        min: 0,
+        max: 100,
+        step: 20,
+        bind: { value: createBind(numeric, "integer") }
+    }),
+
     createComponent("h1", undefined, en),
     createComponent("h1", undefined, upper),
     createComponent("h1", undefined, jp),
@@ -40,7 +80,7 @@ const app = createComponent("div", { id: format`colored-${color}`, style: { colo
             [dir], ([d]) => d > 0 ? "left" : "right"
         )),
         createComponent("button", {
-            onclick: createEventHandler(() => dir.value *= -1)
+            on: {click: createEventHandler(() => dir.value *= -1)}
         }, "flip"),
     ),
 
@@ -54,24 +94,22 @@ const app = createComponent("div", { id: format`colored-${color}`, style: { colo
         createEach(
             us,
             (name) => createComponent("span", {
-                onmount: createEventHandler((node) => {
-                    console.log("mount", node);
-                    return () => console.log("unmount", node);
-                }),
+                use: {
+                    mount: (node) => {
+                        console.log("mount", node);
+                        return () => console.log("unmount", node);
+                    }
+                },
                 style: { display: "block", color: "red" }
             }, name)
         ),
-        createComponent("button", { onclick: createEventHandler(() => us.value = us.value.toSorted())}, "???"),
-        createComponent("button", { onclick: createEventHandler(() => {
+        createComponent("button", { on: { click: createEventHandler(() => us.value = us.value.toSorted())}}, "???"),
+        createComponent("button", { on: { click: createEventHandler(() => {
             const victim = us.value[Math.floor(Math.random() * us.value.length)];
             us.value = us.value.filter((value) => value !== victim);
-        })}, "---"),
+        })}}, "---"),
     ),
 
-    // createKey(gen, createComponent("br", { onmount: createEventHandler((node) => {
-    //     console.log("mount", node);
-    //     return () => console.log("unmount", node);
-    // })})),
     createText(format`${color}`),
 
     createComponent("div", undefined,

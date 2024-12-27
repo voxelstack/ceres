@@ -1,5 +1,5 @@
-import { EventHandler, EventType } from "./event";
-import { Props, Reactive, Tag } from "./props";
+import { binders, HTMLElementBindMap } from "./bind";
+import { Actions, Attributes, Binds, Handlers, Props, Reactive, Styles, Tag } from "./props";
 import { ReactiveString } from "./reactive_string";
 import { Child, Renderable } from "./renderable";
 import { Store, ValueCallback } from "./store";
@@ -11,13 +11,12 @@ export function createComponent<Type extends Tag>(
 ) {
     return new Component(type, props, children);
 }
-class Component<Type extends Tag> extends Renderable {
+class Component<const ElementTag extends Tag> extends Renderable {
     protected root!: HTMLElement;
-    protected handlers!: Partial<Record<EventType, EventHandler<any>>>;
 
     constructor(
-        private type: Type,
-        private props: Props<Type>,
+        private type: ElementTag,
+        private props: Props<ElementTag>,
         private children: Child[]
     ) {
         super();
@@ -25,50 +24,15 @@ class Component<Type extends Tag> extends Renderable {
 
     override mount(parent: Node, anchor?: Node) {
         super.mount(parent, anchor);
-
         this.root = document.createElement(this.type);
-        this.handlers = {};
+ 
+        const { style, on, use, bind, ...attributes } = this.props;
+        this.attachStyles(style);
+        this.attachEventHandlers(on);
+        this.attachBinds(bind);
+        this.attachAttributes(attributes as Attributes<ElementTag>);
 
-        const { root, handlers, props, children, disposables } = this;
-
-        for (const [k, v] of Object.entries(props)) {
-            if (k === "style") {
-                const style = props[k as keyof Props<Type>] ?? {};
-                for (const [sk, sv] of Object.entries(style)) {
-                    const dispose = watchProp(sv, (value) => {
-                        root.style.setProperty(sk, value.toString());
-                    });
-                    if (dispose) {
-                        disposables.push(dispose);
-                    }
-                }
-            } else if (k.startsWith("on")) {
-                const type = k.substring(2) as EventType;
-
-                switch (type) {
-                    case "mount": {
-                        handlers["mount"] = v;
-                        break;
-                    }
-                    default: {
-                        const { listener, options } = v;
-    
-                        root.addEventListener(type, listener, options);
-                        disposables.push(() => {
-                            root.removeEventListener(type, listener, options);
-                        });
-                    }
-                }
-            } else {
-                const dispose = watchProp(v, (value) => {
-                    root.setAttribute(k, value);
-                })
-                if (dispose) {
-                    disposables.push(dispose);
-                }
-            }
-        }
-
+        const { root, children, disposables } = this;
         for (const child of children) {
             if (child instanceof Renderable) {
                 child.mount(root);
@@ -87,10 +51,7 @@ class Component<Type extends Tag> extends Renderable {
         }
 
         parent.insertBefore(root, anchor ?? null);
-        const onunmount = handlers["mount"]?.listener(root);
-        if (onunmount) {
-            disposables.push(onunmount);
-        }
+        this.runActions(use);
     }
     override move(parent: Node, anchor?: Node) {
         parent.insertBefore(this.root, anchor ?? null);
@@ -100,6 +61,57 @@ class Component<Type extends Tag> extends Renderable {
     override unmount(): void {
         super.unmount();
         this.root.parentElement?.removeChild(this.root);
+    }
+
+    private attachStyles(style?: Styles) {
+        for (const [key, value] of Object.entries(style ?? {})) {
+            const dispose = watchProp(value, (next) => {
+                this.root.style.setProperty(key, next.toString());
+            });
+            if (dispose) {
+                this.disposables.push(dispose);
+            }
+        }
+    }
+    private attachEventHandlers(on?: Handlers<ElementTag>) {
+        for (const [key, value] of Object.entries(on ?? {})) {
+            const { listener, options } = value;
+
+            this.root.addEventListener(key, listener, options);
+            this.disposables.push(() => {
+                this.root.removeEventListener(key, listener, options);
+            });
+        }
+    }
+    private attachBinds(bind?: Binds<ElementTag>) {
+        for (const [key, value] of Object.entries(bind ?? {})) {
+            console.log(key, value)
+            const elementBinders = binders[this.type as keyof HTMLElementBindMap];
+            const binder = elementBinders[key as keyof typeof elementBinders];
+            const dispose = binder(this.root as any, value);
+            if (dispose) {
+                this.disposables.push(...dispose);
+            }
+        }
+    }
+    private attachAttributes(attributes?: Attributes<ElementTag>) {
+        for (const [key, value] of Object.entries(attributes ?? {})){
+            const dispose = watchProp(value, (next) => {
+                this.root.setAttribute(key, next);
+            });
+            if (dispose) {
+                this.disposables.push(dispose);
+            }
+        }
+    }
+    private runActions(actions?: Actions) {
+        for (const [_, value] of Object.entries(actions ?? {})) {
+            const dispose = value(this.root);
+            if (dispose) {
+                this.disposables.push(dispose);
+            }
+        }
+        
     }
 }
 function watchProp(value: Reactive<any>, onValue: ValueCallback<any>) {
