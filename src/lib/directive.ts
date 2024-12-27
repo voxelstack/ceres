@@ -78,15 +78,14 @@ class DirectiveIf extends Directive {
 }
 
 export function createEach<T>(entries: Store<Array<T>>, render: (entry: T) => Renderable) {
-    return new DirectiveEach(derive([entries], ([e]) => new Set<T>(e)), render);
+    return new DirectiveEach(entries, render);
 }
 class DirectiveEach<T> extends Directive {
     private marker!: Node;
     private registry!: Map<T, Renderable>;
-    private order!: Array<T>;
 
     constructor(
-        private entries: Store<Set<T>>,
+        private entries: Store<Array<T>>,
         private render: (entry: T) => Renderable
     ) {
         super();
@@ -102,36 +101,36 @@ class DirectiveEach<T> extends Directive {
         const { marker, registry, entries, render } =  this;
         
         entries.watch((next, previous) => {
-            const added = previous ? next.difference(previous) : next;
-            const removed = previous?.difference(next);
-
-            added.forEach((value) => {
-                if (!registry.has(value)) {
+            const prev: Array<T> = previous ?? [];
+            next.forEach((value) => {
+                const prevIndex = prev.findIndex((it) => it === value);
+                if (prevIndex === -1) {
                     const fragment = render(value);
-                    fragment.mount(parent, anchor);
+                    fragment.mount(parent, marker);
                     registry.set(value, fragment);
+                } else {
+                    prev.splice(prevIndex, 1);
                 }
             });
-            removed?.forEach((value) => {
-                registry.get(value)!.unmount();
+            prev.forEach((value) => {
+                registry.get(value)?.unmount();
                 registry.delete(value);
             });
 
-            this.order = Array.from(next).reverse();
             let last: Node = marker;
-            this.order.forEach((value) => {
-                last = registry.get(value)!.move(marker.parentElement!, last)!;
+            next.toReversed().forEach((value) => {
+                last = registry.get(value)!.move(marker.parentElement!, last) ?? last;
             });
         });
     }
     override move(parent: Node, anchor?: Node) {
-        const { marker, order, registry } = this;
+        const { marker, registry } = this;
 
         parent.insertBefore(this.marker, anchor ?? null);
 
         let last = marker;
-        order.forEach((value) => {
-            last = registry.get(value)!.move(marker.parentElement!, last)!;
+        this.entries.value.toReversed().forEach((value) => {
+            last = registry.get(value)!.move(marker.parentElement!, last) ?? last;
         });
         return last;
     }
