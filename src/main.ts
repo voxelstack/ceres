@@ -3,15 +3,15 @@ import { $body, $boundary, $component, $document, $fragment, $head, $window } fr
 import { $await, $each, $if } from "./lib/directive";
 import { $handler } from "./lib/event";
 import { $text, $format } from "./lib/reactive_string";
-import { $derived, $state } from "./lib/store";
+import { $derived, $store } from "./lib/store";
 
-const en = $state("Ceres・Fauna・");
-const jp = $state("セレス・ファウナ・");
-const count = $state(0);
+const en = $store("Ceres・Fauna・");
+const jp = $store("セレス・ファウナ・");
+const count = $store(0);
 const upper = $derived([en], ([e]) => e.toUpperCase());
 const double = $derived([count], ([c]) => 2 * c);
 const color = $derived([count], ([c]) => ["darkgreen", "darkolivegreen", "darkkhaki"][c % 3]);
-const dir = $state(1);
+const dir = $store(1);
 
 function scroll(str: string) {
     return `${str.slice(dir.value)}${str.slice(0, dir.value)}`;
@@ -21,18 +21,18 @@ setInterval(() => en.value = scroll(en.value), 500);
 setInterval(() => jp.value = scroll(jp.value), 500);
 setInterval(() => ++count.value, 500);
 
-const gen = $state(1);
+const gen = $store(1);
 setInterval(() => gen.value = ++gen.value % 5, 2000);
 
-const us = $state(["saplings", "takos", "sanalites", "otomos"]);
+const us = $store(["saplings", "takos", "sanalites", "otomos"]);
 
-const checked = $state(true);
+const checked = $store(true);
 checked.watch(console.log);
-const mapped = $state("enabled");
+const mapped = $store("enabled");
 mapped.watch(console.log);
-const text = $state("hehehe");
+const text = $store("hehehe");
 text.watch(console.log);
-const numeric = $state(20);
+const numeric = $store(20);
 numeric.watch(console.log);
 
 const options = [
@@ -42,37 +42,37 @@ const options = [
     { value: "grimmy", label: "Grimmy" },
     { value: "koseki_bijou", label: "Koseki Bijou" },
 ];
-const selected = $state(options[2].value);
+const selected = $store(options[2].value);
 selected.watch(console.log);
-const multiple = $state([options[2].value, options[3].value])
+const multiple = $store([options[2].value, options[3].value])
 multiple.watch(console.log);
 
 const groups = ["a", "b", "c", "d", "e", "f", "g"];
-const radio = $state("a");
+const radio = $store("a");
 radio.watch(console.log);
-const checkboxes = $state(["b", "c"]);
+const checkboxes = $store(["b", "c"]);
 checkboxes.watch(console.log);
 
-const w = $state(32);
+const w = $store(32);
 w.watch(console.log);
 
-const online = $state(window.navigator.onLine);
+const online = $store(window.navigator.onLine);
 online.subscribe((online) => console.log(online ?
       "Phew! Back online."
     : "OHNO! Connection lost."
 ));
 
-const devicePixelRatio = $state(window.devicePixelRatio);
+const devicePixelRatio = $store(window.devicePixelRatio);
 devicePixelRatio.watch(console.log);
 
 function makeQuery() {
     return fetch("https://imissfauna.com/api/v2/past_stream").then((res) => res.json());
 }
-const query = $state(makeQuery());
+const query = $store(makeQuery());
 
-const v = $state<HTMLVideoElement | null>(null);
+const v = $store<HTMLVideoElement | null>(null);
 
-const fullscreenElement = $state<Element | null>(null);
+const fullscreenElement = $store<Element | null>(null);
 fullscreenElement.watch(console.log);
 
 const app = $component("div", { id: $format`colored-${color}`, style: { color } },

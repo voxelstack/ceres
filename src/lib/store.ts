@@ -27,7 +27,7 @@ export abstract class Store<T> {
     }
 }
 
-export function $state<T>(value: T) {
+export function $store<T>(value: T) {
     return new AtomStore(value);
 }
 export class AtomStore<T> extends Store<T> {
