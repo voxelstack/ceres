@@ -8,7 +8,16 @@ import { AtomStore, Store, ValueCallback } from "./store";
 export interface ElementProxy<Element> {
     get element(): Element;
 }
+type MountListener<Element> = (element: Element | null) => void;
 type ResizeListener = (entry: ResizeObserverEntry) => void;
+type ComponentEventMap<Type extends Tag> = {
+    mount: MountListener<HTMLElementTagNameMap[Type]>;
+    resize: ResizeListener;
+};
+type Listeners<Type extends Tag> = {
+    [Key in keyof ComponentEventMap<Type>]: Set<ComponentEventMap<Type>[Key]>
+};
+
 export function $component<Type extends Tag>(
     type: Type,
     props: Props<Type> = {},
@@ -21,7 +30,7 @@ export class Component<const ElementTag extends Tag>
     implements ElementProxy<HTMLElementTagNameMap[ElementTag]>
 {
     private resizeObserver?: ResizeObserver;
-    private resizeListeners?: Set<ResizeListener>;
+    private listeners!: Listeners<ElementTag>;
     protected root!: HTMLElementTagNameMap[ElementTag];
 
     constructor(
@@ -38,6 +47,8 @@ export class Component<const ElementTag extends Tag>
 
     override mount(parent: Node, anchor?: Node) {
         super.mount(parent, anchor);
+
+        this.listeners = { mount: new Set(), resize: new Set() };
         this.root = document.createElement(this.type);
 
         const { root, children, disposables } = this;
@@ -67,6 +78,7 @@ export class Component<const ElementTag extends Tag>
         this.attachAttributes(attributes as Attributes<ElementTag>);
 
         parent.insertBefore(root, anchor ?? null);
+        this.listeners.mount.forEach((listener) => listener(root));
         this.runActions(use);
     }
     override move(parent: Node, anchor?: Node) {
@@ -77,28 +89,42 @@ export class Component<const ElementTag extends Tag>
     override unmount(): void {
         super.unmount();
         this.root.parentElement?.removeChild(this.root);
+        this.listeners.mount.forEach((listener) => listener(null));
     }
 
-    // TODO Should this be a generic addEventListener?
-    addResizeListener(listener: ResizeListener) {
-        this.resizeListeners = this.resizeListeners ?? new Set();
-        if (this.resizeObserver === undefined) {
-            this.resizeObserver = new ResizeObserver((entries) => {
-                entries.forEach((entry) => {
-                    this.resizeListeners?.forEach((listener) => listener(entry));
+    subscribe<
+        Type extends keyof Listeners<ElementTag>
+    >(type: Type, listener: ComponentEventMap<ElementTag>[Type]) {
+        this.addEventListener(type, listener);
+        return () => this.removeEventListener(type, listener);
+    }
+
+    private addEventListener<
+        Type extends keyof Listeners<ElementTag>
+    >(type: Type, listener: ComponentEventMap<ElementTag>[Type]) {
+        if (type === "resize") {
+            if (this.resizeObserver === undefined) {
+                this.resizeObserver = new ResizeObserver((entries) => {
+                    entries.forEach((entry) => {
+                        this.listeners.resize.forEach((listener) => listener(entry));
+                    });
                 });
-            });
-            this.resizeObserver.observe(this.root);
+                this.resizeObserver.observe(this.root);
+            }
         }
 
-        this.resizeListeners.add(listener);
+        this.listeners[type].add(listener);
     }
-    removeResizeListener(listener: ResizeListener) {        
-        this.resizeListeners?.delete(listener);
+    private removeEventListener<
+        Type extends keyof Listeners<ElementTag>
+    >(type: Type, listener: ComponentEventMap<ElementTag>[Type]) {
+        this.listeners[type].delete(listener);
 
-        if (this.resizeListeners?.size === 0) {
-            this.resizeObserver?.unobserve(this.root);
-            this.resizeObserver = undefined;
+        if (type === "resize") {
+            if (this.listeners.resize.size === 0) {
+                this.resizeObserver?.unobserve(this.root);
+                this.resizeObserver = undefined;
+            }
         }
     }
 
@@ -177,7 +203,7 @@ export class Component<const ElementTag extends Tag>
             const binder: (...args: any) => Disposable | void =
                 binders[key as keyof typeof binders];
 
-            const dispose = value instanceof Store ?
+            const dispose = value instanceof AtomStore ?
                   binder(this, rawBind(value))
                 : binder(this, value);
             if (dispose) {

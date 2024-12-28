@@ -35,10 +35,16 @@ type BindTransformer<
     previous: Previous,
     context: Context
 ) => Result;
-type BoundType<B> = B extends Bind<any, any, infer StoreType, any> ?
+type StoredType<B> = B extends Bind<any, any, infer StoreType, any> ?
       StoreType
     : B extends BindRead<any, infer StoreType, any> ?
           StoreType
+        : never
+;
+type BoundType<B> = B extends Bind<infer BoundType, any, any, any> ?
+      BoundType
+    : B extends BindRead<infer BoundType, any, any> ?
+          BoundType
         : never
 ;
 
@@ -129,18 +135,26 @@ export const documentBinders: SpecialElementBinders<Document, DocumentBindMap> =
 };
 export type DocumentBinds = SpecialElementBinds<DocumentBindMap>;
 
-type ComponentBindMap = {
-    clientWidth: BindRead<number, any, Component<any>>;
-    clientHeight: BindRead<number, any, Component<any>>;
-    contentWidth: BindRead<number, any, Component<any>>;
-    contentHeight: BindRead<number, any, Component<any>>;
+type ComponentBindMap<ElementType extends Tag> = {
+    this: BindRead<HTMLElementTagNameMap[ElementType] | null, any, Component<ElementType>>;
+    clientWidth: BindRead<number, any, Component<ElementType>>;
+    clientHeight: BindRead<number, any, Component<ElementType>>;
+    contentWidth: BindRead<number, any, Component<ElementType>>;
+    contentHeight: BindRead<number, any, Component<ElementType>>;
 };
 type ComponentBinder<ElementType extends Tag, BindType> =
     (target: Component<ElementType>, bind: BindType) => Disposable;
 type ComponentBinders = {
-    [Key in keyof ComponentBindMap]: ComponentBinder<any, ComponentBindMap[Key]>;
+    [Key in keyof ComponentBindMap<any>]: ComponentBinder<any, ComponentBindMap<any>[Key]>;
 };
 const globalComponentBinders: ComponentBinders = {
+    this: (target, bind) => {
+        function listener(element: HTMLElement | null) {
+            const { store, toBind } = bind;
+            store.value = toBind(element, store.value, target);
+        }
+        return target.subscribe("mount", listener);
+    },
     clientWidth: createDimensionReader((entry) => entry.borderBoxSize[0].inlineSize),
     clientHeight: createDimensionReader((entry) => entry.borderBoxSize[0].blockSize),
     contentWidth: createDimensionReader((entry) => entry.contentBoxSize[0].inlineSize),
@@ -193,20 +207,21 @@ export function getComponentBinders<ElementType extends Tag>(type: ElementType) 
     return htmlElementBinders[type as keyof HTMLElementBinders] ?? globalComponentBinders;
 }
 
-type GlobalComponentBinds = {
-    [Attribute in keyof ComponentBindMap]?: BoundOrRaw<ComponentBindMap[Attribute]>;
+type GlobalComponentBinds<ElementType extends Tag> = {
+    [Attribute in keyof ComponentBindMap<ElementType>]?:
+        BoundOrRaw<ComponentBindMap<ElementType>[Attribute]>;
 };
 export type ComponentBinds<ElementTag extends Tag> =
     ElementTag extends keyof HTMLElementBindMap ? {
               [Attribute in keyof HTMLElementBindMap[ElementTag]]?:
                   BoundOrRaw<HTMLElementBindMap[ElementTag][Attribute]>
-          } & GlobalComponentBinds
-        : GlobalComponentBinds
+          } & GlobalComponentBinds<ElementTag>
+        : GlobalComponentBinds<ElementTag>
 ;
 
 export function $transform<T extends keyof Transformations>(
     to: T,
-    store: AtomStore<BoundType<Transformations[T]>>,
+    store: AtomStore<StoredType<Transformations[T]>>,
 ): Transformations[T] {
     const transformer = transformers[to];
     return transformer(store);
@@ -220,7 +235,7 @@ type Transformations = {
 type Transformer<From, To> = (store: AtomStore<From>) => To;
 type Transformers = {
     [Key in keyof Transformations]:
-        Transformer<BoundType<Transformations[Key]>, Transformations[Key]>
+        Transformer<StoredType<Transformations[Key]>, Transformations[Key]>
 };
 const transformers: Transformers = {
     integer: (store) => ({
@@ -365,8 +380,6 @@ function createDimensionReader(
         function listener(entry: ResizeObserverEntry) {
             store.value = toBind(extractor(entry), store.value, target);
         }
-        target.addResizeListener(listener);
-
-        return () => target.removeResizeListener(listener);
+        return target.subscribe("resize", listener);
     }
 }

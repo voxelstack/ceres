@@ -70,10 +70,9 @@ function makeQuery() {
 }
 const query = $state(makeQuery());
 
-// TODO bind { this }
-let v: HTMLVideoElement;
+const v = $state<HTMLVideoElement | null>(null);
 
-const fullscreenElement = $state(null);
+const fullscreenElement = $state<Element | null>(null);
 fullscreenElement.watch(console.log);
 
 const app = $component("div", { id: $format`colored-${color}`, style: { color } },
@@ -91,8 +90,8 @@ const app = $component("div", { id: $format`colored-${color}`, style: { color } 
         $derived([selected], ([s]) => options.find(({ value }) => value === s)?.label))
     ),
 
-    $component("video", { use: { b: (el) => { v = el as HTMLVideoElement; } }}),
-    $component("button", { on: { click: $handler(()=>v.requestFullscreen() )}}, "fullscreen"),
+    $component("video", { bind: { this: v } }),
+    $component("button", { on: { click: $handler(() => v.value?.requestFullscreen())}}, "fullscreen"),
 
     $component("input", {
         type: "checkbox",
