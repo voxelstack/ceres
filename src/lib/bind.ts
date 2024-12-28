@@ -1,210 +1,323 @@
-import { Handlers, Tag } from "./props";
+import { Component, ElementProxy } from "./component";
+import { EventMap, EventType } from "./event";
+import { Tag } from "./props";
 import { Disposable } from "./renderable";
 import { AtomStore } from "./store";
 
-type BindTransformer<DomType, BindType> = (fromDom: DomType, prevBind: BindType, node: Node) => BindType;
-type DomTransformer<DomType, BindType> = (fromBind: BindType, node: Node) => DomType | void;
-type Transformer<DomType, BindType> = {
-    toBind: BindTransformer<DomType, BindType>;
-    toDom: DomTransformer<DomType, BindType>;
+export type BindRead<ReadType, StoreType = ReadType, Context = any> = {
+    store: AtomStore<StoreType>;
+    toBind: BindTransformer<ReadType, StoreType, StoreType, Context>;
+};
+export type Bind<
+    ReadType,
+    WriteType = ReadType,
+    StoreType = ReadType,
+    Context = any
+> = BindRead<ReadType, StoreType, Context> & {
+    fromBind: BindTransformer<StoreType, StoreType, WriteType, Context>;
+};
+type BoundOrRaw<T> = T | AtomStore<BoundType<T>>;
+const identity = <T>(val: T) => val;
+export function rawBind<T>(store: AtomStore<T>): BindRead<T> | Bind<T>  {
+    return {
+        store,
+        toBind: identity,
+        fromBind: identity
+    };
+}
+type BindTransformer<
+    Next,
+    Previous,
+    Result,
+    Context
+> = (
+    next: Next,
+    previous: Previous,
+    context: Context
+) => Result;
+type BoundType<B> = B extends Bind<any, any, infer StoreType, any> ?
+      StoreType
+    : B extends BindRead<any, infer StoreType, any> ?
+          StoreType
+        : never
+;
+
+export type WindowBindMap = {
+    innerWidth: BindRead<number, any, Window>;
+    innerHeight: BindRead<number, any, Window>;
+    scrollX: Bind<number, number, any, Window>;
+    scrollY: Bind<number, number, any, Window>;
+    online: BindRead<boolean, any, Window>;
+    devicePixelRatio: BindRead<number, number, Window>;
+};
+type WindowBinders = {
+    [Key in keyof WindowBindMap]: (target: ElementProxy<Window>, bind: WindowBindMap[Key]) => Disposable;
+};
+export const windowBinders: WindowBinders = {
+    innerWidth: createAttributeReader(watchEvent("resize", () => window.innerWidth)),
+    innerHeight: createAttributeReader(watchEvent("resize", () => window.innerHeight)),
+    scrollX: createAttributeBinder("scrollX", watchEvent("scroll", () => window.scrollX)),
+    scrollY: createAttributeBinder("scrollY", watchEvent("scroll", () => window.scrollY)),
+    online: (target, bind) => {
+        const disposables: Disposable[] = [];
+        const { element } = target;
+        const { store, toBind } = bind;
+
+        const onlineWatcher = watchEvent("online", () => true);
+        const offlineWatcher = watchEvent("offline", () => false);
+
+        disposables.push(onlineWatcher(element, (next) => store.value = toBind(next, store.value, element)));
+        disposables.push(offlineWatcher(element, (next) => store.value = toBind(next, store.value, element)));
+        
+        return () => disposables.forEach((dispose) => dispose());
+    },
+    devicePixelRatio: (target, bind) => {
+        const { element } = target;
+        const { store, toBind } = bind;
+
+        const mqString = `(resolution: ${window.devicePixelRatio}dppx)`;
+        const media = matchMedia(mqString);
+
+        const watcher = watchEvent("change", () => element.devicePixelRatio);
+        return watcher(media, (next) => store.value = toBind(next, store.value, element));
+    }
 };
 
-export function $transform<
-    T extends keyof Transformers,
-    DomType = Transformers[T] extends Transformer<infer DomType,  infer _> ? DomType : never,
-    BindType = Transformers[T] extends Transformer<infer _,  infer BindType> ? BindType : never,
->(
-    store: AtomStore<BindType>,
-    transform: T
-) {
-    const transformer = transformers[transform];
-    return { store, ...transformer } as unknown as Bind<DomType, BindType>;
-}
-export type Bind<DomType, BindType = DomType> = AtomStore<DomType> | {
-    store: AtomStore<BindType>;
-    toBind: BindTransformer<DomType, BindType>;
-    toDom: DomTransformer<DomType, BindType>;
+export type WindowBinds = {
+    [Attribute in keyof WindowBindMap]?: BoundOrRaw<WindowBindMap[Attribute]>;
 };
-export type BindRead<DomType, BindType = DomType> = AtomStore<DomType> | {
-    store: AtomStore<BindType>;
-    toBind: BindTransformer<DomType, BindType>;
+
+type ComponentBindMap = {
+    clientWidth: BindRead<number, any, Component<any>>;
+    clientHeight: BindRead<number, any, Component<any>>;
+    contentWidth: BindRead<number, any, Component<any>>;
+    contentHeight: BindRead<number, any, Component<any>>;
 };
-interface Transformers {
-    integer: Transformer<string, number>;
-    float: Transformer<string, number>;
-    multiselect: Transformer<string, string[]>;
-    checkGroup: Transformer<boolean, string[]>;
-    radioGroup: Transformer<boolean, string>;
+type ComponentBinder<ElementType extends Tag, BindType> =
+    (target: Component<ElementType>, bind: BindType) => Disposable;
+type ComponentBinders = {
+    [Key in keyof ComponentBindMap]: ComponentBinder<any, ComponentBindMap[Key]>;
+};
+const globalComponentBinders: ComponentBinders = {
+    clientWidth: createDimensionReader((entry) => entry.borderBoxSize[0].inlineSize),
+    clientHeight: createDimensionReader((entry) => entry.borderBoxSize[0].blockSize),
+    contentWidth: createDimensionReader((entry) => entry.contentBoxSize[0].inlineSize),
+    contentHeight: createDimensionReader((entry) => entry.contentBoxSize[0].blockSize),
+};
+
+type HTMLElementBindMap = {
+    input: {
+        checked: Bind<boolean, boolean, any, HTMLInputElement>;
+        value: Bind<string, string, any, HTMLInputElement>;
+    };
+    select: {
+        value: Bind<string, undefined, any, HTMLSelectElement>;
+    };
+};
+type HTMLElementBinders = {
+    [ElementType in keyof HTMLElementBindMap as ElementType extends Tag ? ElementType : never]: {
+        [Attribute in keyof HTMLElementBindMap[ElementType]]:
+            ComponentBinder<ElementType, HTMLElementBindMap[ElementType][Attribute]>;
+    };
+};
+const htmlElementBinders: HTMLElementBinders = {
+    input: {
+        ...globalComponentBinders,
+
+        
+        checked: createAttributeBinder(
+            "checked",
+            // TODO              makeExtractor("checked")
+            watchEvent("change", (event) => (event.target as HTMLInputElement).checked),
+            queueMicrotask
+        ),
+        value: createAttributeBinder(
+            "value",
+            watchEvent("input", (event) => (event.target as HTMLInputElement).value),
+            queueMicrotask
+        )
+    },
+    select: {
+        ...globalComponentBinders,
+
+        value: createAttributeBinder(
+            "value",
+            watchEvent("change", (event) => (event.target as HTMLSelectElement).value),
+            queueMicrotask
+        )
+    }
+};
+
+export function getComponentBinders<ElementType extends Tag>(type: ElementType) {
+    return htmlElementBinders[type as keyof HTMLElementBinders] ?? globalComponentBinders;
 }
+
+type GlobalComponentBinds = {
+    [Attribute in keyof ComponentBindMap]?: BoundOrRaw<ComponentBindMap[Attribute]>;
+};
+export type ComponentBinds<ElementTag extends Tag> =
+    ElementTag extends keyof HTMLElementBindMap ? {
+              [Attribute in keyof HTMLElementBindMap[ElementTag]]?:
+                  BoundOrRaw<HTMLElementBindMap[ElementTag][Attribute]>
+          } & GlobalComponentBinds
+        : GlobalComponentBinds
+;
+
+export function $transform<T extends keyof Transformations>(
+    to: T,
+    store: AtomStore<BoundType<Transformations[T]>>,
+): Transformations[T] {
+    const transformer = transformers[to];
+    return transformer(store);
+}
+type Transformations = {
+    integer: Bind<string, string, number>;
+    multiselect: Bind<string, undefined, string[], HTMLSelectElement>;
+    checkGroup: Bind<boolean, boolean, string[], HTMLInputElement>;
+    radioGroup: Bind<boolean, boolean, string, HTMLInputElement>;
+};
+type Transformer<From, To> = (store: AtomStore<From>) => To;
+type Transformers = {
+    [Key in keyof Transformations]: Transformer<BoundType<Transformations[Key]>, Transformations[Key]>
+};
 const transformers: Transformers = {
-    integer: {
-        toBind: (fromDom) => parseInt(fromDom),
-        toDom: (fromBind) => fromBind.toString()
-    },
-    float: {
-        toBind: (fromDom) => parseFloat(fromDom),
-        toDom: (fromBind) => fromBind.toString()
-    },
-    multiselect: {
-        toBind: (_fromDom, _prevBind, node) => {
+    integer: (store) => ({
+        store,
+        toBind: (nextSource) => parseInt(nextSource),
+        fromBind: (nextBind) => nextBind.toString()
+    }),
+    multiselect: (store) => ({
+        store,
+        toBind: (_nextSource, _previousBind, node) => {
             const selected = [];
-            for (const option of (node as HTMLSelectElement).selectedOptions) {
+            for (const option of node.selectedOptions) {
                 selected.push(option.value);
             }
-            return selected;
+            return selected; 
         },
-        toDom: (fromBind, node) => {
-            for (const option of (node as HTMLSelectElement).options) {
-                option.selected = fromBind.includes(option.value);
+        fromBind: (nextBind, _previousBind, node) => {
+            for (const option of node.options) {
+                option.selected = nextBind.includes(option.value);
             }
         }
-    },
-    checkGroup: {
-        toBind: (_fromDom, prevBind, node) => {
-            const el = node as HTMLInputElement;
-            if (el.checked) {
-                return [...prevBind, el.value];
+    }),
+    checkGroup: (store) => ({
+        store,
+        toBind: (_nextSource, previousBind, node) => {
+            if (node.checked) {
+                return [...previousBind, node.value];
             }
-            return prevBind.filter((value) => value !== el.value);
+            return previousBind.filter((value) => value !== node.value);
         },
-        toDom: (fromBind, node) => {
-            return fromBind.includes((node as HTMLInputElement).value);
+        fromBind: (nextBind, _previousBind, node) => {
+            return nextBind.includes(node.value);
         }
-    },
-    radioGroup: {
-        toBind: (_fromDom, prevBind, node) => {
-            const el = node as HTMLInputElement;
-            if (el.checked) {
-                return el.value;
+    }),
+    radioGroup: (store) => ({
+        store,
+        toBind: (_nextSource, previousBind, node) => {
+            if (node.checked) {
+                return node.value;
             }
-            return prevBind;
+            return previousBind;
         },
-        toDom: (fromBind, node) => {
-            return fromBind === (node as HTMLInputElement).value;
+        fromBind: (nextBind, _previousBind, node) => {
+            return nextBind === node.value;
         }
-    }
+    })
 };
 
-export interface HTMLElementBindMap {
-    input: {
-        checked: boolean,
-        value: string,
-    },
-    select: {
-        value: string
+type Watcher<Target, Value> = (target: Target, onValue: (value: Value) => void) => Disposable;
+type Extractor<Whole, Part> = (whole: Whole) => Part;
+function watchEvent<Target extends EventTarget, Type extends EventType, Value>(
+    type: Type,
+    extractor: Extractor<EventMap[Type], Value>
+): Watcher<Target, Value> {
+    return function (target, onValue) {
+        function listener(event: EventMap[Type]) {
+            onValue(extractor(event));
+        }
+        
+        // TODO https://github.com/axios/axios/issues/3219#issuecomment-678233460
+        target.addEventListener(type, listener as EventListener);
+        return () => {
+            target.removeEventListener(type, listener as EventListener);
+        };
     }
 }
+
+type AttributeReader<
+    Target,
+    Attribute extends keyof Target,
+    StoreType
+> = (target: ElementProxy<Target>, bind: BindRead<Target[Attribute], StoreType, Target>) => Disposable;
+function  createAttributeReader<Target, Attribute extends keyof Target, StoreType>(
+    watch: Watcher<Target, Target[Attribute]>
+): AttributeReader<Target, Attribute, StoreType> {
+    return function (target, bind) {
+        const { element } = target;
+        const { store, toBind } = bind;
+        return watch(element, (next) => {
+            store.value = toBind(next, store.value, element);
+        });
+    };
+}
+
 type AttributeBinder<
-    Type extends Tag,
-    DomType,
-    BindType = DomType
+    Target,
+    Attribute extends keyof Target,
+    StoreType
 > = (
-    node: HTMLElementTagNameMap[Type],
-    bind: Bind<DomType, BindType>
-) => Disposable[] | void;
-type AttributeBinders = {
-    [Key in keyof HTMLElementBindMap]: {
-        [BindName in keyof HTMLElementBindMap[Key]]:
-            AttributeBinder<Key, HTMLElementTagNameMap[Key][BindName], HTMLElementBindMap[Key][BindName]>;
-    }
-};
-export const attributeBinders: AttributeBinders = {
-    input: {
-        checked: createAttributeBinder("checked", "change"),
-        value: createAttributeBinder("value", "input"),
-    },
-    select: {
-        value: createAttributeBinder("value", "change")
-    }
-};
+    target: ElementProxy<Target>,
+    bind: Bind<Target[Attribute], Target[Attribute] | undefined, StoreType, Target>
+) => Disposable;
+type Scheduler = (task: () => void) => void;
 function createAttributeBinder<
-    Type extends Tag,
-    Attribute extends keyof HTMLElementTagNameMap[Type],
-    BindType
+    Target,
+    Attribute extends keyof Target,
+    StoreType
 >(
     attribute: Attribute,
-    event: keyof Handlers<Type>
-): AttributeBinder<Type, HTMLElementTagNameMap[Type][Attribute], BindType> {
-    return function (node, bind) {
+    watch: Watcher<Target, Target[Attribute]>,
+    scheduler: Scheduler = (task) => task()
+): AttributeBinder<Target, Attribute, StoreType> {
+    return function (target, bind) {
         const disposables: Disposable[] = [];
+        const { element } = target;
+        const { store, toBind, fromBind } = bind;
+        
+        disposables.push(watch(element, (next) => {
+            store.value = toBind(next, store.value, element);
+        }));
+        disposables.push(store.watch((next, previous) => {
+            scheduler(() => {
+                // Binds must be initialized with a value, previous is never undefined.
+                const writeBack = fromBind(next, previous!, element);
+                if (writeBack !== undefined) {
+                    element[attribute] = writeBack;
+                }
+            });
+        }));
 
-        const type = event as string;
-        if (bind instanceof AtomStore) {
-            const store = bind as AtomStore<HTMLElementTagNameMap[Type][Attribute]>;
-
-            function listener(ev: Event) {
-                const target = ev.target as HTMLElementTagNameMap[Type];
-                store.value = target[attribute];
-            }
-            node.addEventListener(type, listener);
-            disposables.push(() => node.removeEventListener(type, listener));
-            disposables.push(store.watch((next) => {
-                node[attribute] = next;
-            }));
-        } else {
-            const { store, toBind, toDom } = bind;
-
-            function listener(ev: Event) {
-                const target = ev.target as HTMLElementTagNameMap[Type];
-                store.value = toBind(target[attribute], store.value, node);
-            }
-            node.addEventListener(type, listener);
-            disposables.push(() => node.removeEventListener(type, listener));
-            disposables.push(store.watch((next) => {
-                queueMicrotask(() => {
-                    const dom = toDom(next, node);
-                    if (dom !== undefined) {
-                        node[attribute] = dom;
-                    }
-                });
-            }));
-        }
-
-        return disposables;
-    }
+        return () => disposables.forEach((dispose) => dispose());
+    };
 }
 
-export interface HTMLElementDimensionBinds {
-    clientWidth?: BindRead<number>;
-    clientHeight?: BindRead<number>;
-    contentWidth?: BindRead<number>;
-    contentHeight?: BindRead<number>;
-}
-export type GlobalBinds = HTMLElementDimensionBinds;
+type DimensionReader = (
+    target: Component<Tag>,
+    bind: BindRead<number, number, Component<Tag>>
+) => Disposable;
+function createDimensionReader(
+    extractor: Extractor<ResizeObserverEntry, number>
+): DimensionReader {
+    return function (target, bind) {
+        const { store, toBind } = bind;
 
-export type DimensionBinder = (entry: ResizeObserverEntry, bind: BindRead<number>) => void;
-type DimensionBinders = {
-    [Key in keyof HTMLElementDimensionBinds]-?: DimensionBinder;
-};
-export const dimensionBinders: DimensionBinders = {
-    clientWidth: createDimensionBinder("clientWidth"),
-    clientHeight: createDimensionBinder("clientHeight"),
-    contentWidth: createDimensionBinder("contentWidth"),
-    contentHeight: createDimensionBinder("contentHeight"),
-}
-function createDimensionBinder(key: keyof HTMLElementDimensionBinds): DimensionBinder {
-    return function (entry, bind) {
-        let value;
-        switch (key) {
-            case "clientWidth":
-                value = entry.borderBoxSize[0].inlineSize;
-                break;
-            case "clientHeight":
-                value = entry.borderBoxSize[0].blockSize;
-                break;
-            case "contentWidth":
-                value = entry.contentBoxSize[0].inlineSize;
-                break;
-            case "contentHeight":
-                value = entry.contentBoxSize[0].blockSize;
-                break;
+        function listener(entry: ResizeObserverEntry) {
+            store.value = toBind(extractor(entry), store.value, target);
         }
+        target.addResizeListener(listener);
 
-        if (bind instanceof AtomStore) {
-            bind.value = value;
-        } else {
-            const { store, toBind } = bind;
-            store.value = toBind(value, store.value, entry.target);
-        }
+        return () => target.removeResizeListener(listener);
     }
 }

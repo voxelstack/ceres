@@ -1,5 +1,5 @@
 import { $transform } from "./lib/bind";
-import { $boundary, $component, $fragment, $head } from "./lib/component";
+import { $boundary, $component, $fragment, $head, $window } from "./lib/component";
 import { $await, $each, $if } from "./lib/directive";
 import { $handler } from "./lib/event";
 import { $text, $format } from "./lib/reactive_string";
@@ -56,12 +56,25 @@ checkboxes.watch(console.log);
 const w = $state(32);
 w.watch(console.log);
 
+const online = $state(window.navigator.onLine);
+online.subscribe((online) => console.log(online ?
+      "Phew! Back online."
+    : "OHNO! Connection lost."
+));
+
+const devicePixelRatio = $state(window.devicePixelRatio);
+devicePixelRatio.watch(console.log);
+
 function makeQuery() {
     return fetch("https://imissfauna.com/api/v2/past_stream").then((res) => res.json());
 }
 const query = $state(makeQuery());
 
 const app = $component("div", { id: $format`colored-${color}`, style: { color } },
+    $window({
+        on: { keydown: $handler(({ key }) => key === "f" && console.log("hehehe"))},
+        bind: { online, devicePixelRatio }
+    }),
     $head($component("title", undefined,
         $derived([selected], ([s]) => options.find(({ value }) => value === s)?.label))
     ),
@@ -76,7 +89,7 @@ const app = $component("div", { id: $format`colored-${color}`, style: { color } 
             checked: {
                 store: mapped, 
                 toBind: (dom) => dom ? "enabled" : "disabled",
-                toDom: (bind) => bind === "enabled"
+                fromBind: (bind) => bind === "enabled"
             }
         }
     }),
@@ -86,21 +99,21 @@ const app = $component("div", { id: $format`colored-${color}`, style: { color } 
     }),
     $component("input", {
         type: "number",
-        bind: { value: $transform(numeric, "integer") }
+        bind: { value: $transform("integer", numeric) }
     }),
     $component("input", {
         type: "range",
         min: 0,
         max: 100,
         step: 20,
-        bind: { value: $transform(numeric, "integer") }
+        bind: { value: $transform("integer", numeric) }
     }),
 
     $component("select", { bind: { value: selected }}, $each(
         options,
         ({ label, value }) => $component("option", { value }, label)
     )),
-    $component("select", { multiple: true, bind: { value: $transform(multiple, "multiselect") }},
+    $component("select", { multiple: true, bind: { value: $transform("multiselect", multiple) }},
         $each(
             options,
             ({ label, value }) => $component("option", { value }, label)
@@ -111,14 +124,14 @@ const app = $component("div", { id: $format`colored-${color}`, style: { color } 
         groups,
         (entry) => $fragment(
             $component("label", { htmlFor: entry }, entry),
-            $component("input", { id: entry, value: entry, type: "checkbox", bind: { checked: $transform(checkboxes, "checkGroup") } }),
+            $component("input", { id: entry, value: entry, type: "checkbox", bind: { checked: $transform("checkGroup", checkboxes) } }),
         )
     )),
     $component("fieldset", undefined, $each(
         groups,
         (entry) => $fragment(
             $component("label", { htmlFor: entry }, entry),
-            $component("input", { id: entry, value: entry, type: "radio", bind: { checked: $transform(radio, "radioGroup") }}),
+            $component("input", { id: entry, value: entry, type: "radio", bind: { checked: $transform("radioGroup", radio) }}),
         )
     )),
 

@@ -1,9 +1,14 @@
-import { attributeBinders, Bind, BindRead, DimensionBinder, dimensionBinders, HTMLElementBindMap, HTMLElementDimensionBinds } from "./bind";
-import { Actions, Attributes, Binds, Classes, Handlers, Props, Reactive, Stringifiable, Styles, Tag } from "./props";
+import { ComponentBinds, getComponentBinders, rawBind, windowBinders, WindowBindMap, WindowBinds } from "./bind";
+import { EventHandler } from "./event";
+import { Actions, Attributes, Classes, Handlers, Props, Reactive, Stringifiable, Styles, Tag, WindowHandlers, WindowProxyProps } from "./props";
 import { ReactiveString } from "./reactive_string";
-import { Child, Renderable } from "./renderable";
+import { Child, Disposable, Renderable } from "./renderable";
 import { Store, ValueCallback } from "./store";
 
+export interface ElementProxy<Element> {
+    get element(): Element;
+}
+type ResizeListener = (entry: ResizeObserverEntry) => void;
 export function $component<Type extends Tag>(
     type: Type,
     props: Props<Type> = {},
@@ -11,10 +16,13 @@ export function $component<Type extends Tag>(
 ) {
     return new Component(type, props, children);
 }
-class Component<const ElementTag extends Tag> extends Renderable {
+export class Component<const ElementTag extends Tag>
+    extends Renderable
+    implements ElementProxy<HTMLElementTagNameMap[ElementTag]>
+{
     private resizeObserver?: ResizeObserver;
-    private resizeWatchers?: DimensionBinder[];
-    protected root!: HTMLElement;
+    private resizeListeners?: Set<ResizeListener>;
+    protected root!: HTMLElementTagNameMap[ElementTag];
 
     constructor(
         private type: ElementTag,
@@ -22,6 +30,10 @@ class Component<const ElementTag extends Tag> extends Renderable {
         private children: Child[]
     ) {
         super();
+    }
+
+    public get element() {
+        return this.root;
     }
 
     override mount(parent: Node, anchor?: Node) {
@@ -47,7 +59,7 @@ class Component<const ElementTag extends Tag> extends Renderable {
             }
         }
 
-        const { style, className, on, use, bind, ...attributes } = this.props;
+        const { on, use, bind, style, className, ...attributes } = this.props;
         this.attachStyles(style);
         this.attachClass(className);
         this.attachEventHandlers(on);
@@ -65,6 +77,29 @@ class Component<const ElementTag extends Tag> extends Renderable {
     override unmount(): void {
         super.unmount();
         this.root.parentElement?.removeChild(this.root);
+    }
+
+    // TODO Should this be a generic addEventListener?
+    addResizeListener(listener: ResizeListener) {
+        this.resizeListeners = this.resizeListeners ?? new Set();
+        if (this.resizeObserver === undefined) {
+            this.resizeObserver = new ResizeObserver((entries) => {
+                entries.forEach((entry) => {
+                    this.resizeListeners?.forEach((listener) => listener(entry));
+                });
+            });
+            this.resizeObserver.observe(this.root);
+        }
+
+        this.resizeListeners.add(listener);
+    }
+    removeResizeListener(listener: ResizeListener) {        
+        this.resizeListeners?.delete(listener);
+
+        if (this.resizeListeners?.size === 0) {
+            this.resizeObserver?.unobserve(this.root);
+            this.resizeObserver = undefined;
+        }
     }
 
     private attachStyles(style?: Styles) {
@@ -136,46 +171,18 @@ class Component<const ElementTag extends Tag> extends Renderable {
             });
         }
     }
-    private attachBinds(bind?: Binds<ElementTag>) {
+    private attachBinds(bind?: ComponentBinds<ElementTag>) {
         for (const [key, value] of Object.entries(bind ?? {})) {
-            switch (key) {
-                case "clientWidth":
-                case "clientHeight":
-                case "contentWidth":
-                case "contentHeight":
-                    this.attachDimensionBind(key, value);
-                    break;
-                default:
-                    this.attachAttributeBind(key, value);
+            const binders = getComponentBinders(this.type);
+            const binder: (...args: any) => Disposable | void =
+                binders[key as keyof typeof binders];
+
+            const dispose = value instanceof Store ?
+                  binder(this, rawBind(value))
+                : binder(this, value);
+            if (dispose) {
+                this.disposables.push(dispose);
             }
-        }
-    }
-    private attachDimensionBind(key: keyof HTMLElementDimensionBinds, value: BindRead<number>) {
-        if (this.resizeObserver === undefined) {
-            this.resizeObserver = new ResizeObserver((entries) => {
-                entries.forEach((entry) => this.resizeWatchers?.forEach((watcher) => watcher(entry, value)));
-            });
-            this.resizeObserver.observe(this.root);
-        }        
-
-        this.resizeWatchers = this.resizeWatchers ?? [];
-        this.resizeWatchers.push((entry) => {
-            dimensionBinders[key](entry, value);
-        });
-
-        this.disposables.push(() => {
-            this.resizeObserver?.unobserve(this.root);
-            this.resizeObserver = undefined;
-            this.resizeWatchers = undefined;
-        });
-    }
-    private attachAttributeBind(key: any, value: Bind<any>) {
-        const elementBinders = attributeBinders[this.type as keyof HTMLElementBindMap];
-        const binder = elementBinders[key as keyof typeof elementBinders];
-        
-        const dispose = binder(this.root as any, value);
-        if (dispose) {
-            this.disposables.push(...dispose);
         }
     }
     private attachAttributes(attributes?: Attributes<ElementTag>) {
@@ -306,5 +313,55 @@ export function $head(...children: Child[]) {
 class Head extends Fragment {
     override mount() {
         super.mount(document.head);
+    }
+}
+
+export function $window(props: WindowProxyProps) {
+    return new WindowProxy(props);
+}
+class WindowProxy extends Renderable implements ElementProxy<Window> {
+    constructor(
+        private props: WindowProxyProps
+    ) {
+        super();
+    }
+
+    get element() {
+        return window;
+    }
+
+    override mount(parent: Node, anchor?: Node): void {
+        super.mount(parent, anchor);
+
+        const { on, bind } = this.props;
+        this.attachEventHandlers(on);
+        this.attachBinds(bind);
+    }
+    override move() {
+        return undefined;
+    }
+
+    private attachEventHandlers(on?: WindowHandlers) {
+        for (const [key, value] of Object.entries(on ?? {})) {
+            const { listener, options } = value as EventHandler<Event>;
+
+            window.addEventListener(key, listener, options);
+            this.disposables.push(() => {
+                window.removeEventListener(key, listener, options);
+            });
+        }
+    }
+    private attachBinds(bind?: WindowBinds) {
+        for (const [key, value] of Object.entries(bind ?? {})) {
+            const binder: (...args: any) => Disposable | void =
+                windowBinders[key as keyof WindowBindMap];
+
+            const dispose = value instanceof Store ?
+                binder(this, rawBind(value))
+              : binder(this, value);
+            if (dispose) {
+                this.disposables.push(dispose);
+            }
+        }
     }
 }

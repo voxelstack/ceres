@@ -7,8 +7,8 @@
  * (Really fun to write.)
  */
 
-import { Bind, GlobalBinds, HTMLElementBindMap } from "./bind";
-import { EventHandler, EventType } from "./event";
+import { ComponentBinds, WindowBinds } from "./bind";
+import { ElementEventType, EventHandler, WindowEventType } from "./event";
 import { ReactiveString } from "./reactive_string";
 import { type Store } from "./store";
 
@@ -16,11 +16,15 @@ export type Props<ElementTag extends Tag> = Partial<
     Attributes<ElementTag> & {
         className: Classes;
         style: Styles;
-        bind: Binds<ElementTag>;
+        bind: ComponentBinds<ElementTag>;
         use: Actions;
         on: Handlers<ElementTag>;
     }>
 ;
+export type WindowProxyProps = Partial<{
+    bind: WindowBinds;
+    on: WindowHandlers;
+}>;
 
 type PlainAttribute = string | number | boolean | null | PlainAttribute[];
 export type Stringifiable = { toString: () => string };
@@ -51,8 +55,13 @@ export type Handlers<ElementTag extends Tag> = Partial<{
         as Attribute extends `on${infer Event}` ? Event : never
     ]:
         Attribute extends `on${infer Event}` ?
-              Event extends EventType ? EventHandler<Event> : never
+              Event extends ElementEventType ?
+                  EventHandler<HTMLElementEventMap[Event]>
+                : never
             : never
+}>;
+export type WindowHandlers = Partial<{
+    [Key in WindowEventType]: EventHandler<WindowEventMap[Key]>
 }>;
 
 export type Attributes<ElementTag extends Tag> = Partial<{
@@ -72,14 +81,6 @@ export type Attributes<ElementTag extends Tag> = Partial<{
 type Cleanup = () => void;
 type Action = (node: Node) => Cleanup | void;
 export type Actions = Record<string, Action>;
-
-export type Binds<ElementTag extends Tag> = ElementTag extends keyof HTMLElementBindMap ?
-      Partial<{
-          [Attribute in keyof HTMLElementBindMap[ElementTag]]:
-              Bind<HTMLElementBindMap[ElementTag][Attribute], any>
-      }> & GlobalBinds
-    : GlobalBinds
-;
 
 // https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-421529650
 type Equals<X, Y, WhenTrue = true, WhenFalse = false> =
