@@ -8,7 +8,7 @@
  */
 
 import { ComponentBinds, DocumentBinds, WindowBinds } from "./bind";
-import { DocumentEventType, ElementEventType, EventHandler, WindowEventType } from "./event";
+import { ElementEventType, EventHandler } from "./event";
 import { ReactiveString } from "./reactive_string";
 import { type Store } from "./store";
 
@@ -64,12 +64,12 @@ export type Handlers<ElementTag extends Tag> = Partial<{
                 : never
             : never
 }>;
-export type WindowHandlers = {
-    [Key in WindowEventType]?: EventHandler<WindowEventMap[Key]>;
+
+type SpecialElementHandlers<EventMap> = {
+    [Key in keyof EventMap]?: EventHandler<EventMap[Key]>;
 };
-export type DocumentHandlers = {
-    [Key in DocumentEventType]?: EventHandler<DocumentEventMap[Key]>;
-};
+export type WindowHandlers = SpecialElementHandlers<WindowEventMap>;
+export type DocumentHandlers = SpecialElementHandlers<DocumentEventMap>;
 
 export type Attributes<ElementTag extends Tag> = Partial<{
     [

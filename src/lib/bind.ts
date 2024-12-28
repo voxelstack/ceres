@@ -42,6 +42,13 @@ type BoundType<B> = B extends Bind<any, any, infer StoreType, any> ?
         : never
 ;
 
+type SpecialElementBinders<Element, BindMap> = {
+    [Key in keyof BindMap]: (target: ElementProxy<Element>, bind: BindMap[Key]) => Disposable;
+};
+type SpecialElementBinds<BindMap> = {
+    [Attribute in keyof BindMap]?: BoundOrRaw<BindMap[Attribute]>;
+};
+
 export type WindowBindMap = {
     innerWidth: BindRead<number, any, Window>;
     innerHeight: BindRead<number, any, Window>;
@@ -50,11 +57,7 @@ export type WindowBindMap = {
     online: BindRead<boolean, any, Window>;
     devicePixelRatio: BindRead<number, any, Window>;
 };
-type WindowBinders = {
-    [Key in keyof WindowBindMap]:
-        (target: ElementProxy<Window>, bind: WindowBindMap[Key]) => Disposable;
-};
-export const windowBinders: WindowBinders = {
+export const windowBinders: SpecialElementBinders<Window, WindowBindMap> = {
     innerWidth: createAttributeReader(watchEvent("resize", () => window.innerWidth)),
     innerHeight: createAttributeReader(watchEvent("resize", () => window.innerHeight)),
     scrollX: createAttributeBinder("scrollX", watchEvent("scroll", () => window.scrollX)),
@@ -87,9 +90,7 @@ export const windowBinders: WindowBinders = {
         return watcher(media, (next) => store.value = toBind(next, store.value, element));
     }
 };
-export type WindowBinds = {
-    [Attribute in keyof WindowBindMap]?: BoundOrRaw<WindowBindMap[Attribute]>;
-};
+export type WindowBinds = SpecialElementBinds<WindowBindMap>;
 
 export type DocumentBindMap = {
     activeElement: BindRead<Element | null, any, Document>;
@@ -97,11 +98,7 @@ export type DocumentBindMap = {
     pointerLockElement: BindRead<Element | null, any, Document>;
     visibilityState: BindRead<DocumentVisibilityState, any, Document>;
 };
-type DocumentBinders = {
-    [Key in keyof DocumentBindMap]:
-        (target: ElementProxy<Document>, bind: DocumentBindMap[Key]) => Disposable;
-};
-export const documentBinders: DocumentBinders = {
+export const documentBinders: SpecialElementBinders<Document, DocumentBindMap> = {
     activeElement: (target, bind) => {
         const disposables: Disposable[] = [];
         const { element } = target;
@@ -130,12 +127,7 @@ export const documentBinders: DocumentBinders = {
         watchEvent("visibilitychange", () => document.visibilityState)
     )
 };
-
-//const attr = createAttributeReader(watchEvent("visibilitychange", () => document.visibilityState));
-
-export type DocumentBinds = {
-    [Attribute in keyof DocumentBindMap]?: BoundOrRaw<DocumentBindMap[Attribute]>;
-};
+export type DocumentBinds = SpecialElementBinds<DocumentBindMap>;
 
 type ComponentBindMap = {
     clientWidth: BindRead<number, any, Component<any>>;
@@ -173,7 +165,6 @@ type HTMLElementBinders = {
 const htmlElementBinders: HTMLElementBinders = {
     input: {
         ...globalComponentBinders,
-
         
         checked: createAttributeBinder(
             "checked",
