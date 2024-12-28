@@ -1,16 +1,16 @@
 import { $transform } from "./lib/bind";
-import { $body, $boundary, $component, $document, $fragment, $head, $window } from "./lib/component";
+import { $body, $boundary, $element, $document, $fragment, $head, $window } from "./lib/component";
 import { $await, $each, $if } from "./lib/directive";
 import { $handler } from "./lib/event";
 import { $text, $format } from "./lib/reactive_string";
-import { $derived, $store } from "./lib/store";
+import { $derive, $store } from "./lib/store";
 
 const en = $store("Ceres・Fauna・");
 const jp = $store("セレス・ファウナ・");
 const count = $store(0);
-const upper = $derived([en], ([e]) => e.toUpperCase());
-const double = $derived([count], ([c]) => 2 * c);
-const color = $derived([count], ([c]) => ["darkgreen", "darkolivegreen", "darkkhaki"][c % 3]);
+const upper = $derive([en], ([e]) => e.toUpperCase());
+const double = $derive([count], ([c]) => 2 * c);
+const color = $derive([count], ([c]) => ["darkgreen", "darkolivegreen", "darkkhaki"][c % 3]);
 const dir = $store(1);
 
 function scroll(str: string) {
@@ -75,7 +75,7 @@ const v = $store<HTMLVideoElement | null>(null);
 const fullscreenElement = $store<Element | null>(null);
 fullscreenElement.watch(console.log);
 
-const app = $component("div", { id: $format`colored-${color}`, style: { color } },
+const app = $element("div", { id: $format`colored-${color}`, style: { color } },
     $window({
         on: { keydown: $handler(({ key }) => key === "f" && console.log("hehehe"))},
         bind: { online, devicePixelRatio }
@@ -86,18 +86,18 @@ const app = $component("div", { id: $format`colored-${color}`, style: { color } 
     $body({
         on: { mouseleave: $handler(() => console.log("Nooooo don't leave me!!!")) }
     }),
-    $head($component("title", undefined,
-        $derived([selected], ([s]) => options.find(({ value }) => value === s)?.label))
+    $head($element("title", undefined,
+        $derive([selected], ([s]) => options.find(({ value }) => value === s)?.label))
     ),
 
-    $component("video", { bind: { this: v } }),
-    $component("button", { on: { click: $handler(() => v.value?.requestFullscreen())}}, "fullscreen"),
+    $element("video", { bind: { this: v } }),
+    $element("button", { on: { click: $handler(() => v.value?.requestFullscreen())}}, "fullscreen"),
 
-    $component("input", {
+    $element("input", {
         type: "checkbox",
         bind: { checked }
     }),
-    $component("input", {
+    $element("input", {
         type: "checkbox",
         bind: {
             checked: {
@@ -107,15 +107,15 @@ const app = $component("div", { id: $format`colored-${color}`, style: { color } 
             }
         }
     }),
-    $component("input", {
+    $element("input", {
         type: "text",
         bind: { value: text }
     }),
-    $component("input", {
+    $element("input", {
         type: "number",
         bind: { value: $transform("integer", numeric) }
     }),
-    $component("input", {
+    $element("input", {
         type: "range",
         min: 0,
         max: 100,
@@ -123,39 +123,39 @@ const app = $component("div", { id: $format`colored-${color}`, style: { color } 
         bind: { value: $transform("integer", numeric) }
     }),
 
-    $component("select", { bind: { value: selected }}, $each(
+    $element("select", { bind: { value: selected }}, $each(
         options,
-        ({ label, value }) => $component("option", { value }, label)
+        ({ label, value }) => $element("option", { value }, label)
     )),
-    $component("select", { multiple: true, bind: { value: $transform("multiselect", multiple) }},
+    $element("select", { multiple: true, bind: { value: $transform("multiselect", multiple) }},
         $each(
             options,
-            ({ label, value }) => $component("option", { value }, label)
+            ({ label, value }) => $element("option", { value }, label)
         )
     ),
 
-    $component("fieldset", undefined, $each(
+    $element("fieldset", undefined, $each(
         groups,
         (entry) => $fragment(
-            $component("label", { htmlFor: entry }, entry),
-            $component("input", { id: entry, value: entry, type: "checkbox", bind: { checked: $transform("checkGroup", checkboxes) } }),
+            $element("label", { htmlFor: entry }, entry),
+            $element("input", { id: entry, value: entry, type: "checkbox", bind: { checked: $transform("checkGroup", checkboxes) } }),
         )
     )),
-    $component("fieldset", undefined, $each(
+    $element("fieldset", undefined, $each(
         groups,
         (entry) => $fragment(
-            $component("label", { htmlFor: entry }, entry),
-            $component("input", { id: entry, value: entry, type: "radio", bind: { checked: $transform("radioGroup", radio) }}),
+            $element("label", { htmlFor: entry }, entry),
+            $element("input", { id: entry, value: entry, type: "radio", bind: { checked: $transform("radioGroup", radio) }}),
         )
     )),
 
     $boundary(
-        $component("span", undefined, "oh noes, something blew up"),
+        $element("span", undefined, "oh noes, something blew up"),
 
-        $component("span", { use: { explode: () => { throw new Error("kaboom"); }}})
+        $element("span", { use: { explode: () => { throw new Error("kaboom"); }}})
     ),
 
-    $component("span", {
+    $element("span", {
         style: { display: "block", width: `${w.value}px`, height: "32px", background: "red" },
         bind: { contentWidth: w },
         use: {
@@ -167,44 +167,44 @@ const app = $component("div", { id: $format`colored-${color}`, style: { color } 
         }
     }),
 
-    $component("h1", {
+    $element("h1", {
         className: $format`${color}`,
     }, en),
-    $component("h1", {
+    $element("h1", {
         className: multiple,
     }, upper),
-    $component("h1", {
-        className: $derived([multiple], ([m]) => {
+    $element("h1", {
+        className: $derive([multiple], ([m]) => {
             return Object.fromEntries(options.map(({ value })=> [
                 value, m.includes(value)
             ]))
         }),
     }, jp),
 
-    $component("div", undefined, $format`ticks: ${count}`),
-    $component("div", undefined, $format`double: ${double}`),
+    $element("div", undefined, $format`ticks: ${count}`),
+    $element("div", undefined, $format`double: ${double}`),
 
-    $component("span", undefined, double),
+    $element("span", undefined, double),
 
-    $component("div", undefined,
-        $component("span", undefined, $derived(
+    $element("div", undefined,
+        $element("span", undefined, $derive(
             [dir], ([d]) => d > 0 ? "left" : "right"
         )),
-        $component("button", {
+        $element("button", {
             on: {click: $handler(() => dir.value *= -1)}
         }, "flip"),
     ),
 
-    $if($derived([gen], ([g]) => g === 1), $component("span", undefined, "ame")).
-    $elseif($derived([gen], ([g]) => g === 2), $component("span", undefined, "sana")).
-    $elseif($derived([gen], ([g]) => g === 3), $component("span", undefined, "fwmc")).
-    $elseif($derived([gen], ([g]) => g === 4), $component("span", undefined, "cc")).
-    $else($component("span", undefined, "soon")),
+    $if($derive([gen], ([g]) => g === 1), $element("span", undefined, "ame")).
+    $elseif($derive([gen], ([g]) => g === 2), $element("span", undefined, "sana")).
+    $elseif($derive([gen], ([g]) => g === 3), $element("span", undefined, "fwmc")).
+    $elseif($derive([gen], ([g]) => g === 4), $element("span", undefined, "cc")).
+    $else($element("span", undefined, "soon")),
 
-    $component("div", undefined,
+    $element("div", undefined,
         $each(
             us,
-            (name) => $component("span", {
+            (name) => $element("span", {
                 use: {
                     mount: (node) => {
                         console.log("mount", node);
@@ -214,8 +214,8 @@ const app = $component("div", { id: $format`colored-${color}`, style: { color } 
                 style: { display: "block", color: "red" }
             }, name)
         ),
-        $component("button", { on: { click: $handler(() => us.value = us.value.toSorted())}}, "???"),
-        $component("button", { on: { click: $handler(() => {
+        $element("button", { on: { click: $handler(() => us.value = us.value.toSorted())}}, "???"),
+        $element("button", { on: { click: $handler(() => {
             const victim = us.value[Math.floor(Math.random() * us.value.length)];
             us.value = us.value.filter((value) => value !== victim);
         })}}, "---"),
@@ -223,18 +223,18 @@ const app = $component("div", { id: $format`colored-${color}`, style: { color } 
 
     $text($format`${color}`),
 
-    $component("div", undefined,
-        $await(query, $component("span", undefined, "Loading...")).
-        $then((result: object) => $component("div", undefined,
-            $component("pre", undefined, JSON.stringify(result, null, 8)),
-            $component("button", {
+    $element("div", undefined,
+        $await(query, $element("span", undefined, "Loading...")).
+        $then((result: object) => $element("div", undefined,
+            $element("pre", undefined, JSON.stringify(result, null, 8)),
+            $element("button", {
                 on: { click: $handler(() => query.value = makeQuery()) }
             },
             "retry"
         ))).
-        $catch(() => $component("div", undefined,
-            $component("span", undefined, "ohno"),
-            $component("button", {
+        $catch(() => $element("div", undefined,
+            $element("span", undefined, "ohno"),
+            $element("button", {
                 on: { click: $handler(() => query.value = makeQuery()) }
             },
             "retry"

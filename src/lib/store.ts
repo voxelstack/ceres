@@ -115,7 +115,7 @@ export class DerivedStore<const Stores extends Array<Store<any>>, T> extends Sto
         this.connected = false;
     }
 }
-export function $derived<
+export function $derive<
     const Stores extends Array<Store<any>>, T
 >(stores: Stores, aggregator: Aggregator<Stores, T>) {
     return new DerivedStore(stores, aggregator);

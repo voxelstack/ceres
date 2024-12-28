@@ -1,4 +1,4 @@
-import { Component, ElementProxy } from "./component";
+import { CeresElement, ElementProxy } from "./component";
 import { EventMap, EventType } from "./event";
 import { Tag } from "./props";
 import { Disposable } from "./renderable";
@@ -136,14 +136,14 @@ export const documentBinders: SpecialElementBinders<Document, DocumentBindMap> =
 export type DocumentBinds = SpecialElementBinds<DocumentBindMap>;
 
 type ComponentBindMap<ElementType extends Tag> = {
-    this: BindRead<HTMLElementTagNameMap[ElementType] | null, any, Component<ElementType>>;
-    clientWidth: BindRead<number, any, Component<ElementType>>;
-    clientHeight: BindRead<number, any, Component<ElementType>>;
-    contentWidth: BindRead<number, any, Component<ElementType>>;
-    contentHeight: BindRead<number, any, Component<ElementType>>;
+    this: BindRead<HTMLElementTagNameMap[ElementType] | null, any, CeresElement<ElementType>>;
+    clientWidth: BindRead<number, any, CeresElement<ElementType>>;
+    clientHeight: BindRead<number, any, CeresElement<ElementType>>;
+    contentWidth: BindRead<number, any, CeresElement<ElementType>>;
+    contentHeight: BindRead<number, any, CeresElement<ElementType>>;
 };
 type ComponentBinder<ElementType extends Tag, BindType> =
-    (target: Component<ElementType>, bind: BindType) => Disposable;
+    (target: CeresElement<ElementType>, bind: BindType) => Disposable;
 type ComponentBinders = {
     [Key in keyof ComponentBindMap<any>]: ComponentBinder<any, ComponentBindMap<any>[Key]>;
 };
@@ -368,8 +368,8 @@ function createAttributeBinder<
 }
 
 type DimensionReader = (
-    target: Component<Tag>,
-    bind: BindRead<number, number, Component<Tag>>
+    target: CeresElement<Tag>,
+    bind: BindRead<number, number, CeresElement<Tag>>
 ) => Disposable;
 function createDimensionReader(
     extractor: Extractor<ResizeObserverEntry, number>

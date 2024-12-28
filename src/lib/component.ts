@@ -18,14 +18,14 @@ type Listeners<Type extends Tag> = {
     [Key in keyof ComponentEventMap<Type>]: Set<ComponentEventMap<Type>[Key]>
 };
 
-export function $component<Type extends Tag>(
+export function $element<Type extends Tag>(
     type: Type,
     props: Props<Type> = {},
     ...children: Child[]
 ) {
-    return new Component(type, props, children);
+    return new CeresElement(type, props, children);
 }
-export class Component<const ElementTag extends Tag>
+export class CeresElement<const ElementTag extends Tag>
     extends Renderable
     implements ElementProxy<HTMLElementTagNameMap[ElementTag]>
 {
