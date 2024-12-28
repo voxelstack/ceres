@@ -16,7 +16,7 @@ export type Bind<
 > = BindRead<ReadType, StoreType, Context> & {
     fromBind: BindTransformer<StoreType, StoreType, WriteType, Context>;
 };
-type BoundOrRaw<T> = T | AtomStore<BoundType<T>>;
+export type BoundOrRaw<T> = T | AtomStore<BoundType<T>>;
 const identity = <T>(val: T) => val;
 export function rawBind<T>(store: AtomStore<T>): BindRead<T> | Bind<T>  {
     return {
@@ -48,10 +48,11 @@ export type WindowBindMap = {
     scrollX: Bind<number, number, any, Window>;
     scrollY: Bind<number, number, any, Window>;
     online: BindRead<boolean, any, Window>;
-    devicePixelRatio: BindRead<number, number, Window>;
+    devicePixelRatio: BindRead<number, any, Window>;
 };
 type WindowBinders = {
-    [Key in keyof WindowBindMap]: (target: ElementProxy<Window>, bind: WindowBindMap[Key]) => Disposable;
+    [Key in keyof WindowBindMap]:
+        (target: ElementProxy<Window>, bind: WindowBindMap[Key]) => Disposable;
 };
 export const windowBinders: WindowBinders = {
     innerWidth: createAttributeReader(watchEvent("resize", () => window.innerWidth)),
@@ -66,8 +67,12 @@ export const windowBinders: WindowBinders = {
         const onlineWatcher = watchEvent("online", () => true);
         const offlineWatcher = watchEvent("offline", () => false);
 
-        disposables.push(onlineWatcher(element, (next) => store.value = toBind(next, store.value, element)));
-        disposables.push(offlineWatcher(element, (next) => store.value = toBind(next, store.value, element)));
+        disposables.push(
+            onlineWatcher(element, (next) => store.value = toBind(next, store.value, element))
+        );
+        disposables.push(
+            offlineWatcher(element, (next) => store.value = toBind(next, store.value, element))
+        );
         
         return () => disposables.forEach((dispose) => dispose());
     },
@@ -82,9 +87,54 @@ export const windowBinders: WindowBinders = {
         return watcher(media, (next) => store.value = toBind(next, store.value, element));
     }
 };
-
 export type WindowBinds = {
     [Attribute in keyof WindowBindMap]?: BoundOrRaw<WindowBindMap[Attribute]>;
+};
+
+export type DocumentBindMap = {
+    activeElement: BindRead<Element | null, any, Document>;
+    fullscreenElement: BindRead<Element | null, any, Document>;
+    pointerLockElement: BindRead<Element | null, any, Document>;
+    visibilityState: BindRead<DocumentVisibilityState, any, Document>;
+};
+type DocumentBinders = {
+    [Key in keyof DocumentBindMap]:
+        (target: ElementProxy<Document>, bind: DocumentBindMap[Key]) => Disposable;
+};
+export const documentBinders: DocumentBinders = {
+    activeElement: (target, bind) => {
+        const disposables: Disposable[] = [];
+        const { element } = target;
+        const { store, toBind } = bind;
+
+        const focusWatcher = watchEvent("focus", () => document.activeElement);
+        const blurWatcher = watchEvent("blur", () => null);
+
+        disposables.push(
+            focusWatcher(element, (next) => store.value = toBind(next, store.value, element))
+        );
+        disposables.push(
+            blurWatcher(element, (next) => store.value = toBind(next, store.value, element))
+        );
+
+        return () => disposables.forEach((dispose) => dispose());
+    },
+    // TODO Would be nicer if these generics could be inferred.
+    fullscreenElement: createAttributeReader<Document, "fullscreenElement">(
+        watchEvent("fullscreenchange", () => document.fullscreenElement)
+    ),
+    pointerLockElement: createAttributeReader<Document, "pointerLockElement">(
+        watchEvent("pointerlockchange", () => document.pointerLockElement)
+    ),
+    visibilityState: createAttributeReader<Document, "visibilityState">(
+        watchEvent("visibilitychange", () => document.visibilityState)
+    )
+};
+
+//const attr = createAttributeReader(watchEvent("visibilitychange", () => document.visibilityState));
+
+export type DocumentBinds = {
+    [Attribute in keyof DocumentBindMap]?: BoundOrRaw<DocumentBindMap[Attribute]>;
 };
 
 type ComponentBindMap = {
@@ -178,7 +228,8 @@ type Transformations = {
 };
 type Transformer<From, To> = (store: AtomStore<From>) => To;
 type Transformers = {
-    [Key in keyof Transformations]: Transformer<BoundType<Transformations[Key]>, Transformations[Key]>
+    [Key in keyof Transformations]:
+        Transformer<BoundType<Transformations[Key]>, Transformations[Key]>
 };
 const transformers: Transformers = {
     integer: (store) => ({
@@ -250,8 +301,15 @@ type AttributeReader<
     Target,
     Attribute extends keyof Target,
     StoreType
-> = (target: ElementProxy<Target>, bind: BindRead<Target[Attribute], StoreType, Target>) => Disposable;
-function  createAttributeReader<Target, Attribute extends keyof Target, StoreType>(
+> = (
+    target: ElementProxy<Target>,
+    bind: BindRead<Target[Attribute], StoreType, Target>
+) => Disposable;
+function  createAttributeReader<
+    Target,
+    Attribute extends keyof Target,
+    StoreType = Target[Attribute]
+>(
     watch: Watcher<Target, Target[Attribute]>
 ): AttributeReader<Target, Attribute, StoreType> {
     return function (target, bind) {

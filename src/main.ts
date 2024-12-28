@@ -1,5 +1,5 @@
 import { $transform } from "./lib/bind";
-import { $boundary, $component, $fragment, $head, $window } from "./lib/component";
+import { $boundary, $component, $document, $fragment, $head, $window } from "./lib/component";
 import { $await, $each, $if } from "./lib/directive";
 import { $handler } from "./lib/event";
 import { $text, $format } from "./lib/reactive_string";
@@ -70,14 +70,26 @@ function makeQuery() {
 }
 const query = $state(makeQuery());
 
+// TODO bind { this }
+let v: HTMLVideoElement;
+
+const fullscreenElement = $state(null);
+fullscreenElement.watch(console.log);
+
 const app = $component("div", { id: $format`colored-${color}`, style: { color } },
     $window({
         on: { keydown: $handler(({ key }) => key === "f" && console.log("hehehe"))},
         bind: { online, devicePixelRatio }
     }),
+    $document({
+        bind: { fullscreenElement }
+    }),
     $head($component("title", undefined,
         $derived([selected], ([s]) => options.find(({ value }) => value === s)?.label))
     ),
+
+    $component("video", { use: { b: (el) => { v = el as HTMLVideoElement; } }}),
+    $component("button", { on: { click: $handler(()=>v.requestFullscreen() )}}, "fullscreen"),
 
     $component("input", {
         type: "checkbox",
@@ -164,7 +176,7 @@ const app = $component("div", { id: $format`colored-${color}`, style: { color } 
             return Object.fromEntries(options.map(({ value })=> [
                 value, m.includes(value)
             ]))
-        })
+        }),
     }, jp),
 
     $component("div", undefined, $format`ticks: ${count}`),

@@ -1,7 +1,8 @@
 export type ElementEventType = keyof HTMLElementEventMap;
-export type WindowEventType = keyof WindowEventMap
-export type EventType = ElementEventType | WindowEventType;
-export type EventMap = HTMLElementEventMap & WindowEventMap;
+export type WindowEventType = keyof WindowEventMap;
+export type DocumentEventType = keyof DocumentEventMap;
+export type EventType = ElementEventType | WindowEventType | DocumentEventType;
+export type EventMap = HTMLElementEventMap & WindowEventMap & DocumentEventMap;
 export interface EventHandler<E> {
     listener: (ev: E) => any;
     options?: boolean | AddEventListenerOptions;

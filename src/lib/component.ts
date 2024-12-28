@@ -1,9 +1,9 @@
-import { ComponentBinds, getComponentBinders, rawBind, windowBinders, WindowBindMap, WindowBinds } from "./bind";
+import { BoundOrRaw, ComponentBinds, documentBinders, getComponentBinders, rawBind, windowBinders } from "./bind";
 import { EventHandler } from "./event";
-import { Actions, Attributes, Classes, Handlers, Props, Reactive, Stringifiable, Styles, Tag, WindowHandlers, WindowProxyProps } from "./props";
+import { Actions, Attributes, Classes, DocumentProxyProps, Handlers, Props, Reactive, Stringifiable, Styles, Tag, WindowProxyProps } from "./props";
 import { ReactiveString } from "./reactive_string";
 import { Child, Disposable, Renderable } from "./renderable";
-import { Store, ValueCallback } from "./store";
+import { AtomStore, Store, ValueCallback } from "./store";
 
 export interface ElementProxy<Element> {
     get element(): Element;
@@ -316,21 +316,24 @@ class Head extends Fragment {
     }
 }
 
-export function $window(props: WindowProxyProps) {
-    return new WindowProxy(props);
-}
-class WindowProxy extends Renderable implements ElementProxy<Window> {
+type SpecialElementProxyProps = {
+    on?: Record<string, EventHandler<any>>;
+    bind?: Record<string, BoundOrRaw<any>>;
+};
+abstract class SpecialElementProxy<
+    Element extends EventTarget,
+    Props extends SpecialElementProxyProps
+> extends Renderable implements ElementProxy<Element> {
     constructor(
-        private props: WindowProxyProps
+        private props: Props
     ) {
         super();
     }
 
-    get element() {
-        return window;
-    }
-
-    override mount(parent: Node, anchor?: Node): void {
+    abstract get element(): Element;
+    abstract get binders(): Record<string, (...args: any) => Disposable | void>;
+    
+    override mount(parent: Node, anchor?: Node) {
         super.mount(parent, anchor);
 
         const { on, bind } = this.props;
@@ -341,22 +344,21 @@ class WindowProxy extends Renderable implements ElementProxy<Window> {
         return undefined;
     }
 
-    private attachEventHandlers(on?: WindowHandlers) {
+    private attachEventHandlers(on?: Record<string, EventHandler<unknown>>) {
         for (const [key, value] of Object.entries(on ?? {})) {
-            const { listener, options } = value as EventHandler<Event>;
+            const { listener, options } = value;
 
-            window.addEventListener(key, listener, options);
+            this.element.addEventListener(key, listener, options);
             this.disposables.push(() => {
-                window.removeEventListener(key, listener, options);
+                this.element.removeEventListener(key, listener, options);
             });
         }
     }
-    private attachBinds(bind?: WindowBinds) {
+    private attachBinds(bind?: Record<string, BoundOrRaw<unknown>>) {
         for (const [key, value] of Object.entries(bind ?? {})) {
-            const binder: (...args: any) => Disposable | void =
-                windowBinders[key as keyof WindowBindMap];
+            const binder = this.binders[key];
 
-            const dispose = value instanceof Store ?
+            const dispose = value instanceof AtomStore ?
                 binder(this, rawBind(value))
               : binder(this, value);
             if (dispose) {
@@ -364,4 +366,20 @@ class WindowProxy extends Renderable implements ElementProxy<Window> {
             }
         }
     }
+}
+
+export function $window(props: WindowProxyProps) {
+    return new WindowProxy(props);
+}
+class WindowProxy extends SpecialElementProxy<Window, WindowProxyProps> {
+    override get element() { return window; }
+    override get binders() { return windowBinders; }
+}
+
+export function $document(props: DocumentProxyProps) {
+    return new DocumentProxy(props);
+}
+class DocumentProxy extends SpecialElementProxy<Document, DocumentProxyProps> {
+    override get element() { return document; }
+    override get binders() { return documentBinders; }
 }

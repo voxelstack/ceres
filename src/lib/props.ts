@@ -7,8 +7,8 @@
  * (Really fun to write.)
  */
 
-import { ComponentBinds, WindowBinds } from "./bind";
-import { ElementEventType, EventHandler, WindowEventType } from "./event";
+import { ComponentBinds, DocumentBinds, WindowBinds } from "./bind";
+import { DocumentEventType, ElementEventType, EventHandler, WindowEventType } from "./event";
 import { ReactiveString } from "./reactive_string";
 import { type Store } from "./store";
 
@@ -21,10 +21,14 @@ export type Props<ElementTag extends Tag> = Partial<
         on: Handlers<ElementTag>;
     }>
 ;
-export type WindowProxyProps = Partial<{
-    bind: WindowBinds;
-    on: WindowHandlers;
-}>;
+export type WindowProxyProps = {
+    bind?: WindowBinds;
+    on?: WindowHandlers;
+};
+export type DocumentProxyProps = {
+    bind?: DocumentBinds;
+    on?: DocumentHandlers;
+};
 
 type PlainAttribute = string | number | boolean | null | PlainAttribute[];
 export type Stringifiable = { toString: () => string };
@@ -60,9 +64,12 @@ export type Handlers<ElementTag extends Tag> = Partial<{
                 : never
             : never
 }>;
-export type WindowHandlers = Partial<{
-    [Key in WindowEventType]: EventHandler<WindowEventMap[Key]>
-}>;
+export type WindowHandlers = {
+    [Key in WindowEventType]?: EventHandler<WindowEventMap[Key]>;
+};
+export type DocumentHandlers = {
+    [Key in DocumentEventType]?: EventHandler<DocumentEventMap[Key]>;
+};
 
 export type Attributes<ElementTag extends Tag> = Partial<{
     [
