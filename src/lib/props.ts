@@ -29,6 +29,9 @@ export type DocumentProxyProps = {
     bind?: DocumentBinds;
     on?: DocumentHandlers;
 };
+export type BodyProxyProps = {
+    on?: Handlers<"body">;
+}
 
 type PlainAttribute = string | number | boolean | null | PlainAttribute[];
 export type Stringifiable = { toString: () => string };

@@ -1,5 +1,5 @@
 import { $transform } from "./lib/bind";
-import { $boundary, $component, $document, $fragment, $head, $window } from "./lib/component";
+import { $body, $boundary, $component, $document, $fragment, $head, $window } from "./lib/component";
 import { $await, $each, $if } from "./lib/directive";
 import { $handler } from "./lib/event";
 import { $text, $format } from "./lib/reactive_string";
@@ -83,6 +83,9 @@ const app = $component("div", { id: $format`colored-${color}`, style: { color } 
     }),
     $document({
         bind: { fullscreenElement }
+    }),
+    $body({
+        on: { mouseleave: $handler(() => console.log("Nooooo don't leave me!!!")) }
     }),
     $head($component("title", undefined,
         $derived([selected], ([s]) => options.find(({ value }) => value === s)?.label))

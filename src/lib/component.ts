@@ -1,6 +1,6 @@
 import { BoundOrRaw, ComponentBinds, documentBinders, getComponentBinders, rawBind, windowBinders } from "./bind";
 import { EventHandler } from "./event";
-import { Actions, Attributes, Classes, DocumentProxyProps, Handlers, Props, Reactive, Stringifiable, Styles, Tag, WindowProxyProps } from "./props";
+import { Actions, Attributes, BodyProxyProps, Classes, DocumentProxyProps, Handlers, Props, Reactive, Stringifiable, Styles, Tag, WindowProxyProps } from "./props";
 import { ReactiveString } from "./reactive_string";
 import { Child, Disposable, Renderable } from "./renderable";
 import { AtomStore, Store, ValueCallback } from "./store";
@@ -317,7 +317,7 @@ class Head extends Fragment {
 }
 
 type SpecialElementProxyProps = {
-    on?: Record<string, EventHandler<any>>;
+    on?: Record<string, EventHandler<any> | undefined>;
     bind?: Record<string, BoundOrRaw<any>>;
 };
 abstract class SpecialElementProxy<
@@ -344,8 +344,12 @@ abstract class SpecialElementProxy<
         return undefined;
     }
 
-    private attachEventHandlers(on?: Record<string, EventHandler<unknown>>) {
+    private attachEventHandlers(on?: Record<string, EventHandler<any> | undefined>) {
         for (const [key, value] of Object.entries(on ?? {})) {
+            if (value === undefined) {
+                continue;
+            }
+
             const { listener, options } = value;
 
             this.element.addEventListener(key, listener, options);
@@ -382,4 +386,12 @@ export function $document(props: DocumentProxyProps) {
 class DocumentProxy extends SpecialElementProxy<Document, DocumentProxyProps> {
     override get element() { return document; }
     override get binders() { return documentBinders; }
+}
+
+export function $body(props: BodyProxyProps) {
+    return new BodyProxy(props);
+}
+class BodyProxy extends SpecialElementProxy<HTMLBodyElement, BodyProxyProps> {
+    override get element() { return document.body as HTMLBodyElement; }
+    override get binders() { return {}; }
 }
