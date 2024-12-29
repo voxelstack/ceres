@@ -57,6 +57,7 @@ class DirectiveIf extends Directive {
             .map(({ condition }) => (condition as Store<unknown>).subscribe(onChange))
         );
         onChange();
+        this.didMount?.();
     }
     override move(parent: Node, anchor?: Node) {
         parent.insertBefore(this.marker, anchor ?? null);
@@ -68,6 +69,7 @@ class DirectiveIf extends Directive {
         const { marker, visible } = this;
         marker.parentElement?.removeChild(marker);
         visible?.unmount();
+        this.didUnmount?.();
     }
 
     $elseif(
@@ -120,10 +122,10 @@ class DirectiveEach<T> extends Directive {
                 } else {
                     prev.splice(prevIndex, 1);
                 }
-                prev.forEach((value) => {
-                    registry.get(value)?.unmount();
-                    registry.delete(value);
-                });
+            });
+            prev.forEach((value) => {
+                registry.get(value)?.unmount();
+                registry.delete(value);
             });
         }
 
@@ -139,6 +141,7 @@ class DirectiveEach<T> extends Directive {
         } else {
             createRenderables(entries);
         }
+        this.didMount?.();
     }
     override move(parent: Node, anchor?: Node) {
         const { marker, registry } = this;
@@ -158,6 +161,7 @@ class DirectiveEach<T> extends Directive {
         const { marker, registry } = this;
         marker.parentElement?.removeChild(marker);
         registry.forEach((renderable) => renderable.unmount());
+        this.didUnmount?.();
     }
 }
 
@@ -187,6 +191,7 @@ class DirectiveKey<T> extends Directive {
             renderable.mount(parent, marker);
         }));
         renderable.mount(parent, marker);
+        this.didMount?.();
     }
     override move(parent: Node, anchor?: Node) {
         parent.insertBefore(this.marker, anchor ?? null);
@@ -198,13 +203,14 @@ class DirectiveKey<T> extends Directive {
         const { marker, renderable } = this;
         marker.parentElement?.removeChild(marker);
         renderable.unmount();
+        this.didUnmount?.();
     }
 }
 
 export function $await<T>(promise: LiteralOrStore<Promise<T>>, pending?: Renderable) {
     return new DirectiveAwait(promise, pending);
 }
-class DirectiveAwait<T> extends Renderable {
+class DirectiveAwait<T> extends Directive {
     private marker!: Node;
     private onSettled?: (value: T) => Renderable;
     private onError?: (error: unknown) => Renderable;
@@ -258,6 +264,7 @@ class DirectiveAwait<T> extends Renderable {
         } else {
             onValue(promise);
         }
+        this.didMount?.();
     }
     override move(parent: Node, anchor?: Node) {
         parent.insertBefore(this.marker, anchor ?? null);
@@ -269,6 +276,7 @@ class DirectiveAwait<T> extends Renderable {
         const { marker, visible } = this;
         marker.parentElement?.removeChild(marker);
         visible?.unmount();
+        this.didUnmount?.();
     }
 
     $then(

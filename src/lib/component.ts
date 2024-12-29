@@ -3,7 +3,69 @@ import { EventHandler } from "./event";
 import { Actions, Attributes, BodyProxyProps, Classes, DocumentProxyProps, Handlers, Props, Reactive, Stringifiable, Styles, Tag, WindowProxyProps } from "./props";
 import { ReactiveString } from "./reactive_string";
 import { Child, Disposable, Renderable } from "./renderable";
-import { AtomStore, Store, ValueCallback } from "./store";
+import { $derive, AtomStore, Store, StoredTypes, ValueCallback } from "./store";
+
+export type $dyn<T> = AtomStore<T>;
+type $effect = <const Stores extends Array<Store<any>>>(
+     effect: (next: StoredTypes<Stores>, previous: StoredTypes<Stores>) => Disposable | void,
+     stores?: Stores
+) => void;
+type Effect = {
+    callback: (...values: any) => Disposable | void;
+    dispose?: Disposable;
+    store?: Store<any>;
+};
+
+type $component<Props> = ($props: Props, $effect: $effect) => Renderable;
+export function $createComponent<
+    const Props extends { [k: string]: any }
+>(functionComponent: $component<Props>) {
+    const component = new Component(functionComponent);
+    return component.realize.bind(component);
+}
+
+class Component<Props> {
+    constructor(
+        private functionComponent: $component<Props>
+    ) { }
+
+    realize(props: Props) {
+        const effects: Effect[] = [];
+        const disposables: Disposable[] = [];
+
+        const createEffect: $effect = (callback, stores) => {
+            let store;
+            if (stores === undefined) {
+                store = undefined;
+            } else if (stores.length === 1) {
+                store = stores[0];
+            } else {
+                store = $derive(stores, (values) => values);
+            }
+            effects.push({ store, callback });
+        };
+
+        const element = this.functionComponent(props, createEffect);
+        element.didMount = () => effects.forEach((effect) => {
+            effect.dispose?.();
+            
+            if (effect.store === undefined) {
+                effect.dispose = effect.callback() ?? undefined;    
+            } else {
+                effect.store.watch((next, previous) => {
+                    effect.dispose?.();
+                    effect.dispose = effect.callback(next, previous) ?? undefined;
+                });
+            }
+        });
+        element.didUnmount = () => {
+            effects.forEach(({ dispose }) => dispose?.());
+            disposables.forEach((dispose) => dispose());
+        };
+
+        return element;
+    }
+}
 
 export interface ElementProxy<Element> {
     get element(): Element;
@@ -20,10 +82,10 @@ type Listeners<Type extends Tag> = {
 
 export function $element<Type extends Tag>(
     type: Type,
-    props: Props<Type> = {},
+    props?: Props<Type>,
     ...children: Child[]
 ) {
-    return new CeresElement(type, props, children);
+    return new CeresElement(type, props ?? {}, children);
 }
 export class CeresElement<const ElementTag extends Tag>
     extends Renderable
@@ -80,6 +142,7 @@ export class CeresElement<const ElementTag extends Tag>
         parent.insertBefore(root, anchor ?? null);
         this.listeners.mount.forEach((listener) => listener(root));
         this.runActions(use);
+        this.didMount?.();
     }
     override move(parent: Node, anchor?: Node) {
         parent.insertBefore(this.root, anchor ?? null);
@@ -90,6 +153,7 @@ export class CeresElement<const ElementTag extends Tag>
         super.unmount();
         this.root.parentElement?.removeChild(this.root);
         this.listeners.mount.forEach((listener) => listener(null));
+        this.didUnmount?.();
     }
 
     subscribe<
@@ -129,9 +193,20 @@ export class CeresElement<const ElementTag extends Tag>
     }
 
     private attachStyles(style?: Styles) {
+        function toHyphenCase(camelCase: string) {
+            let hyphenCase = "";
+            for (const char of camelCase) {
+                if (char === char.toUpperCase()) {
+                    hyphenCase += "-";
+                }
+                hyphenCase += char.toLowerCase();
+            }
+            return hyphenCase;
+        }
+
         for (const [key, value] of Object.entries(style ?? {})) {
             const dispose = watchProp(value, (next) => {
-                this.root.style.setProperty(key, next.toString());
+                this.root.style.setProperty(toHyphenCase(key), next.toString());
             });
             if (dispose) {
                 this.disposables.push(dispose);
@@ -288,6 +363,7 @@ class Fragment extends Renderable {
         }
 
         parent.insertBefore(fragment, anchor ?? null);
+        this.didMount?.();
     }
     override move(parent: Node, anchor?: Node) {
         const { marker } = this;
@@ -305,6 +381,7 @@ class Fragment extends Renderable {
 
         const { marker } = this;
         marker.parentElement?.removeChild(marker);
+        this.didUnmount?.();
     }
 }
 
@@ -365,6 +442,7 @@ abstract class SpecialElementProxy<
         const { on, bind } = this.props;
         this.attachEventHandlers(on);
         this.attachBinds(bind);
+        this.didMount?.();
     }
     override move() {
         return undefined;

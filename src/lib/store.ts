@@ -52,8 +52,8 @@ export class AtomStore<T> extends Store<T> {
     }
 }
 
-type StoredType<S extends Store<any>> = S extends AtomStore<infer T> ? T : never;
-type StoredTypes<
+export type StoredType<S extends Store<any>> = S extends AtomStore<infer T> ? T : never;
+export type StoredTypes<
     Stores extends Array<Store<any>>,
     Values extends Array<any> = []
 > = Stores extends [infer Head extends Store<any>, ...infer Tail extends Array<Store<any>>] ?

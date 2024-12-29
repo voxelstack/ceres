@@ -87,6 +87,7 @@ class ReactiveText extends Renderable {
         }
         parent.insertBefore(fragment, anchor ?? null);
         this.nodes.reverse();
+        this.didMount?.();
     }
     override move(parent: Node, anchor?: Node) {
         const { nodes } = this;
@@ -97,5 +98,10 @@ class ReactiveText extends Renderable {
             last = node;
         });
         return last;
+    }
+    override unmount() {
+        super.unmount();
+        this.nodes.forEach((node) => node.parentElement?.removeChild(node));
+        this.didUnmount?.();
     }
 }

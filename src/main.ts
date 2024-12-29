@@ -1,5 +1,5 @@
 import { $transform } from "./lib/bind";
-import { $body, $boundary, $element, $document, $fragment, $head, $window } from "./lib/component";
+import { $body, $boundary, $element, $document, $fragment, $head, $window, $createComponent, $dyn } from "./lib/component";
 import { $await, $each, $if } from "./lib/directive";
 import { $handler } from "./lib/event";
 import { $text, $format } from "./lib/reactive_string";
@@ -71,9 +71,35 @@ function makeQuery() {
 const query = $store(makeQuery());
 
 const v = $store<HTMLVideoElement | null>(null);
+const title = $derive([selected], ([s]) => options.find(({ value }) => value === s)?.label);
 
 const fullscreenElement = $store<Element | null>(null);
 fullscreenElement.watch(console.log);
+
+interface ScrollerProps {
+    text: string;
+    speed: $dyn<number>;
+}
+const Scroller = $createComponent<ScrollerProps>(($props, $effect) => {
+    const { speed } = $props;
+    const text = $store($props.text);
+
+    $effect(() => {
+        const handle = setInterval(() => text.value = scroll(text.value), speed.value);
+        return () => clearInterval(handle);
+    }, [speed]);
+
+    return $element("div", { style: { fontSize: "48px", fontWeight: "bolder" } }, text);
+});
+
+const EditableScroller = $createComponent<ScrollerProps>(($props) => {
+    const { text, speed } = $props;
+
+    return $fragment(
+        $element("input", { type: "number", bind: { value: $transform("integer", speed) }}),
+        Scroller({ text, speed })
+    );
+});
 
 const app = $element("div", { id: $format`colored-${color}`, style: { color } },
     $window({
@@ -86,16 +112,17 @@ const app = $element("div", { id: $format`colored-${color}`, style: { color } },
     $body({
         on: { mouseleave: $handler(() => console.log("Nooooo don't leave me!!!")) }
     }),
-    $head($element("title", undefined,
-        $derive([selected], ([s]) => options.find(({ value }) => value === s)?.label))
-    ),
+    $head($element("title", undefined, title)),
+
+    EditableScroller({ text: "セレス・ファウナ・", speed: $store(100) }),
 
     $element("video", { bind: { this: v } }),
     $element("button", { on: { click: $handler(() => v.value?.requestFullscreen())}}, "fullscreen"),
 
     $element("input", {
         type: "checkbox",
-        bind: { checked }
+        bind: { checked },
+        use: { mount: console.log }
     }),
     $element("input", {
         type: "checkbox",

@@ -5,6 +5,8 @@ export type Disposable = () => void;
 
 export abstract class Renderable {
     protected disposables!: Disposable[];
+    public didMount?: () => void;
+    public didUnmount?: () => void;
     
     constructor() { }
 
