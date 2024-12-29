@@ -1,5 +1,5 @@
 import { BoundOrRaw, ComponentBinds, documentBinders, getComponentBinders, rawBind, windowBinders } from "./bind";
-import { EventHandler } from "./event";
+import { EventHandler, toConfiguredListener } from "./event";
 import { Actions, Attributes, BodyProxyProps, Classes, DocumentProxyProps, Handlers, Props, Reactive, Stringifiable, Styles, Tag, WindowProxyProps } from "./props";
 import { ReactiveString } from "./reactive_string";
 import { Child, Disposable, Renderable } from "./renderable";
@@ -263,7 +263,7 @@ export class CeresElement<const ElementTag extends Tag>
     }
     private attachEventHandlers(on?: Handlers<ElementTag>) {
         for (const [key, value] of Object.entries(on ?? {})) {
-            const { listener, options } = value;
+            const { listener, options } = toConfiguredListener(value);
 
             this.root.addEventListener(key, listener, options);
             this.disposables.push(() => {
@@ -453,7 +453,7 @@ abstract class SpecialElementProxy<
                 continue;
             }
 
-            const { listener, options } = value;
+            const { listener, options } = toConfiguredListener(value);
 
             this.element.addEventListener(key, listener, options);
             this.disposables.push(() => {

@@ -62,8 +62,7 @@ export type Handlers<ElementTag extends Tag> = Partial<{
         as Attribute extends `on${infer Event}` ? Event : never
     ]:
         Attribute extends `on${infer Event}` ?
-              Event extends ElementEventType ?
-                  EventHandler<HTMLElementEventMap[Event]>
+              Event extends ElementEventType ? EventHandler<HTMLElementEventMap[Event]>
                 : never
             : never
 }>;
