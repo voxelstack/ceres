@@ -1,6 +1,6 @@
 import { StringLike } from "./props";
 import { Renderable } from "./renderable";
-import { DerivedStore, Store } from "./store";
+import { $derive, Store } from "./store";
 
 export function $format(strings: TemplateStringsArray, ...values: StringLike[]) {
     return new ReactiveString(strings, values);
@@ -26,7 +26,7 @@ export class ReactiveString {
                 }
                 return acc;
             }, { observables: [], unfilteredIndices: [] });
-        return new DerivedStore(observables, (reactiveValues) => {
+        return $derive(observables, (reactiveValues) => {
             let result = strings[0];
             let unfilteredIndex = 0;
             for (let index = 0; index < values.length; ++index) {

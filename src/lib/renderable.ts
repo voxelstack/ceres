@@ -15,7 +15,6 @@ export abstract class Renderable {
     };
     abstract move(parent: Node, anchor?: Node): Node | undefined;
     unmount(): void {
-        // TODO Override on derived classes to release members.
         this.disposables.forEach((dispose) => dispose());
     }
 }

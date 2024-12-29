@@ -3,7 +3,7 @@ import { $body, $boundary, $element, $document, $fragment, $head, $window, $crea
 import { $await, $each, $if } from "./lib/directive";
 import { $handler } from "./lib/event";
 import { $text, $format } from "./lib/reactive_string";
-import { $derive, $store } from "./lib/store";
+import { $derive, $registry, $store } from "./lib/store";
 
 const en = $store("Ceres・Fauna・");
 const jp = $store("セレス・ファウナ・");
@@ -71,10 +71,13 @@ function makeQuery() {
 const query = $store(makeQuery());
 
 const v = $store<HTMLVideoElement | null>(null);
-const title = $derive([selected], ([s]) => options.find(({ value }) => value === s)?.label);
 
 const fullscreenElement = $store<Element | null>(null);
 fullscreenElement.watch(console.log);
+
+const state = $registry({ title: "ceres_fauna" });
+selected.subscribe((next) => state.setKey("title", next));
+
 
 interface ScrollerProps {
     text: string;
@@ -112,7 +115,9 @@ const app = $element("div", { id: $format`colored-${color}`, style: { color } },
     $body({
         on: { mouseleave: $handler(() => console.log("Nooooo don't leave me!!!")) }
     }),
-    $head($element("title", undefined, title)),
+    $head($element("title", undefined,
+        state.derive("title", (next) => options.find(({ value }) => value === next)!.label))
+    ),
 
     EditableScroller({ text: "セレス・ファウナ・", speed: $store(100) }),
 
@@ -222,10 +227,10 @@ const app = $element("div", { id: $format`colored-${color}`, style: { color } },
         }, "flip"),
     ),
 
-    $if($derive([gen], ([g]) => g === 1), $element("span", undefined, "ame")).
-    $elseif($derive([gen], ([g]) => g === 2), $element("span", undefined, "sana")).
-    $elseif($derive([gen], ([g]) => g === 3), $element("span", undefined, "fwmc")).
-    $elseif($derive([gen], ([g]) => g === 4), $element("span", undefined, "cc")).
+    $if(gen.derive((g) => g === 1), $element("span", undefined, "ame")).
+    $elseif(gen.derive((g) => g === 2), $element("span", undefined, "sana")).
+    $elseif(gen.derive((g) => g === 3), $element("span", undefined, "fwmc")).
+    $elseif(gen.derive((g) => g === 4), $element("span", undefined, "cc")).
     $else($element("span", undefined, "soon")),
 
     $element("div", undefined,

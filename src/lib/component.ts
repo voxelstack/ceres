@@ -148,7 +148,6 @@ export class CeresElement<const ElementTag extends Tag>
         parent.insertBefore(this.root, anchor ?? null);
         return this.root;
     }
-    // TODO Ensure idempotency.
     override unmount(): void {
         super.unmount();
         this.root.parentElement?.removeChild(this.root);

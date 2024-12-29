@@ -122,7 +122,6 @@ export const documentBinders: SpecialElementBinders<Document, DocumentBindMap> =
 
         return () => disposables.forEach((dispose) => dispose());
     },
-    // TODO Would be nicer if these generics could be inferred.
     fullscreenElement: createAttributeReader<Document, "fullscreenElement">(
         watchEvent("fullscreenchange", () => document.fullscreenElement)
     ),
@@ -182,7 +181,6 @@ const htmlElementBinders: HTMLElementBinders = {
         
         checked: createAttributeBinder(
             "checked",
-            // TODO              makeExtractor("checked")
             watchEvent("change", (event) => (event.target as HTMLInputElement).checked),
             queueMicrotask
         ),
@@ -295,7 +293,7 @@ function watchEvent<Target extends EventTarget, Type extends EventType, Value>(
             onValue(extractor(event));
         }
         
-        // TODO https://github.com/axios/axios/issues/3219#issuecomment-678233460
+        // https://github.com/axios/axios/issues/3219#issuecomment-678233460
         target.addEventListener(type, listener as EventListener);
         return () => {
             target.removeEventListener(type, listener as EventListener);
