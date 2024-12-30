@@ -1,9 +1,19 @@
 {
-  "name": "ceres",
-  "private": "true",
-  "version": "0.0.0",
+  "name": "@voxelstack/ceres",
+  "version": "0.1.0",
+  "description": "Web development for me.",
+  "keywords": ["UI", "framework"],
+  "homepage": "https://github.com/voxelstack/ceres",
+  "license": "MIT",
+  "author": "voxelstack <voxelstack@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/voxelstack/ceres.git"
+  },
   "type": "module",
   "main": "index.js",
+  "files": ["build"],
+  "types": "index.d.ts",
   "scripts": {
     "dev": "run-p build:watch serve",
     "serve": "http-server -o -c-1",
