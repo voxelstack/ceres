@@ -15,7 +15,7 @@ export abstract class Renderable {
     };
     abstract move(parent: Node, anchor?: Node): Node | undefined;
     unmount(): void {
-        this.disposables.forEach((dispose) => dispose());
+        this.disposables?.forEach((dispose) => dispose());
     }
 }
 export interface ConditionalRenderable {

@@ -17,7 +17,7 @@ export type Props<ElementTag extends Tag> = Partial<
         className: Classes;
         style: Styles;
         bind: ComponentBinds<ElementTag>;
-        use: Actions;
+        use: Actions<ElementTag>;
         on: Handlers<ElementTag>;
     }>
 ;
@@ -26,10 +26,14 @@ export type WindowProxyProps = {
     on?: WindowHandlers;
 };
 export type DocumentProxyProps = {
+    className?: Classes;
+    style?: Styles;
     bind?: DocumentBinds;
     on?: DocumentHandlers;
 };
 export type BodyProxyProps = {
+    className?: Classes;
+    style?: Styles;
     on?: Handlers<"body">;
 }
 
@@ -88,8 +92,8 @@ export type Attributes<ElementTag extends Tag> = Partial<{
 }>;
 
 type Cleanup = () => void;
-type Action = (node: Node) => Cleanup | void;
-export type Actions = Record<string, Action>;
+type Action<ElementTag extends Tag> = (node: HTMLElementTagNameMap[ElementTag]) => Cleanup | void;
+export type Actions<ElementTag extends Tag> = Record<string, Action<ElementTag>>;
 
 // https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-421529650
 type Equals<X, Y, WhenTrue = true, WhenFalse = false> =

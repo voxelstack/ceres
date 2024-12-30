@@ -5,9 +5,16 @@ import { ReactiveString } from "./reactive_string";
 import { Child, Disposable, Renderable } from "./renderable";
 import { $derive, AtomStore, Store, StoredTypes, ValueCallback } from "./store";
 
+type ReadonlyStore<T> = { readonly value: T };
+type WritableStores<Stores extends Array<AtomStore<any>  | ReadonlyStore<any>>> = {
+    [Key in keyof Stores]: Stores[Key] extends ReadonlyStore<infer StoredType> ?
+         AtomStore<StoredType>
+        : never
+};
 export type $dyn<T> = AtomStore<T>;
-type $effect = <const Stores extends Array<Store<any>>>(
-     effect: (next: StoredTypes<Stores>, previous: StoredTypes<Stores>) => Disposable | void,
+export type $bind<T> = AtomStore<T>;
+type $effect = <const Stores extends Array<AtomStore<any> | ReadonlyStore<any>>>(
+     effect: (next: StoredTypes<WritableStores<Stores>>, previous: StoredTypes<WritableStores<Stores>>) => Disposable | void,
      stores?: Stores
 ) => void;
 type Effect = {
@@ -17,9 +24,14 @@ type Effect = {
 };
 
 type $component<Props> = ($props: Props, $effect: $effect) => Renderable;
+type WithReadonlyStores<Props> = {
+    [Key in keyof Props]: Props[Key] extends $dyn<infer StoredType> ?
+          ReadonlyStore<StoredType>
+        : Props[Key];
+}
 export function $createComponent<
     const Props extends { [k: string]: any }
->(functionComponent: $component<Props>) {
+>(functionComponent: $component<WithReadonlyStores<Props>>) {
     const component = new Component(functionComponent);
     return component.realize.bind(component);
 }
@@ -37,10 +49,8 @@ class Component<Props> {
             let store;
             if (stores === undefined) {
                 store = undefined;
-            } else if (stores.length === 1) {
-                store = stores[0];
             } else {
-                store = $derive(stores, (values) => values);
+                store = $derive(stores as Array<Store<any>>, (values) => values);
             }
             effects.push({ store, callback });
         };
@@ -133,7 +143,7 @@ export class CeresElement<const ElementTag extends Tag>
         }
 
         const { on, use, bind, style, className, ...attributes } = this.props;
-        this.attachStyles(style);
+        this.attachStyle(style);
         this.attachClass(className);
         this.attachEventHandlers(on);
         this.attachBinds(bind);
@@ -150,8 +160,8 @@ export class CeresElement<const ElementTag extends Tag>
     }
     override unmount(): void {
         super.unmount();
-        this.root.parentElement?.removeChild(this.root);
-        this.listeners.mount.forEach((listener) => listener(null));
+        this.root?.parentElement?.removeChild(this.root);
+        this.listeners?.mount.forEach((listener) => listener(null));
         this.didUnmount?.();
     }
 
@@ -191,75 +201,11 @@ export class CeresElement<const ElementTag extends Tag>
         }
     }
 
-    private attachStyles(style?: Styles) {
-        function toHyphenCase(camelCase: string) {
-            let hyphenCase = "";
-            for (const char of camelCase) {
-                if (char === char.toUpperCase()) {
-                    hyphenCase += "-";
-                }
-                hyphenCase += char.toLowerCase();
-            }
-            return hyphenCase;
-        }
-
-        for (const [key, value] of Object.entries(style ?? {})) {
-            const dispose = watchProp(value, (next) => {
-                this.root.style.setProperty(toHyphenCase(key), next.toString());
-            });
-            if (dispose) {
-                this.disposables.push(dispose);
-            }
-        }
+    private attachStyle(style?: Styles) {
+        this.disposables.push(...attachStyle(this.root, style));
     }
     private attachClass(className?: Classes) {
-        if (className === undefined) {
-            return;
-        }
-
-        const dispose = watchProp(className, (next, previous) => {
-            if (typeof next === "string") {
-                this.root.className = next;
-            } else if (Array.isArray(next)) {
-                const prev: string[] = previous ?? [];
-                next.forEach((clazz) => {
-                    const prevIndex = prev.findIndex((it) => it === clazz);
-                    if (prevIndex === -1) {
-                        this.root.classList.add(clazz);
-                    } else {
-                        prev.splice(prevIndex, 1);
-                    }
-                });
-                prev.forEach((c) => {
-                    this.root.classList.remove(c);
-                });
-            } else {
-                const prev: Record<string, boolean> = previous ?? {};
-                Object.entries(next).forEach(([clazz, enabled]) => {
-                    if (enabled) {
-                        if (!prev[clazz]) {
-                            this.root.classList.add(clazz);
-                        } else {
-                            delete prev[clazz];
-                        }
-                    } else {
-                        if (prev[clazz]) {
-                            this.root.classList.remove(clazz);
-                        } else {
-                            delete prev[clazz];
-                        }
-                    }
-                });
-                Object.entries(prev).forEach(([clazz, enabled]) => {
-                    if (enabled) {
-                        this.root.classList.remove(clazz);
-                    }
-                });
-            }
-        });
-        if (dispose) {
-            this.disposables.push(dispose);
-        }
+        this.disposables.push(...attachClass(this.root, className));
     }
     private attachEventHandlers(on?: Handlers<ElementTag>) {
         for (const [key, value] of Object.entries(on ?? {})) {
@@ -287,15 +233,24 @@ export class CeresElement<const ElementTag extends Tag>
     }
     private attachAttributes(attributes?: Attributes<ElementTag>) {
         for (const [key, value] of Object.entries(attributes ?? {})){
+            if (!value) {
+                continue;
+            }
+
             const dispose = watchProp(value, (next) => {
-                this.root.setAttribute(key, next);
+                if (!next) {
+                    this.root.removeAttribute(key);
+                } else {
+                    this.root.setAttribute(key, next);
+                }
+                
             });
             if (dispose) {
                 this.disposables.push(dispose);
             }
         }
     }
-    private runActions(actions?: Actions) {
+    private runActions(actions?: Actions<ElementTag>) {
         for (const [_, value] of Object.entries(actions ?? {})) {
             const dispose = value(this.root);
             if (dispose) {
@@ -313,6 +268,82 @@ function watchProp(value: Reactive<any>, onValue: ValueCallback<any>) {
     } else {
         onValue(value);
     }
+}
+// TODO Make CeresElement and StyleElementProxy inherit from a StyledElement class instead.
+function attachClass(element: HTMLElement, className?: Classes) {
+    const disposables: Disposable[] = [];
+    if (className === undefined) {
+        return [];
+    }
+
+    const dispose = watchProp(className, (next, previous) => {
+        if (typeof next === "string") {
+            element.className = next;
+        } else if (Array.isArray(next)) {
+            const prev: string[] = previous ?? [];
+            next.forEach((clazz) => {
+                const prevIndex = prev.findIndex((it) => it === clazz);
+                if (prevIndex === -1) {
+                    element.classList.add(clazz);
+                } else {
+                    prev.splice(prevIndex, 1);
+                }
+            });
+            prev.forEach((c) => {
+                element.classList.remove(c);
+            });
+        } else {
+            const prev: Record<string, boolean> = previous ?? {};
+            Object.entries(next).forEach(([clazz, enabled]) => {
+                if (enabled) {
+                    if (!prev[clazz]) {
+                        element.classList.add(clazz);
+                    } else {
+                        delete prev[clazz];
+                    }
+                } else {
+                    if (prev[clazz]) {
+                        element.classList.remove(clazz);
+                    } else {
+                        delete prev[clazz];
+                    }
+                }
+            });
+            Object.entries(prev).forEach(([clazz, enabled]) => {
+                if (enabled) {
+                    element.classList.remove(clazz);
+                }
+            });
+        }
+    });
+    if (dispose) {
+        disposables.push(dispose);
+    }
+
+    return disposables;
+}
+function toHyphenCase(camelCase: string) {
+    let hyphenCase = "";
+    for (const char of camelCase) {
+        if (char === char.toUpperCase()) {
+            hyphenCase += "-";
+        }
+        hyphenCase += char.toLowerCase();
+    }
+    return hyphenCase;
+}
+function attachStyle(element: HTMLElement, style?: Styles) {
+    const disposables: Disposable[] = [];
+
+    for (const [key, value] of Object.entries(style ?? {})) {
+        const dispose = watchProp(value, (next) => {
+            element.style.setProperty(toHyphenCase(key), next.toString());
+        });
+        if (dispose) {
+            disposables.push(dispose);
+        }
+    }
+    return disposables;
 }
 
 export function $fragment(...children: Child[]) {
@@ -413,12 +444,12 @@ export function $head(...children: Child[]) {
     return new Head(children);
 }
 class Head extends Fragment {
-    override mount() {
+    override mount(parent: Node, anchor?: Node) {
         super.mount(document.head);
     }
 }
 
-type SpecialElementProxyProps = {
+interface SpecialElementProxyProps {
     on?: Record<string, EventHandler<any> | undefined>;
     bind?: Record<string, BoundOrRaw<any>>;
 };
@@ -427,7 +458,7 @@ abstract class SpecialElementProxy<
     Props extends SpecialElementProxyProps
 > extends Renderable implements ElementProxy<Element> {
     constructor(
-        private props: Props
+        protected props: Props
     ) {
         super();
     }
@@ -483,18 +514,41 @@ class WindowProxy extends SpecialElementProxy<Window, WindowProxyProps> {
     override get binders() { return windowBinders; }
 }
 
+interface StyledElementProxyProps extends SpecialElementProxyProps {
+    className?: Classes;
+    style?: Styles;
+}
+abstract class StyledElementProxy<
+    Element extends HTMLElement,
+    Props extends StyledElementProxyProps
+> extends SpecialElementProxy<Element, Props> {
+    override mount(parent: Node, anchor?: Node): void {
+        super.mount(parent, anchor);
+
+        const { className, style } = this.props;
+        this.attachClass(className);
+        this.attachStyle(style);
+    }
+    private attachClass(className?: Classes) {
+        this.disposables.push(...attachClass(this.element, className));
+    }
+    private attachStyle(style?: Styles) {
+        this.disposables.push(...attachStyle(this.element, style));
+    }
+}
+
 export function $document(props: DocumentProxyProps) {
     return new DocumentProxy(props);
 }
-class DocumentProxy extends SpecialElementProxy<Document, DocumentProxyProps> {
-    override get element() { return document; }
+class DocumentProxy extends StyledElementProxy<HTMLElement, DocumentProxyProps> {
+    override get element() { return document.documentElement; }
     override get binders() { return documentBinders; }
 }
 
 export function $body(props: BodyProxyProps) {
     return new BodyProxy(props);
 }
-class BodyProxy extends SpecialElementProxy<HTMLBodyElement, BodyProxyProps> {
+class BodyProxy extends StyledElementProxy<HTMLBodyElement, BodyProxyProps> {
     override get element() { return document.body as HTMLBodyElement; }
     override get binders() { return {}; }
 }

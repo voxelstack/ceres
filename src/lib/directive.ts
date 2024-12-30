@@ -88,16 +88,17 @@ class DirectiveIf extends Directive {
 export function $each<T>(
     entries: LiteralOrStore<Array<T>>,
     render: (entry: T) => Renderable
-) {
+): Pick<DirectiveEach<T>, "$else"> {
     return new DirectiveEach(entries, render);
 }
 class DirectiveEach<T> extends Directive {
+    private orElse?: Renderable
     private marker!: Node;
     private registry!: Map<T, Renderable>;
 
     constructor(
         private entries: LiteralOrStore<Array<T>>,
-        private render: (entry: T) => Renderable
+        private render: (entry: T) => Renderable,
     ) {
         super();
     }
@@ -109,9 +110,16 @@ class DirectiveEach<T> extends Directive {
         this.marker = document.createTextNode("");
         parent.insertBefore(this.marker, anchor ?? null);
 
-        const { marker, registry, entries, render } =  this;
+        const { marker, registry, entries, render, orElse } =  this;
 
         function createRenderables(next: Array<T>, previous?: Array<T>) {
+            if (next.length === 0) {
+                orElse?.mount(parent, marker);
+                return;
+            } else {
+                orElse?.unmount();
+            }
+
             const prev: Array<T> = previous ?? [];
             next.forEach((value) => {
                 const prevIndex = prev.findIndex((it) => it === value);
@@ -162,6 +170,11 @@ class DirectiveEach<T> extends Directive {
         marker.parentElement?.removeChild(marker);
         registry.forEach((renderable) => renderable.unmount());
         this.didUnmount?.();
+    }
+
+    $else(orElse: Renderable): Omit<DirectiveEach<T>, "$else"> {
+        this.orElse = orElse;
+        return this;
     }
 }
 

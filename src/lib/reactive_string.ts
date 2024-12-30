@@ -66,12 +66,21 @@ class ReactiveText extends Renderable {
         const { nodes, reactiveString: { strings, values }, disposables } = this;
         const fragment = document.createDocumentFragment();
 
-        for (const index in values) {
-            let node = document.createTextNode(strings[index]);
+        for (let index = 0; index < Math.max(strings.length, values.length); ++index) {
+            const str = strings[index];
+            if (str === undefined) {
+                continue;
+            }
+
+            let node = document.createTextNode(str);
             fragment.insertBefore(node, null);
             nodes.push(node);
 
             const value = values[index];
+            if (value === undefined) {
+                continue;
+            }
+
             if (value instanceof Store) {
                 node = document.createTextNode(value.value.toString());
                 disposables.push(value.watch((next) => {
