@@ -1,3 +1,5 @@
+[![npm](https://github.com/voxelstack/ceres/actions/workflows/npm.yml/badge.svg)](https://www.npmjs.com/package/@voxelstack/ceres)
+
 # ceres
 
 > The only difference between ceres and svelte is press coverage[^1][^2][^3][^4][^5][^6][^7].
@@ -5,7 +7,6 @@
 > &mdash; Panic! At The Disco[^8][^9]
 
 ceres is a UI framework for the web built around observables.
-
 It works by making small changes to the DOM whenever your data changes, and it feels like writing svelte with hyperscript.
 
 
