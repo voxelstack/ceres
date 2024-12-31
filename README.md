@@ -25,7 +25,7 @@ const app = Greeter({ greeting: "Hey" });
 app.mount(document.body);
 ```
 
-Read the docs and try it out at the [website](#todo).
+Read the docs and try it out at the [website](https://voxelstack.github.io/ceres-dev/).
 
 [^1]: And that svelte is nicer to use<sup>[citation needed]</sup>.
 [^2]: And production ready<sup>[citation needed]</sup>.
