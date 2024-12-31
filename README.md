@@ -17,7 +17,7 @@ const Greeter = $createComponent<{ greeting: string }>(($props) => {
     return $element("div", {},
         $element("input", { type: "text", bind: { value: name } }),
         $element("button", { on: { click: () => name.value = "ceres" } }, "Greet myself"),
-        $element("span", {}, $format(`${$props.greeting} ${name}!`))
+        $element("span", {}, $format`${$props.greeting} ${name}!`)
     );
 });
 
