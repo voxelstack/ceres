@@ -4,16 +4,16 @@ export default {
 	input: "src/index.ts",
 	output: [{
 			name: "ceres",
-			file: "build/index.umd.js",
+			file: "dist/index.umd.js",
 			format: "umd",
 		}, {
-			dir: "build",
+			dir: "dist",
 			format: "es",
 		}
 	],
 	plugins: [typescript({
 		tsconfig: "tsconfig.json",
 		declaration: true,
-		declarationDir: "build",
+		declarationDir: "dist",
 	})],
 };
