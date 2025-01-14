@@ -110,7 +110,7 @@ class ReactiveText extends Renderable {
     }
     override unmount() {
         super.unmount();
-        this.nodes.forEach((node) => node.parentElement?.removeChild(node));
+        this.nodes.forEach((node) => node.parentNode?.removeChild(node));
         this.didUnmount?.();
     }
 }

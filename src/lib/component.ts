@@ -160,7 +160,7 @@ export class CeresElement<const ElementTag extends Tag>
     }
     override unmount(): void {
         super.unmount();
-        this.root?.parentElement?.removeChild(this.root);
+        this.root?.parentNode?.removeChild(this.root);
         this.listeners?.mount.forEach((listener) => listener(null));
         this.didUnmount?.();
     }
@@ -410,7 +410,7 @@ class Fragment extends Renderable {
         super.unmount();
 
         const { marker } = this;
-        marker.parentElement?.removeChild(marker);
+        marker.parentNode?.removeChild(marker);
         this.didUnmount?.();
     }
 }

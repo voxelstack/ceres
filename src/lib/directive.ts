@@ -45,7 +45,7 @@ class DirectiveIf extends Directive {
 
             if (previous !== visible) {
                 previous?.unmount();
-                visible?.mount(marker.parentElement!, marker);
+                visible?.mount(marker.parentNode!, marker);
             }
         }
         const firstLiteralTrue = chain.findIndex(({ condition }) => !(condition instanceof Store) && condition);
@@ -67,7 +67,7 @@ class DirectiveIf extends Directive {
         super.unmount();
         
         const { marker, visible } = this;
-        marker.parentElement?.removeChild(marker);
+        marker.parentNode?.removeChild(marker);
         visible?.unmount();
         this.didUnmount?.();
     }
@@ -143,7 +143,7 @@ class DirectiveEach<T> extends Directive {
                 
                 let last: Node = marker;
                 next.toReversed().forEach((value) => {
-                    last = registry.get(value)!.move(marker.parentElement!, last) ?? last;
+                    last = registry.get(value)!.move(marker.parentNode!, last) ?? last;
                 });
             });
         } else {
@@ -159,7 +159,7 @@ class DirectiveEach<T> extends Directive {
         let last = marker;
         const entries = this.entries instanceof Store ? this.entries.value : this.entries;
         entries.toReversed().forEach((value) => {
-            last = registry.get(value)!.move(marker.parentElement!, last) ?? last;
+            last = registry.get(value)!.move(marker.parentNode!, last) ?? last;
         });
         return last;
     }
@@ -167,7 +167,7 @@ class DirectiveEach<T> extends Directive {
         super.unmount();
 
         const { marker, registry } = this;
-        marker.parentElement?.removeChild(marker);
+        marker.parentNode?.removeChild(marker);
         registry.forEach((renderable) => renderable.unmount());
         this.didUnmount?.();
     }
@@ -214,7 +214,7 @@ class DirectiveKey<T> extends Directive {
         super.unmount();
 
         const { marker, renderable } = this;
-        marker.parentElement?.removeChild(marker);
+        marker.parentNode?.removeChild(marker);
         renderable.unmount();
         this.didUnmount?.();
     }
@@ -287,7 +287,7 @@ class DirectiveAwait<T> extends Directive {
         super.unmount();
 
         const { marker, visible } = this;
-        marker.parentElement?.removeChild(marker);
+        marker.parentNode?.removeChild(marker);
         visible?.unmount();
         this.didUnmount?.();
     }
