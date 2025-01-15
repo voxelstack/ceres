@@ -1,6 +1,6 @@
 import { BoundOrRaw, ComponentBinds, documentBinders, getComponentBinders, rawBind, windowBinders } from "./bind";
 import { EventHandler, toConfiguredListener } from "./event";
-import { Actions, Attributes, BodyProxyProps, Classes, DocumentProxyProps, Handlers, Props, Reactive, Stringifiable, Styles, Tag, WindowProxyProps } from "./props";
+import { Actions, Attributes, BodyProxyProps, Classes, DocumentProxyProps, Handlers, LiteralOrStore, Props, Reactive, Stringifiable, Styles, Tag, WindowProxyProps } from "./props";
 import { ReactiveString } from "./reactive_string";
 import { Child, Disposable, Renderable } from "./renderable";
 import { $derive, AtomStore, Store, StoredTypes, ValueCallback } from "./store";
@@ -293,25 +293,16 @@ function attachClass(element: HTMLElement, className?: Classes) {
                 element.classList.remove(c);
             });
         } else {
-            const prev: Record<string, boolean> = previous ?? {};
             Object.entries(next).forEach(([clazz, enabled]) => {
-                if (enabled) {
-                    if (!prev[clazz]) {
-                        element.classList.add(clazz);
-                    } else {
-                        delete prev[clazz];
-                    }
-                } else {
-                    if (prev[clazz]) {
+                const dispose = watchProp(enabled, (isEnabled, wasEnabled) => {
+                    if (wasEnabled && !isEnabled) {
                         element.classList.remove(clazz);
-                    } else {
-                        delete prev[clazz];
+                    } else if (isEnabled && !wasEnabled) {
+                        element.classList.add(clazz);
                     }
-                }
-            });
-            Object.entries(prev).forEach(([clazz, enabled]) => {
-                if (enabled) {
-                    element.classList.remove(clazz);
+                });
+                if (dispose) {
+                    disposables.push(dispose);
                 }
             });
         }

@@ -56,7 +56,7 @@ export type Styles = Partial<{
 export type Classes =
     | LiteralOrStore<Stringifiable>
     | LiteralOrStore<Array<string>>
-    | LiteralOrStore<Record<string, boolean>>
+    | Record<string, LiteralOrStore<boolean>>
 ;
 
 // https://github.com/microsoft/TypeScript/issues/40689
