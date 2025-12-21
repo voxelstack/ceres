@@ -92,8 +92,8 @@ type Listeners<Type extends Tag> = {
 
 export function $element<Type extends Tag>(
     type: Type,
-    props?: Props<Type>,
-    ...children: Child[]
+    props: Props<Type>,
+    children: Child[]
 ) {
     return new CeresElement(type, props ?? {}, children);
 }
@@ -125,7 +125,7 @@ export class CeresElement<const ElementTag extends Tag>
 
         const { root, children, disposables } = this;
         function createText(next: Stringifiable) {
-            root.textContent = next.toString();
+            root.append(next.toString());
         }
         for (const child of children) {
             if (child instanceof Renderable) {
