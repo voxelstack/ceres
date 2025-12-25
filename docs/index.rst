@@ -11,16 +11,32 @@ ceres
 
 ceres is a UI framework for the web built around observables.
 
+.. ceres:: typescript
+
+   import { $createComponent, $element, $fragment, $format, $store } from "{{ceres_js}}";
+
+   const Greeter = $createComponent<{ greeting: string }>(($props) => {
+      const name = $store("you");
+
+      return $fragment(
+         $element(
+            "div",
+            {},
+            $element("input", { type: "text", bind: { value: name } }),
+            $element(
+               "button",
+               { on: { click: () => (name.value = "ceres") } },
+               "Greet myself"
+            )
+         ),
+         $element("span", {}, $format`${$props.greeting} ${name}!`)
+      );
+   });
+
+   const app = Greeter({ greeting: "Hey" });
+   app.mount(root);
+
 It works by making small changes to the DOM whenever your data changes, and it feels like writing svelte with hyperscript.
-
-.. raw:: html
-
-   <p class="codepen" data-height="300" data-theme-id="light" data-default-tab="js" data-slug-hash="Ggodmgd" data-pen-title="Hey you!" data-editable="true" data-user="voxelstack" style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
-      <span>See the Pen <a href="https://codepen.io/voxelstack/pen/Ggodmgd">
-  Hey you!</a> by voxelstack (<a href="https://codepen.io/voxelstack">@voxelstack</a>)
-  on <a href="https://codepen.io">CodePen</a>.</span>
-      </p>
-      <script async src="https://public.codepenassets.com/embed/index.js"></script>
 
 .. toctree::
    :caption: Introduction

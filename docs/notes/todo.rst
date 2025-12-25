@@ -20,5 +20,3 @@ TODO
     The fix is to not update the DOM immediately when a store changes. Instead we schedule a DOM change to run on the next microtask, and if that change gets overwitten before the current task finishes, update the scheduled change instead of scheduling a new one.
 
     This is coming soon.
-
-.. todo:: Turn all code snippets to codepen embeds.

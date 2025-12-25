@@ -33,7 +33,13 @@
             "options": {
                 "cwd": "${workspaceFolder}/docs"
             },
-            "command": ["sphinx-autobuild",  ".", "_build"],
+            "command": [
+                "sphinx-autobuild",
+                ".",
+                "_build",
+                "--ignore",
+                "_static/js/ceres.js"
+            ],
             "group": "build",
             "isBackground": true,
             "label": "sphinx: build:watch",

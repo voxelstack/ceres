@@ -1,0 +1,11 @@
+.ceres-snippet:has(+ .ceres-viewer) div[class^='highlight'] {
+    margin-bottom: 0;
+}
+
+.ceres-viewer {
+    padding: 12px;
+    margin-bottom: 24px;
+
+    border: 1px solid #e1e4e5;
+    border-top: none;
+}
