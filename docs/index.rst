@@ -43,52 +43,6 @@ It works by making small changes to the DOM whenever your data changes, and it f
    :maxdepth: 2
 
    introduction/rendering
-   introduction/literals_and_stores
-
-.. toctree::
-   :caption: Directives
-   :maxdepth: 2
-
-   directives/if
-   directives/each
-   directives/key
-   directives/await
-
-.. toctree::
-   :caption: Special props
-   :maxdepth: 2
-
-   special_props/bind
-   special_props/use
-
-.. toctree::
-   :caption: Styling
-   :maxdepth: 2
-
-   styling/inline_styles
-   styling/class_name
-
-.. toctree::
-   :caption: Special renderables
-   :maxdepth: 2
-
-   special_renderables/boundary
-   special_renderables/window
-   special_renderables/document
-   special_renderables/body
-   special_renderables/head
-
-.. toctree::
-   :caption: Components
-   :maxdepth: 2
-
-   components/create_component
-
-.. toctree::
-   :caption: App state
-   :maxdepth: 2
-
-   app_state/registry
 
 .. toctree::
    :caption: Notes

@@ -1,8 +1,11 @@
 {
   "name": "@voxelstack/ceres",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Web development for me.",
-  "keywords": ["UI", "framework"],
+  "keywords": [
+    "UI",
+    "framework"
+  ],
   "homepage": "https://github.com/voxelstack/ceres",
   "license": "MIT",
   "author": "voxelstack <voxelstack@gmail.com>",
@@ -14,21 +17,11 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "run-p build:watch serve",
-    "serve": "http-server -o -c-1",
-    "build": "rollup --config ./rollup.config.js",
-    "build:watch": "rollup --config ./rollup.config.js --watch"
+    "compile": "tsc --project ./tsconfig.json",
+    "watch": "tsc --watch --project ./tsconfig.json"
   },
   "devDependencies": {
-    "@eslint/js": "^9.17.0",
-    "@rollup/plugin-typescript": "^12.1.2",
-    "eslint": "^9.17.0",
-    "globals": "^15.13.0",
-    "http-server": "^14.1.1",
-    "npm-run-all": "^4.1.5",
-    "rollup": "^4.28.1",
-    "tslib": "^2.8.1",
-    "typescript": "^5.7.2",
-    "typescript-eslint": "^8.18.1"
-  }
+    "typescript": "^5.7.2"
+  },
+  "packageManager": "yarn@4.12.0+sha512.f45ab632439a67f8bc759bf32ead036a1f413287b9042726b7cc4818b7b49e14e9423ba49b18f9e06ea4941c1ad062385b1d8760a8d5091a1a31e5f6219afca8"
 }

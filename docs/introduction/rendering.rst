@@ -8,36 +8,51 @@ Elements
 Calling :code:`$element` describes a renderable that can be mounted onto the DOM.
 The simplest renderable only takes the name of the tag that will be created:
 
-.. code:: typescript
+.. ceres:: typescript
+
+    import { $element } from "{{ceres_js}}";
 
     $element("div")
-    .mount(document.body);
+    .mount(root);
 
 Props
 -----
 
 Attributes can be set by passing an object as the second argument of :code:`$element`.
 
-.. code:: typescript
+.. ceres:: typescript
+
+    import { $element } from "{{ceres_js}}";
 
     $element("input", { type: "text" })
-    .mount(document.body);
+    .mount(root);
 
 Children
 --------
 
-Any arguments passed after the props will be rendered as children of the created element.
+The children of an element can be either a single string:
 
-.. code:: typescript
+.. code:: ceres
 
-    $element("div", {},
-        $element("ul", {},
+    import { $element } from "{{ceres_js}}";
+
+    $element("div", {}, "ceres")
+    .mount(root)
+
+Or multiple elements:
+
+.. ceres:: typescript
+
+    import { $element } from "{{ceres_js}}";
+
+    $element("div", {}, [
+        $element("ul", {}, [
             $element("li", {}, "ceres"),
             $element("li", {}, "watson"),
             $element("li", {}, "ouro")
-        )
-    )
-    .mount(document.body);
+        ])
+    ])
+    .mount(root);
 
 Fragments
 _________
