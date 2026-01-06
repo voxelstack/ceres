@@ -1,27 +1,34 @@
 {
-  "name": "@voxelstack/ceres",
-  "version": "0.3.0",
-  "description": "Web development for me.",
-  "keywords": [
-    "UI",
-    "framework"
-  ],
-  "homepage": "https://github.com/voxelstack/ceres",
-  "license": "MIT",
-  "author": "voxelstack <voxelstack@gmail.com>",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/voxelstack/ceres.git"
-  },
-  "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "compile": "tsc --project ./tsconfig.json",
-    "watch": "tsc --watch --project ./tsconfig.json"
-  },
-  "devDependencies": {
-    "typescript": "^5.7.2"
-  },
-  "packageManager": "yarn@4.12.0+sha512.f45ab632439a67f8bc759bf32ead036a1f413287b9042726b7cc4818b7b49e14e9423ba49b18f9e06ea4941c1ad062385b1d8760a8d5091a1a31e5f6219afca8"
+    "name": "@voxelstack/ceres",
+    "version": "0.3.0",
+    "description": "Web development for me.",
+    "keywords": [
+        "UI",
+        "framework"
+    ],
+    "homepage": "https://github.com/voxelstack/ceres",
+    "license": "MIT",
+    "author": "voxelstack <voxelstack@gmail.com>",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/voxelstack/ceres.git"
+    },
+    "type": "module",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "compile": "tsc --project ./src/tsconfig.json",
+        "compile:watch": "tsc --watch --project ./src/tsconfig.json",
+        "test": "cross-env TS_NODE_PROJECT=./test/tsconfig.json mocha",
+        "test:watch": "cross-env TS_NODE_PROJECT=./test/tsconfig.json mocha"
+    },
+    "devDependencies": {
+        "@types/mocha": "^10.0.10",
+        "@types/node": "^25.0.3",
+        "cross-env": "^10.1.0",
+        "mocha": "^11.7.5",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.7.2"
+    },
+    "packageManager": "yarn@4.12.0+sha512.f45ab632439a67f8bc759bf32ead036a1f413287b9042726b7cc4818b7b49e14e9423ba49b18f9e06ea4941c1ad062385b1d8760a8d5091a1a31e5f6219afca8"
 }

@@ -1,21 +1,13 @@
 {
-  "compilerOptions": {
-    "strict": true,
+    "compilerOptions": {
+        "strict": true,
 
-    "module": "ESnext",
-    "target": "ESNext",
-    "lib": ["DOM", "ESNext"],
+        "target": "ESNext",
+        "lib": ["DOM", "ESNext"],
+        "types": [],
 
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-    
-    "rootDir": "./src",
-    "outDir": "./dist",
-
-    "paths": {
-      "@observable": ["./src/lib/observable/index"],
-      "@element": ["./src/lib/element/index"]
+        "sourceMap": true,
+        "declaration": true,
+        "declarationMap": true,
     },
-  }
 }

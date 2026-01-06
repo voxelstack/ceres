@@ -1,0 +1,16 @@
+{
+    "extends": "../tsconfig.json",
+
+    "compilerOptions": {
+        "module": "ESnext",
+
+        "rootDir": ".",
+        "outDir": "../dist",
+
+        "paths": {
+            "@observable": ["./lib/observable/index"],
+            "@element": ["./lib/element/index"]
+        }
+    },
+    "include": ["."]
+}
