@@ -29,13 +29,19 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./",\
         "packageDependencies": [\
           ["@types/chai", "npm:5.2.3"],\
+          ["@types/chai-dom", "npm:1.11.3"],\
+          ["@types/jsdom", "npm:27.0.0"],\
+          ["@types/jsdom-global", "npm:3.0.7"],\
           ["@types/mocha", "npm:10.0.10"],\
           ["@types/node", "npm:25.0.3"],\
           ["@types/sinon", "npm:21.0.0"],\
           ["@types/sinon-chai", "npm:4.0.0"],\
           ["@voxelstack/ceres", "workspace:."],\
           ["chai", "npm:6.2.2"],\
+          ["chai-dom", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:1.12.1"],\
           ["cross-env", "npm:10.1.0"],\
+          ["jsdom", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:27.4.0"],\
+          ["jsdom-global", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:3.0.2"],\
           ["mocha", "npm:11.7.5"],\
           ["sinon", "npm:21.0.1"],\
           ["sinon-chai", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:4.0.1"],\
@@ -43,6 +49,155 @@ const RAW_RUNTIME_STATE =
           ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"]\
         ],\
         "linkType": "SOFT"\
+      }]\
+    ]],\
+    ["@acemir/cssom", [\
+      ["npm:0.9.30", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@acemir-cssom-npm-0.9.30-4f179edd5e-10c0.zip/node_modules/@acemir/cssom/",\
+        "packageDependencies": [\
+          ["@acemir/cssom", "npm:0.9.30"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@asamuzakjp/css-color", [\
+      ["npm:4.1.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@asamuzakjp-css-color-npm-4.1.1-337ba4c819-10c0.zip/node_modules/@asamuzakjp/css-color/",\
+        "packageDependencies": [\
+          ["@asamuzakjp/css-color", "npm:4.1.1"],\
+          ["@csstools/css-calc", "virtual:337ba4c819749113889000040fa00b0551915f3e78954f2e044f4dea5540847d983e1f864a4c39bc454c0a48c5bec39416e57a4548e2d3895bf715c0e705dcb1#npm:2.1.4"],\
+          ["@csstools/css-color-parser", "virtual:337ba4c819749113889000040fa00b0551915f3e78954f2e044f4dea5540847d983e1f864a4c39bc454c0a48c5bec39416e57a4548e2d3895bf715c0e705dcb1#npm:3.1.0"],\
+          ["@csstools/css-parser-algorithms", "virtual:337ba4c819749113889000040fa00b0551915f3e78954f2e044f4dea5540847d983e1f864a4c39bc454c0a48c5bec39416e57a4548e2d3895bf715c0e705dcb1#npm:3.0.5"],\
+          ["@csstools/css-tokenizer", "npm:3.0.4"],\
+          ["lru-cache", "npm:11.2.4"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@asamuzakjp/dom-selector", [\
+      ["npm:6.7.6", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@asamuzakjp-dom-selector-npm-6.7.6-ad311d6960-10c0.zip/node_modules/@asamuzakjp/dom-selector/",\
+        "packageDependencies": [\
+          ["@asamuzakjp/dom-selector", "npm:6.7.6"],\
+          ["@asamuzakjp/nwsapi", "npm:2.3.9"],\
+          ["bidi-js", "npm:1.0.3"],\
+          ["css-tree", "npm:3.1.0"],\
+          ["is-potential-custom-element-name", "npm:1.0.1"],\
+          ["lru-cache", "npm:11.2.4"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@asamuzakjp/nwsapi", [\
+      ["npm:2.3.9", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@asamuzakjp-nwsapi-npm-2.3.9-9247524c07-10c0.zip/node_modules/@asamuzakjp/nwsapi/",\
+        "packageDependencies": [\
+          ["@asamuzakjp/nwsapi", "npm:2.3.9"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@csstools/color-helpers", [\
+      ["npm:5.1.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@csstools-color-helpers-npm-5.1.0-d44a2a6134-10c0.zip/node_modules/@csstools/color-helpers/",\
+        "packageDependencies": [\
+          ["@csstools/color-helpers", "npm:5.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@csstools/css-calc", [\
+      ["npm:2.1.4", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@csstools-css-calc-npm-2.1.4-81c74a3511-10c0.zip/node_modules/@csstools/css-calc/",\
+        "packageDependencies": [\
+          ["@csstools/css-calc", "npm:2.1.4"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:337ba4c819749113889000040fa00b0551915f3e78954f2e044f4dea5540847d983e1f864a4c39bc454c0a48c5bec39416e57a4548e2d3895bf715c0e705dcb1#npm:2.1.4", {\
+        "packageLocation": "./.yarn/__virtual__/@csstools-css-calc-virtual-670969d659/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@csstools-css-calc-npm-2.1.4-81c74a3511-10c0.zip/node_modules/@csstools/css-calc/",\
+        "packageDependencies": [\
+          ["@csstools/css-calc", "virtual:337ba4c819749113889000040fa00b0551915f3e78954f2e044f4dea5540847d983e1f864a4c39bc454c0a48c5bec39416e57a4548e2d3895bf715c0e705dcb1#npm:2.1.4"],\
+          ["@csstools/css-parser-algorithms", "virtual:337ba4c819749113889000040fa00b0551915f3e78954f2e044f4dea5540847d983e1f864a4c39bc454c0a48c5bec39416e57a4548e2d3895bf715c0e705dcb1#npm:3.0.5"],\
+          ["@csstools/css-tokenizer", "npm:3.0.4"],\
+          ["@types/csstools__css-parser-algorithms", null],\
+          ["@types/csstools__css-tokenizer", null]\
+        ],\
+        "packagePeers": [\
+          "@csstools/css-parser-algorithms",\
+          "@csstools/css-tokenizer",\
+          "@types/csstools__css-parser-algorithms",\
+          "@types/csstools__css-tokenizer"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@csstools/css-color-parser", [\
+      ["npm:3.1.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@csstools-css-color-parser-npm-3.1.0-005f6b530f-10c0.zip/node_modules/@csstools/css-color-parser/",\
+        "packageDependencies": [\
+          ["@csstools/css-color-parser", "npm:3.1.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:337ba4c819749113889000040fa00b0551915f3e78954f2e044f4dea5540847d983e1f864a4c39bc454c0a48c5bec39416e57a4548e2d3895bf715c0e705dcb1#npm:3.1.0", {\
+        "packageLocation": "./.yarn/__virtual__/@csstools-css-color-parser-virtual-9c3d708d7b/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@csstools-css-color-parser-npm-3.1.0-005f6b530f-10c0.zip/node_modules/@csstools/css-color-parser/",\
+        "packageDependencies": [\
+          ["@csstools/color-helpers", "npm:5.1.0"],\
+          ["@csstools/css-calc", "virtual:337ba4c819749113889000040fa00b0551915f3e78954f2e044f4dea5540847d983e1f864a4c39bc454c0a48c5bec39416e57a4548e2d3895bf715c0e705dcb1#npm:2.1.4"],\
+          ["@csstools/css-color-parser", "virtual:337ba4c819749113889000040fa00b0551915f3e78954f2e044f4dea5540847d983e1f864a4c39bc454c0a48c5bec39416e57a4548e2d3895bf715c0e705dcb1#npm:3.1.0"],\
+          ["@csstools/css-parser-algorithms", "virtual:337ba4c819749113889000040fa00b0551915f3e78954f2e044f4dea5540847d983e1f864a4c39bc454c0a48c5bec39416e57a4548e2d3895bf715c0e705dcb1#npm:3.0.5"],\
+          ["@csstools/css-tokenizer", "npm:3.0.4"],\
+          ["@types/csstools__css-parser-algorithms", null],\
+          ["@types/csstools__css-tokenizer", null]\
+        ],\
+        "packagePeers": [\
+          "@csstools/css-parser-algorithms",\
+          "@csstools/css-tokenizer",\
+          "@types/csstools__css-parser-algorithms",\
+          "@types/csstools__css-tokenizer"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@csstools/css-parser-algorithms", [\
+      ["npm:3.0.5", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@csstools-css-parser-algorithms-npm-3.0.5-a0aa2fe05e-10c0.zip/node_modules/@csstools/css-parser-algorithms/",\
+        "packageDependencies": [\
+          ["@csstools/css-parser-algorithms", "npm:3.0.5"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:337ba4c819749113889000040fa00b0551915f3e78954f2e044f4dea5540847d983e1f864a4c39bc454c0a48c5bec39416e57a4548e2d3895bf715c0e705dcb1#npm:3.0.5", {\
+        "packageLocation": "./.yarn/__virtual__/@csstools-css-parser-algorithms-virtual-3a442a65c1/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@csstools-css-parser-algorithms-npm-3.0.5-a0aa2fe05e-10c0.zip/node_modules/@csstools/css-parser-algorithms/",\
+        "packageDependencies": [\
+          ["@csstools/css-parser-algorithms", "virtual:337ba4c819749113889000040fa00b0551915f3e78954f2e044f4dea5540847d983e1f864a4c39bc454c0a48c5bec39416e57a4548e2d3895bf715c0e705dcb1#npm:3.0.5"],\
+          ["@csstools/css-tokenizer", "npm:3.0.4"],\
+          ["@types/csstools__css-tokenizer", null]\
+        ],\
+        "packagePeers": [\
+          "@csstools/css-tokenizer",\
+          "@types/csstools__css-tokenizer"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@csstools/css-syntax-patches-for-csstree", [\
+      ["npm:1.0.22", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@csstools-css-syntax-patches-for-csstree-npm-1.0.22-a1166f365e-10c0.zip/node_modules/@csstools/css-syntax-patches-for-csstree/",\
+        "packageDependencies": [\
+          ["@csstools/css-syntax-patches-for-csstree", "npm:1.0.22"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@csstools/css-tokenizer", [\
+      ["npm:3.0.4", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@csstools-css-tokenizer-npm-3.0.4-342d48d326-10c0.zip/node_modules/@csstools/css-tokenizer/",\
+        "packageDependencies": [\
+          ["@csstools/css-tokenizer", "npm:3.0.4"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["@epic-web/invariant", [\
@@ -288,6 +443,28 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@exodus/bytes", [\
+      ["npm:1.8.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@exodus-bytes-npm-1.8.0-0b698b2053-10c0.zip/node_modules/@exodus/bytes/",\
+        "packageDependencies": [\
+          ["@exodus/bytes", "npm:1.8.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:1b55926d2838d3ef3142bdb5e91069316e2128a49d6ce2759c0041cd50798aee9629bfcefa131415d0efedf9ec4bb97d945a3cc30507ea2f47c83181cc745946#npm:1.8.0", {\
+        "packageLocation": "./.yarn/__virtual__/@exodus-bytes-virtual-a1bc7fd260/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@exodus-bytes-npm-1.8.0-0b698b2053-10c0.zip/node_modules/@exodus/bytes/",\
+        "packageDependencies": [\
+          ["@exodus/bytes", "virtual:1b55926d2838d3ef3142bdb5e91069316e2128a49d6ce2759c0041cd50798aee9629bfcefa131415d0efedf9ec4bb97d945a3cc30507ea2f47c83181cc745946#npm:1.8.0"],\
+          ["@exodus/crypto", null],\
+          ["@types/exodus__crypto", null]\
+        ],\
+        "packagePeers": [\
+          "@exodus/crypto",\
+          "@types/exodus__crypto"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@isaacs/balanced-match", [\
       ["npm:4.0.1", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@isaacs-balanced-match-npm-4.0.1-8965afafe6-10c0.zip/node_modules/@isaacs/balanced-match/",\
@@ -416,11 +593,43 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/chai-dom", [\
+      ["npm:1.11.3", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@types-chai-dom-npm-1.11.3-ea1cea6483-10c0.zip/node_modules/@types/chai-dom/",\
+        "packageDependencies": [\
+          ["@types/chai", "npm:5.2.3"],\
+          ["@types/chai-dom", "npm:1.11.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/deep-eql", [\
       ["npm:4.0.2", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@types-deep-eql-npm-4.0.2-e6bc68cc92-10c0.zip/node_modules/@types/deep-eql/",\
         "packageDependencies": [\
           ["@types/deep-eql", "npm:4.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/jsdom", [\
+      ["npm:27.0.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@types-jsdom-npm-27.0.0-1d3e92b047-10c0.zip/node_modules/@types/jsdom/",\
+        "packageDependencies": [\
+          ["@types/jsdom", "npm:27.0.0"],\
+          ["@types/node", "npm:25.0.3"],\
+          ["@types/tough-cookie", "npm:4.0.5"],\
+          ["parse5", "npm:7.3.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/jsdom-global", [\
+      ["npm:3.0.7", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@types-jsdom-global-npm-3.0.7-aa2add9e6c-10c0.zip/node_modules/@types/jsdom-global/",\
+        "packageDependencies": [\
+          ["@types/jsdom", "npm:27.0.0"],\
+          ["@types/jsdom-global", "npm:3.0.7"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -474,18 +683,33 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/tough-cookie", [\
+      ["npm:4.0.5", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@types-tough-cookie-npm-4.0.5-8c5e2162e1-10c0.zip/node_modules/@types/tough-cookie/",\
+        "packageDependencies": [\
+          ["@types/tough-cookie", "npm:4.0.5"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@voxelstack/ceres", [\
       ["workspace:.", {\
         "packageLocation": "./",\
         "packageDependencies": [\
           ["@types/chai", "npm:5.2.3"],\
+          ["@types/chai-dom", "npm:1.11.3"],\
+          ["@types/jsdom", "npm:27.0.0"],\
+          ["@types/jsdom-global", "npm:3.0.7"],\
           ["@types/mocha", "npm:10.0.10"],\
           ["@types/node", "npm:25.0.3"],\
           ["@types/sinon", "npm:21.0.0"],\
           ["@types/sinon-chai", "npm:4.0.0"],\
           ["@voxelstack/ceres", "workspace:."],\
           ["chai", "npm:6.2.2"],\
+          ["chai-dom", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:1.12.1"],\
           ["cross-env", "npm:10.1.0"],\
+          ["jsdom", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:27.4.0"],\
+          ["jsdom-global", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:3.0.2"],\
           ["mocha", "npm:11.7.5"],\
           ["sinon", "npm:21.0.1"],\
           ["sinon-chai", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:4.0.1"],\
@@ -573,6 +797,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["bidi-js", [\
+      ["npm:1.0.3", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/bidi-js-npm-1.0.3-0035393a88-10c0.zip/node_modules/bidi-js/",\
+        "packageDependencies": [\
+          ["bidi-js", "npm:1.0.3"],\
+          ["require-from-string", "npm:2.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["brace-expansion", [\
       ["npm:2.0.2", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/brace-expansion-npm-2.0.2-bc7f134bbc-10c0.zip/node_modules/brace-expansion/",\
@@ -626,6 +860,28 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/chai-npm-6.2.2-e1795cadaa-10c0.zip/node_modules/chai/",\
         "packageDependencies": [\
           ["chai", "npm:6.2.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["chai-dom", [\
+      ["npm:1.12.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/chai-dom-npm-1.12.1-05fceca9bd-10c0.zip/node_modules/chai-dom/",\
+        "packageDependencies": [\
+          ["chai-dom", "npm:1.12.1"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:1.12.1", {\
+        "packageLocation": "./.yarn/__virtual__/chai-dom-virtual-b57ac5572f/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/chai-dom-npm-1.12.1-05fceca9bd-10c0.zip/node_modules/chai-dom/",\
+        "packageDependencies": [\
+          ["@types/chai", "npm:5.2.3"],\
+          ["chai", "npm:6.2.2"],\
+          ["chai-dom", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:1.12.1"]\
+        ],\
+        "packagePeers": [\
+          "@types/chai",\
+          "chai"\
         ],\
         "linkType": "HARD"\
       }]\
@@ -714,6 +970,41 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["css-tree", [\
+      ["npm:3.1.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/css-tree-npm-3.1.0-19cd308584-10c0.zip/node_modules/css-tree/",\
+        "packageDependencies": [\
+          ["css-tree", "npm:3.1.0"],\
+          ["mdn-data", "npm:2.12.2"],\
+          ["source-map-js", "npm:1.2.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["cssstyle", [\
+      ["npm:5.3.7", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/cssstyle-npm-5.3.7-ffdbe1b5e7-10c0.zip/node_modules/cssstyle/",\
+        "packageDependencies": [\
+          ["@asamuzakjp/css-color", "npm:4.1.1"],\
+          ["@csstools/css-syntax-patches-for-csstree", "npm:1.0.22"],\
+          ["css-tree", "npm:3.1.0"],\
+          ["cssstyle", "npm:5.3.7"],\
+          ["lru-cache", "npm:11.2.4"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["data-urls", [\
+      ["npm:6.0.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/data-urls-npm-6.0.0-f0731a6320-10c0.zip/node_modules/data-urls/",\
+        "packageDependencies": [\
+          ["data-urls", "npm:6.0.0"],\
+          ["whatwg-mimetype", "npm:4.0.0"],\
+          ["whatwg-url", "npm:15.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["debug", [\
       ["npm:4.4.3", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/debug-npm-4.4.3-0105c6123a-10c0.zip/node_modules/debug/",\
@@ -756,6 +1047,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/decamelize-npm-4.0.0-12410e3409-10c0.zip/node_modules/decamelize/",\
         "packageDependencies": [\
           ["decamelize", "npm:4.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["decimal.js", [\
+      ["npm:10.6.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/decimal.js-npm-10.6.0-a72c1b8a2f-10c0.zip/node_modules/decimal.js/",\
+        "packageDependencies": [\
+          ["decimal.js", "npm:10.6.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -807,6 +1107,15 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["encoding", "npm:0.1.13"],\
           ["iconv-lite", "npm:0.6.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["entities", [\
+      ["npm:6.0.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/entities-npm-6.0.1-84692dab43-10c0.zip/node_modules/entities/",\
+        "packageDependencies": [\
+          ["entities", "npm:6.0.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1035,6 +1344,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["html-encoding-sniffer", [\
+      ["npm:6.0.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/html-encoding-sniffer-npm-6.0.0-1b55926d28-10c0.zip/node_modules/html-encoding-sniffer/",\
+        "packageDependencies": [\
+          ["@exodus/bytes", "virtual:1b55926d2838d3ef3142bdb5e91069316e2128a49d6ce2759c0041cd50798aee9629bfcefa131415d0efedf9ec4bb97d945a3cc30507ea2f47c83181cc745946#npm:1.8.0"],\
+          ["html-encoding-sniffer", "npm:6.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["http-cache-semantics", [\
       ["npm:4.2.0", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/http-cache-semantics-npm-4.2.0-fadacfb3ad-10c0.zip/node_modules/http-cache-semantics/",\
@@ -1121,6 +1440,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["is-potential-custom-element-name", [\
+      ["npm:1.0.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/is-potential-custom-element-name-npm-1.0.1-f352f606f8-10c0.zip/node_modules/is-potential-custom-element-name/",\
+        "packageDependencies": [\
+          ["is-potential-custom-element-name", "npm:1.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["is-unicode-supported", [\
       ["npm:0.1.0", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/is-unicode-supported-npm-0.1.0-0833e1bbfb-10c0.zip/node_modules/is-unicode-supported/",\
@@ -1163,6 +1491,70 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["argparse", "npm:2.0.1"],\
           ["js-yaml", "npm:4.1.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["jsdom", [\
+      ["npm:27.4.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/jsdom-npm-27.4.0-5fbca04a68-10c0.zip/node_modules/jsdom/",\
+        "packageDependencies": [\
+          ["jsdom", "npm:27.4.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:27.4.0", {\
+        "packageLocation": "./.yarn/__virtual__/jsdom-virtual-d7214e72ba/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/jsdom-npm-27.4.0-5fbca04a68-10c0.zip/node_modules/jsdom/",\
+        "packageDependencies": [\
+          ["@acemir/cssom", "npm:0.9.30"],\
+          ["@asamuzakjp/dom-selector", "npm:6.7.6"],\
+          ["@exodus/bytes", "virtual:1b55926d2838d3ef3142bdb5e91069316e2128a49d6ce2759c0041cd50798aee9629bfcefa131415d0efedf9ec4bb97d945a3cc30507ea2f47c83181cc745946#npm:1.8.0"],\
+          ["@types/canvas", null],\
+          ["canvas", null],\
+          ["cssstyle", "npm:5.3.7"],\
+          ["data-urls", "npm:6.0.0"],\
+          ["decimal.js", "npm:10.6.0"],\
+          ["html-encoding-sniffer", "npm:6.0.0"],\
+          ["http-proxy-agent", "npm:7.0.2"],\
+          ["https-proxy-agent", "npm:7.0.6"],\
+          ["is-potential-custom-element-name", "npm:1.0.1"],\
+          ["jsdom", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:27.4.0"],\
+          ["parse5", "npm:8.0.0"],\
+          ["saxes", "npm:6.0.0"],\
+          ["symbol-tree", "npm:3.2.4"],\
+          ["tough-cookie", "npm:6.0.0"],\
+          ["w3c-xmlserializer", "npm:5.0.0"],\
+          ["webidl-conversions", "npm:8.0.1"],\
+          ["whatwg-mimetype", "npm:4.0.0"],\
+          ["whatwg-url", "npm:15.1.0"],\
+          ["ws", "virtual:d7214e72ba5221807a710cf6ae918719b213d1f2812d89ba3c97c8823bebe1a7f6667666835a480e0d89ff16970665699e077d7578495760e8633c9e46e9ff5b#npm:8.19.0"],\
+          ["xml-name-validator", "npm:5.0.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/canvas",\
+          "canvas"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["jsdom-global", [\
+      ["npm:3.0.2", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/jsdom-global-npm-3.0.2-125141b922-10c0.zip/node_modules/jsdom-global/",\
+        "packageDependencies": [\
+          ["jsdom-global", "npm:3.0.2"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:3.0.2", {\
+        "packageLocation": "./.yarn/__virtual__/jsdom-global-virtual-cdf3c5d607/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/jsdom-global-npm-3.0.2-125141b922-10c0.zip/node_modules/jsdom-global/",\
+        "packageDependencies": [\
+          ["@types/jsdom", "npm:27.0.0"],\
+          ["jsdom", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:27.4.0"],\
+          ["jsdom-global", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:3.0.2"]\
+        ],\
+        "packagePeers": [\
+          "@types/jsdom",\
+          "jsdom"\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1220,6 +1612,15 @@ const RAW_RUNTIME_STATE =
           ["proc-log", "npm:6.1.0"],\
           ["promise-retry", "npm:2.0.1"],\
           ["ssri", "npm:13.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["mdn-data", [\
+      ["npm:2.12.2", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/mdn-data-npm-2.12.2-d75edd5e16-10c0.zip/node_modules/mdn-data/",\
+        "packageDependencies": [\
+          ["mdn-data", "npm:2.12.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1437,6 +1838,24 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["parse5", [\
+      ["npm:7.3.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/parse5-npm-7.3.0-b0410074a3-10c0.zip/node_modules/parse5/",\
+        "packageDependencies": [\
+          ["entities", "npm:6.0.1"],\
+          ["parse5", "npm:7.3.0"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:8.0.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/parse5-npm-8.0.0-c813f23978-10c0.zip/node_modules/parse5/",\
+        "packageDependencies": [\
+          ["entities", "npm:6.0.1"],\
+          ["parse5", "npm:8.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["path-exists", [\
       ["npm:4.0.0", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/path-exists-npm-4.0.0-e9e4f63eb0-10c0.zip/node_modules/path-exists/",\
@@ -1513,6 +1932,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["punycode", [\
+      ["npm:2.3.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/punycode-npm-2.3.1-97543c420d-10c0.zip/node_modules/punycode/",\
+        "packageDependencies": [\
+          ["punycode", "npm:2.3.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["randombytes", [\
       ["npm:2.1.0", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/randombytes-npm-2.1.0-e3da76bccf-10c0.zip/node_modules/randombytes/",\
@@ -1537,6 +1965,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/require-directory-npm-2.1.1-8608aee50b-10c0.zip/node_modules/require-directory/",\
         "packageDependencies": [\
           ["require-directory", "npm:2.1.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["require-from-string", [\
+      ["npm:2.0.2", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/require-from-string-npm-2.0.2-8557e0db12-10c0.zip/node_modules/require-from-string/",\
+        "packageDependencies": [\
+          ["require-from-string", "npm:2.0.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1573,6 +2010,16 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/safer-buffer-npm-2.1.2-8d5c0b705e-10c0.zip/node_modules/safer-buffer/",\
         "packageDependencies": [\
           ["safer-buffer", "npm:2.1.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["saxes", [\
+      ["npm:6.0.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/saxes-npm-6.0.0-31558949f5-10c0.zip/node_modules/saxes/",\
+        "packageDependencies": [\
+          ["saxes", "npm:6.0.0"],\
+          ["xmlchars", "npm:2.2.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1696,6 +2143,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["source-map-js", [\
+      ["npm:1.2.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/source-map-js-npm-1.2.1-b9a47d7e1a-10c0.zip/node_modules/source-map-js/",\
+        "packageDependencies": [\
+          ["source-map-js", "npm:1.2.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["ssri", [\
       ["npm:13.0.0", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/ssri-npm-13.0.0-f5fa93375d-10c0.zip/node_modules/ssri/",\
@@ -1773,6 +2229,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["symbol-tree", [\
+      ["npm:3.2.4", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/symbol-tree-npm-3.2.4-fe70cdb75b-10c0.zip/node_modules/symbol-tree/",\
+        "packageDependencies": [\
+          ["symbol-tree", "npm:3.2.4"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["tar", [\
       ["npm:7.5.2", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/tar-npm-7.5.2-6d8cfb7a13-10c0.zip/node_modules/tar/",\
@@ -1794,6 +2259,45 @@ const RAW_RUNTIME_STATE =
           ["fdir", "virtual:0e783aadbd2b4b8e6f6056033c0b290501892d23bc7c5dad5477e00e48ad8bd3e4434c3962a52dd75a58e06dbb7218094a494bac954ef2f7f6fdb65d9717e5f4#npm:6.5.0"],\
           ["picomatch", "npm:4.0.3"],\
           ["tinyglobby", "npm:0.2.15"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["tldts", [\
+      ["npm:7.0.19", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/tldts-npm-7.0.19-08fd96f082-10c0.zip/node_modules/tldts/",\
+        "packageDependencies": [\
+          ["tldts", "npm:7.0.19"],\
+          ["tldts-core", "npm:7.0.19"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["tldts-core", [\
+      ["npm:7.0.19", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/tldts-core-npm-7.0.19-d03bb25d82-10c0.zip/node_modules/tldts-core/",\
+        "packageDependencies": [\
+          ["tldts-core", "npm:7.0.19"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["tough-cookie", [\
+      ["npm:6.0.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/tough-cookie-npm-6.0.0-c7d0e8e15a-10c0.zip/node_modules/tough-cookie/",\
+        "packageDependencies": [\
+          ["tldts", "npm:7.0.19"],\
+          ["tough-cookie", "npm:6.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["tr46", [\
+      ["npm:6.0.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/tr46-npm-6.0.0-86cfd34257-10c0.zip/node_modules/tr46/",\
+        "packageDependencies": [\
+          ["punycode", "npm:2.3.1"],\
+          ["tr46", "npm:6.0.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1864,6 +2368,45 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["w3c-xmlserializer", [\
+      ["npm:5.0.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/w3c-xmlserializer-npm-5.0.0-589edd7bff-10c0.zip/node_modules/w3c-xmlserializer/",\
+        "packageDependencies": [\
+          ["w3c-xmlserializer", "npm:5.0.0"],\
+          ["xml-name-validator", "npm:5.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["webidl-conversions", [\
+      ["npm:8.0.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/webidl-conversions-npm-8.0.1-0a5c649859-10c0.zip/node_modules/webidl-conversions/",\
+        "packageDependencies": [\
+          ["webidl-conversions", "npm:8.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["whatwg-mimetype", [\
+      ["npm:4.0.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/whatwg-mimetype-npm-4.0.0-ebb293a688-10c0.zip/node_modules/whatwg-mimetype/",\
+        "packageDependencies": [\
+          ["whatwg-mimetype", "npm:4.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["whatwg-url", [\
+      ["npm:15.1.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/whatwg-url-npm-15.1.0-0889b0b826-10c0.zip/node_modules/whatwg-url/",\
+        "packageDependencies": [\
+          ["tr46", "npm:6.0.0"],\
+          ["webidl-conversions", "npm:8.0.1"],\
+          ["whatwg-url", "npm:15.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["which", [\
       ["npm:2.0.2", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/which-npm-2.0.2-320ddf72f7-10c0.zip/node_modules/which/",\
@@ -1909,6 +2452,50 @@ const RAW_RUNTIME_STATE =
           ["string-width", "npm:5.1.2"],\
           ["strip-ansi", "npm:7.1.2"],\
           ["wrap-ansi", "npm:8.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["ws", [\
+      ["npm:8.19.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/ws-npm-8.19.0-c967c046a5-10c0.zip/node_modules/ws/",\
+        "packageDependencies": [\
+          ["ws", "npm:8.19.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:d7214e72ba5221807a710cf6ae918719b213d1f2812d89ba3c97c8823bebe1a7f6667666835a480e0d89ff16970665699e077d7578495760e8633c9e46e9ff5b#npm:8.19.0", {\
+        "packageLocation": "./.yarn/__virtual__/ws-virtual-e33e76e674/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/ws-npm-8.19.0-c967c046a5-10c0.zip/node_modules/ws/",\
+        "packageDependencies": [\
+          ["@types/bufferutil", null],\
+          ["@types/utf-8-validate", null],\
+          ["bufferutil", null],\
+          ["utf-8-validate", null],\
+          ["ws", "virtual:d7214e72ba5221807a710cf6ae918719b213d1f2812d89ba3c97c8823bebe1a7f6667666835a480e0d89ff16970665699e077d7578495760e8633c9e46e9ff5b#npm:8.19.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/bufferutil",\
+          "@types/utf-8-validate",\
+          "bufferutil",\
+          "utf-8-validate"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["xml-name-validator", [\
+      ["npm:5.0.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/xml-name-validator-npm-5.0.0-0e0ec66944-10c0.zip/node_modules/xml-name-validator/",\
+        "packageDependencies": [\
+          ["xml-name-validator", "npm:5.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["xmlchars", [\
+      ["npm:2.2.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/xmlchars-npm-2.2.0-8b78f0f5e4-10c0.zip/node_modules/xmlchars/",\
+        "packageDependencies": [\
+          ["xmlchars", "npm:2.2.0"]\
         ],\
         "linkType": "HARD"\
       }]\

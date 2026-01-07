@@ -4,7 +4,7 @@ import { expect } from "chai";
 import { afterEach, describe } from "mocha";
 import Sinon, { spy } from "sinon";
 
-import { $store } from "ceres";
+import { $element, $store } from "ceres";
 
 afterEach(function () {
     Sinon.restore();
@@ -31,5 +31,15 @@ describe("Store", function () {
         store.value = 1;
 
         expect(emitter).to.have.been.calledWith({ prev: 0, curr: 1 });
+    });
+});
+
+describe("Element", function () {
+    it("should mount", function () {
+        const root = document.createElement("div");
+
+        $element("span", {}, "ceres").mount(root);
+
+        expect(root).to.have.descendant("span").and.have.text("ceres");
     });
 });
