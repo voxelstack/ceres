@@ -21,6 +21,7 @@
         "compile:watch": "tsc --watch --project ./tsconfig.json",
         "test": "cross-env TSX_TSCONFIG_PATH=./test/tsconfig.json mocha",
         "test:watch": "cross-env TSX_TSCONFIG_PATH=./test/tsconfig.json mocha --watch",
+        "format": "prettier . --check",
         "lint": "eslint ./src ./test"
     },
     "devDependencies": {
@@ -37,9 +38,12 @@
         "chai-dom": "^1.12.1",
         "cross-env": "^10.1.0",
         "eslint": "^9.39.2",
+        "eslint-config-prettier": "^10.1.8",
         "jsdom": "^27.4.0",
         "jsdom-global": "^3.0.2",
         "mocha": "^11.7.5",
+        "prettier": "3.7.4",
+        "prettier-plugin-organize-imports": "^4.3.0",
         "sinon": "^21.0.1",
         "sinon-chai": "^4.0.1",
         "tsx": "^4.21.0",
