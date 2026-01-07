@@ -3,11 +3,23 @@
         "strict": true,
 
         "target": "ESNext",
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
         "lib": ["DOM", "ESNext"],
-        "types": [],
+
+        "outDir": "./dist",
+
+        "paths": {
+            "ceres": ["./src"],
+
+            "@element": ["./src/lib/element"],
+            "@observable": ["./src/lib/observable"]
+        },
 
         "sourceMap": true,
         "declaration": true,
         "declarationMap": true,
     },
+
+    "include": ["./src"]
 }
