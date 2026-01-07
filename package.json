@@ -20,9 +20,11 @@
         "compile": "tsc --project ./tsconfig.json",
         "compile:watch": "tsc --watch --project ./tsconfig.json",
         "test": "cross-env TSX_TSCONFIG_PATH=./test/tsconfig.json mocha",
-        "test:watch": "cross-env TSX_TSCONFIG_PATH=./test/tsconfig.json mocha --watch"
+        "test:watch": "cross-env TSX_TSCONFIG_PATH=./test/tsconfig.json mocha --watch",
+        "lint": "eslint ./src ./test"
     },
     "devDependencies": {
+        "@eslint/js": "^9.39.2",
         "@types/chai": "^5.2.3",
         "@types/chai-dom": "^1.11.3",
         "@types/jsdom": "^27.0.0",
@@ -34,13 +36,15 @@
         "chai": "^6.2.2",
         "chai-dom": "^1.12.1",
         "cross-env": "^10.1.0",
+        "eslint": "^9.39.2",
         "jsdom": "^27.4.0",
         "jsdom-global": "^3.0.2",
         "mocha": "^11.7.5",
         "sinon": "^21.0.1",
         "sinon-chai": "^4.0.1",
         "tsx": "^4.21.0",
-        "typescript": "^5.7.2"
+        "typescript": "^5.9.3",
+        "typescript-eslint": "^8.52.0"
     },
     "packageManager": "yarn@4.12.0+sha512.f45ab632439a67f8bc759bf32ead036a1f413287b9042726b7cc4818b7b49e14e9423ba49b18f9e06ea4941c1ad062385b1d8760a8d5091a1a31e5f6219afca8"
 }

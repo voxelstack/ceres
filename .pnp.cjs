@@ -28,6 +28,7 @@ const RAW_RUNTIME_STATE =
       [null, {\
         "packageLocation": "./",\
         "packageDependencies": [\
+          ["@eslint/js", "npm:9.39.2"],\
           ["@types/chai", "npm:5.2.3"],\
           ["@types/chai-dom", "npm:1.11.3"],\
           ["@types/jsdom", "npm:27.0.0"],\
@@ -40,13 +41,15 @@ const RAW_RUNTIME_STATE =
           ["chai", "npm:6.2.2"],\
           ["chai-dom", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:1.12.1"],\
           ["cross-env", "npm:10.1.0"],\
+          ["eslint", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:9.39.2"],\
           ["jsdom", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:27.4.0"],\
           ["jsdom-global", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:3.0.2"],\
           ["mocha", "npm:11.7.5"],\
           ["sinon", "npm:21.0.1"],\
           ["sinon-chai", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:4.0.1"],\
           ["tsx", "npm:4.21.0"],\
-          ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"]\
+          ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"],\
+          ["typescript-eslint", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:8.52.0"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -443,6 +446,117 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@eslint-community/eslint-utils", [\
+      ["npm:4.9.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@eslint-community-eslint-utils-npm-4.9.1-30ad3d49de-10c0.zip/node_modules/@eslint-community/eslint-utils/",\
+        "packageDependencies": [\
+          ["@eslint-community/eslint-utils", "npm:4.9.1"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:e25bc77c6db5edf0b45909cce09859263b37fd63ad7bf89adf4b62f9d09af25d49dcd0d6aea6982140b389d3bf3672a7b9c9cac07d7db1abb2a631371735939c#npm:4.9.1", {\
+        "packageLocation": "./.yarn/__virtual__/@eslint-community-eslint-utils-virtual-a14dbe0531/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@eslint-community-eslint-utils-npm-4.9.1-30ad3d49de-10c0.zip/node_modules/@eslint-community/eslint-utils/",\
+        "packageDependencies": [\
+          ["@eslint-community/eslint-utils", "virtual:e25bc77c6db5edf0b45909cce09859263b37fd63ad7bf89adf4b62f9d09af25d49dcd0d6aea6982140b389d3bf3672a7b9c9cac07d7db1abb2a631371735939c#npm:4.9.1"],\
+          ["@types/eslint", null],\
+          ["eslint", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:9.39.2"],\
+          ["eslint-visitor-keys", "npm:3.4.3"]\
+        ],\
+        "packagePeers": [\
+          "@types/eslint",\
+          "eslint"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@eslint-community/regexpp", [\
+      ["npm:4.12.2", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@eslint-community-regexpp-npm-4.12.2-3d54624470-10c0.zip/node_modules/@eslint-community/regexpp/",\
+        "packageDependencies": [\
+          ["@eslint-community/regexpp", "npm:4.12.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@eslint/config-array", [\
+      ["npm:0.21.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@eslint-config-array-npm-0.21.1-c33ed9ec91-10c0.zip/node_modules/@eslint/config-array/",\
+        "packageDependencies": [\
+          ["@eslint/config-array", "npm:0.21.1"],\
+          ["@eslint/object-schema", "npm:2.1.7"],\
+          ["debug", "virtual:643ed7cc338bcf145a82d8b05b3bef6bcf150ca545df386225596f10ce53cc90b88b3ca83e348ade1ccea5f3f8e76c92d2f0e2ba544da60d40aff9921c56872d#npm:4.4.3"],\
+          ["minimatch", "npm:3.1.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@eslint/config-helpers", [\
+      ["npm:0.4.2", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@eslint-config-helpers-npm-0.4.2-a55655f805-10c0.zip/node_modules/@eslint/config-helpers/",\
+        "packageDependencies": [\
+          ["@eslint/config-helpers", "npm:0.4.2"],\
+          ["@eslint/core", "npm:0.17.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@eslint/core", [\
+      ["npm:0.17.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@eslint-core-npm-0.17.0-8579df04c4-10c0.zip/node_modules/@eslint/core/",\
+        "packageDependencies": [\
+          ["@eslint/core", "npm:0.17.0"],\
+          ["@types/json-schema", "npm:7.0.15"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@eslint/eslintrc", [\
+      ["npm:3.3.3", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@eslint-eslintrc-npm-3.3.3-8ccf6281a3-10c0.zip/node_modules/@eslint/eslintrc/",\
+        "packageDependencies": [\
+          ["@eslint/eslintrc", "npm:3.3.3"],\
+          ["ajv", "npm:6.12.6"],\
+          ["debug", "virtual:643ed7cc338bcf145a82d8b05b3bef6bcf150ca545df386225596f10ce53cc90b88b3ca83e348ade1ccea5f3f8e76c92d2f0e2ba544da60d40aff9921c56872d#npm:4.4.3"],\
+          ["espree", "npm:10.4.0"],\
+          ["globals", "npm:14.0.0"],\
+          ["ignore", "npm:5.3.2"],\
+          ["import-fresh", "npm:3.3.1"],\
+          ["js-yaml", "npm:4.1.1"],\
+          ["minimatch", "npm:3.1.2"],\
+          ["strip-json-comments", "npm:3.1.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@eslint/js", [\
+      ["npm:9.39.2", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@eslint-js-npm-9.39.2-c8e5f9bf73-10c0.zip/node_modules/@eslint/js/",\
+        "packageDependencies": [\
+          ["@eslint/js", "npm:9.39.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@eslint/object-schema", [\
+      ["npm:2.1.7", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@eslint-object-schema-npm-2.1.7-cb962a5b9b-10c0.zip/node_modules/@eslint/object-schema/",\
+        "packageDependencies": [\
+          ["@eslint/object-schema", "npm:2.1.7"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@eslint/plugin-kit", [\
+      ["npm:0.4.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@eslint-plugin-kit-npm-0.4.1-3df70dd079-10c0.zip/node_modules/@eslint/plugin-kit/",\
+        "packageDependencies": [\
+          ["@eslint/core", "npm:0.17.0"],\
+          ["@eslint/plugin-kit", "npm:0.4.1"],\
+          ["levn", "npm:0.4.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@exodus/bytes", [\
       ["npm:1.8.0", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@exodus-bytes-npm-1.8.0-0b698b2053-10c0.zip/node_modules/@exodus/bytes/",\
@@ -461,6 +575,44 @@ const RAW_RUNTIME_STATE =
         "packagePeers": [\
           "@exodus/crypto",\
           "@types/exodus__crypto"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@humanfs/core", [\
+      ["npm:0.19.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@humanfs-core-npm-0.19.1-e2e7aaeb6e-10c0.zip/node_modules/@humanfs/core/",\
+        "packageDependencies": [\
+          ["@humanfs/core", "npm:0.19.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@humanfs/node", [\
+      ["npm:0.16.7", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@humanfs-node-npm-0.16.7-fa16bdb590-10c0.zip/node_modules/@humanfs/node/",\
+        "packageDependencies": [\
+          ["@humanfs/core", "npm:0.19.1"],\
+          ["@humanfs/node", "npm:0.16.7"],\
+          ["@humanwhocodes/retry", "npm:0.4.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@humanwhocodes/module-importer", [\
+      ["npm:1.0.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@humanwhocodes-module-importer-npm-1.0.1-9d07ed2e4a-10c0.zip/node_modules/@humanwhocodes/module-importer/",\
+        "packageDependencies": [\
+          ["@humanwhocodes/module-importer", "npm:1.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@humanwhocodes/retry", [\
+      ["npm:0.4.3", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@humanwhocodes-retry-npm-0.4.3-a8d7ca1663-10c0.zip/node_modules/@humanwhocodes/retry/",\
+        "packageDependencies": [\
+          ["@humanwhocodes/retry", "npm:0.4.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -612,6 +764,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/estree", [\
+      ["npm:1.0.8", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@types-estree-npm-1.0.8-2195bac6d6-10c0.zip/node_modules/@types/estree/",\
+        "packageDependencies": [\
+          ["@types/estree", "npm:1.0.8"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/jsdom", [\
       ["npm:27.0.0", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@types-jsdom-npm-27.0.0-1d3e92b047-10c0.zip/node_modules/@types/jsdom/",\
@@ -630,6 +791,15 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@types/jsdom", "npm:27.0.0"],\
           ["@types/jsdom-global", "npm:3.0.7"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/json-schema", [\
+      ["npm:7.0.15", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@types-json-schema-npm-7.0.15-fd16381786-10c0.zip/node_modules/@types/json-schema/",\
+        "packageDependencies": [\
+          ["@types/json-schema", "npm:7.0.15"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -692,10 +862,250 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@typescript-eslint/eslint-plugin", [\
+      ["npm:8.52.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@typescript-eslint-eslint-plugin-npm-8.52.0-a70cd5ea42-10c0.zip/node_modules/@typescript-eslint/eslint-plugin/",\
+        "packageDependencies": [\
+          ["@typescript-eslint/eslint-plugin", "npm:8.52.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:7300d5f7fad5835ac0966c5f20deaed9c87ea63f0fc267521d664695fba9bc68ea8fcb9c807e5c8b3cd5b09e037821e59bb16b40be320fc3b1c284fe4448766c#npm:8.52.0", {\
+        "packageLocation": "./.yarn/__virtual__/@typescript-eslint-eslint-plugin-virtual-1438846b5a/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@typescript-eslint-eslint-plugin-npm-8.52.0-a70cd5ea42-10c0.zip/node_modules/@typescript-eslint/eslint-plugin/",\
+        "packageDependencies": [\
+          ["@eslint-community/regexpp", "npm:4.12.2"],\
+          ["@types/eslint", null],\
+          ["@types/typescript", null],\
+          ["@types/typescript-eslint__parser", null],\
+          ["@typescript-eslint/eslint-plugin", "virtual:7300d5f7fad5835ac0966c5f20deaed9c87ea63f0fc267521d664695fba9bc68ea8fcb9c807e5c8b3cd5b09e037821e59bb16b40be320fc3b1c284fe4448766c#npm:8.52.0"],\
+          ["@typescript-eslint/parser", "virtual:7300d5f7fad5835ac0966c5f20deaed9c87ea63f0fc267521d664695fba9bc68ea8fcb9c807e5c8b3cd5b09e037821e59bb16b40be320fc3b1c284fe4448766c#npm:8.52.0"],\
+          ["@typescript-eslint/scope-manager", "npm:8.52.0"],\
+          ["@typescript-eslint/type-utils", "virtual:1438846b5a0d4b35aa484a46317af4cd9642d5f0de19c07c972381ca8c845930b454831162aed8d9854e24ac1d1f5f30bd499fac83bd154b04a42df1d80d8b48#npm:8.52.0"],\
+          ["@typescript-eslint/utils", "virtual:7300d5f7fad5835ac0966c5f20deaed9c87ea63f0fc267521d664695fba9bc68ea8fcb9c807e5c8b3cd5b09e037821e59bb16b40be320fc3b1c284fe4448766c#npm:8.52.0"],\
+          ["@typescript-eslint/visitor-keys", "npm:8.52.0"],\
+          ["eslint", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:9.39.2"],\
+          ["ignore", "npm:7.0.5"],\
+          ["natural-compare", "npm:1.4.0"],\
+          ["ts-api-utils", "virtual:1438846b5a0d4b35aa484a46317af4cd9642d5f0de19c07c972381ca8c845930b454831162aed8d9854e24ac1d1f5f30bd499fac83bd154b04a42df1d80d8b48#npm:2.4.0"],\
+          ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"]\
+        ],\
+        "packagePeers": [\
+          "@types/eslint",\
+          "@types/typescript-eslint__parser",\
+          "@types/typescript",\
+          "@typescript-eslint/parser",\
+          "eslint",\
+          "typescript"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@typescript-eslint/parser", [\
+      ["npm:8.52.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@typescript-eslint-parser-npm-8.52.0-7f2ce4b0cb-10c0.zip/node_modules/@typescript-eslint/parser/",\
+        "packageDependencies": [\
+          ["@typescript-eslint/parser", "npm:8.52.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:7300d5f7fad5835ac0966c5f20deaed9c87ea63f0fc267521d664695fba9bc68ea8fcb9c807e5c8b3cd5b09e037821e59bb16b40be320fc3b1c284fe4448766c#npm:8.52.0", {\
+        "packageLocation": "./.yarn/__virtual__/@typescript-eslint-parser-virtual-661698bd16/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@typescript-eslint-parser-npm-8.52.0-7f2ce4b0cb-10c0.zip/node_modules/@typescript-eslint/parser/",\
+        "packageDependencies": [\
+          ["@types/eslint", null],\
+          ["@types/typescript", null],\
+          ["@typescript-eslint/parser", "virtual:7300d5f7fad5835ac0966c5f20deaed9c87ea63f0fc267521d664695fba9bc68ea8fcb9c807e5c8b3cd5b09e037821e59bb16b40be320fc3b1c284fe4448766c#npm:8.52.0"],\
+          ["@typescript-eslint/scope-manager", "npm:8.52.0"],\
+          ["@typescript-eslint/types", "npm:8.52.0"],\
+          ["@typescript-eslint/typescript-estree", "virtual:7300d5f7fad5835ac0966c5f20deaed9c87ea63f0fc267521d664695fba9bc68ea8fcb9c807e5c8b3cd5b09e037821e59bb16b40be320fc3b1c284fe4448766c#npm:8.52.0"],\
+          ["@typescript-eslint/visitor-keys", "npm:8.52.0"],\
+          ["debug", "virtual:643ed7cc338bcf145a82d8b05b3bef6bcf150ca545df386225596f10ce53cc90b88b3ca83e348ade1ccea5f3f8e76c92d2f0e2ba544da60d40aff9921c56872d#npm:4.4.3"],\
+          ["eslint", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:9.39.2"],\
+          ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"]\
+        ],\
+        "packagePeers": [\
+          "@types/eslint",\
+          "@types/typescript",\
+          "eslint",\
+          "typescript"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@typescript-eslint/project-service", [\
+      ["npm:8.52.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@typescript-eslint-project-service-npm-8.52.0-300ac97b84-10c0.zip/node_modules/@typescript-eslint/project-service/",\
+        "packageDependencies": [\
+          ["@typescript-eslint/project-service", "npm:8.52.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:d434c70b29dc254578dbfe43067904992d82d7c78bcfd30441d50c7fe9a8ff504c4d57ea8780f54e2f9f8a59cad26a1e9b213ce4cd8b7eadd95a6601308948da#npm:8.52.0", {\
+        "packageLocation": "./.yarn/__virtual__/@typescript-eslint-project-service-virtual-009f5e505e/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@typescript-eslint-project-service-npm-8.52.0-300ac97b84-10c0.zip/node_modules/@typescript-eslint/project-service/",\
+        "packageDependencies": [\
+          ["@types/typescript", null],\
+          ["@typescript-eslint/project-service", "virtual:d434c70b29dc254578dbfe43067904992d82d7c78bcfd30441d50c7fe9a8ff504c4d57ea8780f54e2f9f8a59cad26a1e9b213ce4cd8b7eadd95a6601308948da#npm:8.52.0"],\
+          ["@typescript-eslint/tsconfig-utils", "virtual:d434c70b29dc254578dbfe43067904992d82d7c78bcfd30441d50c7fe9a8ff504c4d57ea8780f54e2f9f8a59cad26a1e9b213ce4cd8b7eadd95a6601308948da#npm:8.52.0"],\
+          ["@typescript-eslint/types", "npm:8.52.0"],\
+          ["debug", "virtual:643ed7cc338bcf145a82d8b05b3bef6bcf150ca545df386225596f10ce53cc90b88b3ca83e348ade1ccea5f3f8e76c92d2f0e2ba544da60d40aff9921c56872d#npm:4.4.3"],\
+          ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"]\
+        ],\
+        "packagePeers": [\
+          "@types/typescript",\
+          "typescript"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@typescript-eslint/scope-manager", [\
+      ["npm:8.52.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@typescript-eslint-scope-manager-npm-8.52.0-df1e126940-10c0.zip/node_modules/@typescript-eslint/scope-manager/",\
+        "packageDependencies": [\
+          ["@typescript-eslint/scope-manager", "npm:8.52.0"],\
+          ["@typescript-eslint/types", "npm:8.52.0"],\
+          ["@typescript-eslint/visitor-keys", "npm:8.52.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@typescript-eslint/tsconfig-utils", [\
+      ["npm:8.52.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@typescript-eslint-tsconfig-utils-npm-8.52.0-451ec8941e-10c0.zip/node_modules/@typescript-eslint/tsconfig-utils/",\
+        "packageDependencies": [\
+          ["@typescript-eslint/tsconfig-utils", "npm:8.52.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:d434c70b29dc254578dbfe43067904992d82d7c78bcfd30441d50c7fe9a8ff504c4d57ea8780f54e2f9f8a59cad26a1e9b213ce4cd8b7eadd95a6601308948da#npm:8.52.0", {\
+        "packageLocation": "./.yarn/__virtual__/@typescript-eslint-tsconfig-utils-virtual-6c65054a64/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@typescript-eslint-tsconfig-utils-npm-8.52.0-451ec8941e-10c0.zip/node_modules/@typescript-eslint/tsconfig-utils/",\
+        "packageDependencies": [\
+          ["@types/typescript", null],\
+          ["@typescript-eslint/tsconfig-utils", "virtual:d434c70b29dc254578dbfe43067904992d82d7c78bcfd30441d50c7fe9a8ff504c4d57ea8780f54e2f9f8a59cad26a1e9b213ce4cd8b7eadd95a6601308948da#npm:8.52.0"],\
+          ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"]\
+        ],\
+        "packagePeers": [\
+          "@types/typescript",\
+          "typescript"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@typescript-eslint/type-utils", [\
+      ["npm:8.52.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@typescript-eslint-type-utils-npm-8.52.0-5aefa32304-10c0.zip/node_modules/@typescript-eslint/type-utils/",\
+        "packageDependencies": [\
+          ["@typescript-eslint/type-utils", "npm:8.52.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:1438846b5a0d4b35aa484a46317af4cd9642d5f0de19c07c972381ca8c845930b454831162aed8d9854e24ac1d1f5f30bd499fac83bd154b04a42df1d80d8b48#npm:8.52.0", {\
+        "packageLocation": "./.yarn/__virtual__/@typescript-eslint-type-utils-virtual-bc347a2094/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@typescript-eslint-type-utils-npm-8.52.0-5aefa32304-10c0.zip/node_modules/@typescript-eslint/type-utils/",\
+        "packageDependencies": [\
+          ["@types/eslint", null],\
+          ["@types/typescript", null],\
+          ["@typescript-eslint/type-utils", "virtual:1438846b5a0d4b35aa484a46317af4cd9642d5f0de19c07c972381ca8c845930b454831162aed8d9854e24ac1d1f5f30bd499fac83bd154b04a42df1d80d8b48#npm:8.52.0"],\
+          ["@typescript-eslint/types", "npm:8.52.0"],\
+          ["@typescript-eslint/typescript-estree", "virtual:7300d5f7fad5835ac0966c5f20deaed9c87ea63f0fc267521d664695fba9bc68ea8fcb9c807e5c8b3cd5b09e037821e59bb16b40be320fc3b1c284fe4448766c#npm:8.52.0"],\
+          ["@typescript-eslint/utils", "virtual:7300d5f7fad5835ac0966c5f20deaed9c87ea63f0fc267521d664695fba9bc68ea8fcb9c807e5c8b3cd5b09e037821e59bb16b40be320fc3b1c284fe4448766c#npm:8.52.0"],\
+          ["debug", "virtual:643ed7cc338bcf145a82d8b05b3bef6bcf150ca545df386225596f10ce53cc90b88b3ca83e348ade1ccea5f3f8e76c92d2f0e2ba544da60d40aff9921c56872d#npm:4.4.3"],\
+          ["eslint", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:9.39.2"],\
+          ["ts-api-utils", "virtual:1438846b5a0d4b35aa484a46317af4cd9642d5f0de19c07c972381ca8c845930b454831162aed8d9854e24ac1d1f5f30bd499fac83bd154b04a42df1d80d8b48#npm:2.4.0"],\
+          ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"]\
+        ],\
+        "packagePeers": [\
+          "@types/eslint",\
+          "@types/typescript",\
+          "eslint",\
+          "typescript"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@typescript-eslint/types", [\
+      ["npm:8.52.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@typescript-eslint-types-npm-8.52.0-dd9057d59e-10c0.zip/node_modules/@typescript-eslint/types/",\
+        "packageDependencies": [\
+          ["@typescript-eslint/types", "npm:8.52.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@typescript-eslint/typescript-estree", [\
+      ["npm:8.52.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@typescript-eslint-typescript-estree-npm-8.52.0-3ae3386e3a-10c0.zip/node_modules/@typescript-eslint/typescript-estree/",\
+        "packageDependencies": [\
+          ["@typescript-eslint/typescript-estree", "npm:8.52.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:7300d5f7fad5835ac0966c5f20deaed9c87ea63f0fc267521d664695fba9bc68ea8fcb9c807e5c8b3cd5b09e037821e59bb16b40be320fc3b1c284fe4448766c#npm:8.52.0", {\
+        "packageLocation": "./.yarn/__virtual__/@typescript-eslint-typescript-estree-virtual-d434c70b29/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@typescript-eslint-typescript-estree-npm-8.52.0-3ae3386e3a-10c0.zip/node_modules/@typescript-eslint/typescript-estree/",\
+        "packageDependencies": [\
+          ["@types/typescript", null],\
+          ["@typescript-eslint/project-service", "virtual:d434c70b29dc254578dbfe43067904992d82d7c78bcfd30441d50c7fe9a8ff504c4d57ea8780f54e2f9f8a59cad26a1e9b213ce4cd8b7eadd95a6601308948da#npm:8.52.0"],\
+          ["@typescript-eslint/tsconfig-utils", "virtual:d434c70b29dc254578dbfe43067904992d82d7c78bcfd30441d50c7fe9a8ff504c4d57ea8780f54e2f9f8a59cad26a1e9b213ce4cd8b7eadd95a6601308948da#npm:8.52.0"],\
+          ["@typescript-eslint/types", "npm:8.52.0"],\
+          ["@typescript-eslint/typescript-estree", "virtual:7300d5f7fad5835ac0966c5f20deaed9c87ea63f0fc267521d664695fba9bc68ea8fcb9c807e5c8b3cd5b09e037821e59bb16b40be320fc3b1c284fe4448766c#npm:8.52.0"],\
+          ["@typescript-eslint/visitor-keys", "npm:8.52.0"],\
+          ["debug", "virtual:643ed7cc338bcf145a82d8b05b3bef6bcf150ca545df386225596f10ce53cc90b88b3ca83e348ade1ccea5f3f8e76c92d2f0e2ba544da60d40aff9921c56872d#npm:4.4.3"],\
+          ["minimatch", "npm:9.0.5"],\
+          ["semver", "npm:7.7.3"],\
+          ["tinyglobby", "npm:0.2.15"],\
+          ["ts-api-utils", "virtual:1438846b5a0d4b35aa484a46317af4cd9642d5f0de19c07c972381ca8c845930b454831162aed8d9854e24ac1d1f5f30bd499fac83bd154b04a42df1d80d8b48#npm:2.4.0"],\
+          ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"]\
+        ],\
+        "packagePeers": [\
+          "@types/typescript",\
+          "typescript"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@typescript-eslint/utils", [\
+      ["npm:8.52.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@typescript-eslint-utils-npm-8.52.0-caaee0116c-10c0.zip/node_modules/@typescript-eslint/utils/",\
+        "packageDependencies": [\
+          ["@typescript-eslint/utils", "npm:8.52.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:7300d5f7fad5835ac0966c5f20deaed9c87ea63f0fc267521d664695fba9bc68ea8fcb9c807e5c8b3cd5b09e037821e59bb16b40be320fc3b1c284fe4448766c#npm:8.52.0", {\
+        "packageLocation": "./.yarn/__virtual__/@typescript-eslint-utils-virtual-0e7d9817b3/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@typescript-eslint-utils-npm-8.52.0-caaee0116c-10c0.zip/node_modules/@typescript-eslint/utils/",\
+        "packageDependencies": [\
+          ["@eslint-community/eslint-utils", "virtual:e25bc77c6db5edf0b45909cce09859263b37fd63ad7bf89adf4b62f9d09af25d49dcd0d6aea6982140b389d3bf3672a7b9c9cac07d7db1abb2a631371735939c#npm:4.9.1"],\
+          ["@types/eslint", null],\
+          ["@types/typescript", null],\
+          ["@typescript-eslint/scope-manager", "npm:8.52.0"],\
+          ["@typescript-eslint/types", "npm:8.52.0"],\
+          ["@typescript-eslint/typescript-estree", "virtual:7300d5f7fad5835ac0966c5f20deaed9c87ea63f0fc267521d664695fba9bc68ea8fcb9c807e5c8b3cd5b09e037821e59bb16b40be320fc3b1c284fe4448766c#npm:8.52.0"],\
+          ["@typescript-eslint/utils", "virtual:7300d5f7fad5835ac0966c5f20deaed9c87ea63f0fc267521d664695fba9bc68ea8fcb9c807e5c8b3cd5b09e037821e59bb16b40be320fc3b1c284fe4448766c#npm:8.52.0"],\
+          ["eslint", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:9.39.2"],\
+          ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"]\
+        ],\
+        "packagePeers": [\
+          "@types/eslint",\
+          "@types/typescript",\
+          "eslint",\
+          "typescript"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@typescript-eslint/visitor-keys", [\
+      ["npm:8.52.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@typescript-eslint-visitor-keys-npm-8.52.0-a4de6f1d15-10c0.zip/node_modules/@typescript-eslint/visitor-keys/",\
+        "packageDependencies": [\
+          ["@typescript-eslint/types", "npm:8.52.0"],\
+          ["@typescript-eslint/visitor-keys", "npm:8.52.0"],\
+          ["eslint-visitor-keys", "npm:4.2.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@voxelstack/ceres", [\
       ["workspace:.", {\
         "packageLocation": "./",\
         "packageDependencies": [\
+          ["@eslint/js", "npm:9.39.2"],\
           ["@types/chai", "npm:5.2.3"],\
           ["@types/chai-dom", "npm:1.11.3"],\
           ["@types/jsdom", "npm:27.0.0"],\
@@ -708,13 +1118,15 @@ const RAW_RUNTIME_STATE =
           ["chai", "npm:6.2.2"],\
           ["chai-dom", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:1.12.1"],\
           ["cross-env", "npm:10.1.0"],\
+          ["eslint", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:9.39.2"],\
           ["jsdom", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:27.4.0"],\
           ["jsdom-global", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:3.0.2"],\
           ["mocha", "npm:11.7.5"],\
           ["sinon", "npm:21.0.1"],\
           ["sinon-chai", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:4.0.1"],\
           ["tsx", "npm:4.21.0"],\
-          ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"]\
+          ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"],\
+          ["typescript-eslint", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:8.52.0"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -728,11 +1140,55 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["acorn", [\
+      ["npm:8.15.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/acorn-npm-8.15.0-0764cf600e-10c0.zip/node_modules/acorn/",\
+        "packageDependencies": [\
+          ["acorn", "npm:8.15.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["acorn-jsx", [\
+      ["npm:5.3.2", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/acorn-jsx-npm-5.3.2-d7594599ea-10c0.zip/node_modules/acorn-jsx/",\
+        "packageDependencies": [\
+          ["acorn-jsx", "npm:5.3.2"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:9633b00e55c5aebf81b0127f50addd44705c175a47a287258963782da8f9f4e66c2da6640a60ed2826e19f024f73cd554a58729ee1644f93800bbd0d7b7ddd79#npm:5.3.2", {\
+        "packageLocation": "./.yarn/__virtual__/acorn-jsx-virtual-642bf0c873/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/acorn-jsx-npm-5.3.2-d7594599ea-10c0.zip/node_modules/acorn-jsx/",\
+        "packageDependencies": [\
+          ["@types/acorn", null],\
+          ["acorn", "npm:8.15.0"],\
+          ["acorn-jsx", "virtual:9633b00e55c5aebf81b0127f50addd44705c175a47a287258963782da8f9f4e66c2da6640a60ed2826e19f024f73cd554a58729ee1644f93800bbd0d7b7ddd79#npm:5.3.2"]\
+        ],\
+        "packagePeers": [\
+          "@types/acorn",\
+          "acorn"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["agent-base", [\
       ["npm:7.1.4", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/agent-base-npm-7.1.4-cb8b4604d5-10c0.zip/node_modules/agent-base/",\
         "packageDependencies": [\
           ["agent-base", "npm:7.1.4"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["ajv", [\
+      ["npm:6.12.6", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/ajv-npm-6.12.6-4b5105e2b2-10c0.zip/node_modules/ajv/",\
+        "packageDependencies": [\
+          ["ajv", "npm:6.12.6"],\
+          ["fast-deep-equal", "npm:3.1.3"],\
+          ["fast-json-stable-stringify", "npm:2.1.0"],\
+          ["json-schema-traverse", "npm:0.4.1"],\
+          ["uri-js", "npm:4.4.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -808,6 +1264,15 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["brace-expansion", [\
+      ["npm:1.1.12", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/brace-expansion-npm-1.1.12-329e9ad7a1-10c0.zip/node_modules/brace-expansion/",\
+        "packageDependencies": [\
+          ["balanced-match", "npm:1.0.2"],\
+          ["brace-expansion", "npm:1.1.12"],\
+          ["concat-map", "npm:0.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:2.0.2", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/brace-expansion-npm-2.0.2-bc7f134bbc-10c0.zip/node_modules/brace-expansion/",\
         "packageDependencies": [\
@@ -842,6 +1307,15 @@ const RAW_RUNTIME_STATE =
           ["p-map", "npm:7.0.4"],\
           ["ssri", "npm:13.0.0"],\
           ["unique-filename", "npm:5.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["callsites", [\
+      ["npm:3.1.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/callsites-npm-3.1.0-268f989910-10c0.zip/node_modules/callsites/",\
+        "packageDependencies": [\
+          ["callsites", "npm:3.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -943,6 +1417,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/color-name-npm-1.1.4-025792b0ea-10c0.zip/node_modules/color-name/",\
         "packageDependencies": [\
           ["color-name", "npm:1.1.4"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["concat-map", [\
+      ["npm:0.0.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/concat-map-npm-0.0.1-85a921b7ee-10c0.zip/node_modules/concat-map/",\
+        "packageDependencies": [\
+          ["concat-map", "npm:0.0.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1056,6 +1539,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/decimal.js-npm-10.6.0-a72c1b8a2f-10c0.zip/node_modules/decimal.js/",\
         "packageDependencies": [\
           ["decimal.js", "npm:10.6.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["deep-is", [\
+      ["npm:0.1.4", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/deep-is-npm-0.1.4-88938b5a67-10c0.zip/node_modules/deep-is/",\
+        "packageDependencies": [\
+          ["deep-is", "npm:0.1.4"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1191,11 +1683,171 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["eslint", [\
+      ["npm:9.39.2", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/eslint-npm-9.39.2-af6e824e47-10c0.zip/node_modules/eslint/",\
+        "packageDependencies": [\
+          ["eslint", "npm:9.39.2"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:9.39.2", {\
+        "packageLocation": "./.yarn/__virtual__/eslint-virtual-e25bc77c6d/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/eslint-npm-9.39.2-af6e824e47-10c0.zip/node_modules/eslint/",\
+        "packageDependencies": [\
+          ["@eslint-community/eslint-utils", "virtual:e25bc77c6db5edf0b45909cce09859263b37fd63ad7bf89adf4b62f9d09af25d49dcd0d6aea6982140b389d3bf3672a7b9c9cac07d7db1abb2a631371735939c#npm:4.9.1"],\
+          ["@eslint-community/regexpp", "npm:4.12.2"],\
+          ["@eslint/config-array", "npm:0.21.1"],\
+          ["@eslint/config-helpers", "npm:0.4.2"],\
+          ["@eslint/core", "npm:0.17.0"],\
+          ["@eslint/eslintrc", "npm:3.3.3"],\
+          ["@eslint/js", "npm:9.39.2"],\
+          ["@eslint/plugin-kit", "npm:0.4.1"],\
+          ["@humanfs/node", "npm:0.16.7"],\
+          ["@humanwhocodes/module-importer", "npm:1.0.1"],\
+          ["@humanwhocodes/retry", "npm:0.4.3"],\
+          ["@types/estree", "npm:1.0.8"],\
+          ["@types/jiti", null],\
+          ["ajv", "npm:6.12.6"],\
+          ["chalk", "npm:4.1.2"],\
+          ["cross-spawn", "npm:7.0.6"],\
+          ["debug", "virtual:643ed7cc338bcf145a82d8b05b3bef6bcf150ca545df386225596f10ce53cc90b88b3ca83e348ade1ccea5f3f8e76c92d2f0e2ba544da60d40aff9921c56872d#npm:4.4.3"],\
+          ["escape-string-regexp", "npm:4.0.0"],\
+          ["eslint", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:9.39.2"],\
+          ["eslint-scope", "npm:8.4.0"],\
+          ["eslint-visitor-keys", "npm:4.2.1"],\
+          ["espree", "npm:10.4.0"],\
+          ["esquery", "npm:1.7.0"],\
+          ["esutils", "npm:2.0.3"],\
+          ["fast-deep-equal", "npm:3.1.3"],\
+          ["file-entry-cache", "npm:8.0.0"],\
+          ["find-up", "npm:5.0.0"],\
+          ["glob-parent", "npm:6.0.2"],\
+          ["ignore", "npm:5.3.2"],\
+          ["imurmurhash", "npm:0.1.4"],\
+          ["is-glob", "npm:4.0.3"],\
+          ["jiti", null],\
+          ["json-stable-stringify-without-jsonify", "npm:1.0.1"],\
+          ["lodash.merge", "npm:4.6.2"],\
+          ["minimatch", "npm:3.1.2"],\
+          ["natural-compare", "npm:1.4.0"],\
+          ["optionator", "npm:0.9.4"]\
+        ],\
+        "packagePeers": [\
+          "@types/jiti",\
+          "jiti"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["eslint-scope", [\
+      ["npm:8.4.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/eslint-scope-npm-8.4.0-8ed12feb40-10c0.zip/node_modules/eslint-scope/",\
+        "packageDependencies": [\
+          ["eslint-scope", "npm:8.4.0"],\
+          ["esrecurse", "npm:4.3.0"],\
+          ["estraverse", "npm:5.3.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["eslint-visitor-keys", [\
+      ["npm:3.4.3", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/eslint-visitor-keys-npm-3.4.3-a356ac7e46-10c0.zip/node_modules/eslint-visitor-keys/",\
+        "packageDependencies": [\
+          ["eslint-visitor-keys", "npm:3.4.3"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:4.2.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/eslint-visitor-keys-npm-4.2.1-435d5be22a-10c0.zip/node_modules/eslint-visitor-keys/",\
+        "packageDependencies": [\
+          ["eslint-visitor-keys", "npm:4.2.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["espree", [\
+      ["npm:10.4.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/espree-npm-10.4.0-9633b00e55-10c0.zip/node_modules/espree/",\
+        "packageDependencies": [\
+          ["acorn", "npm:8.15.0"],\
+          ["acorn-jsx", "virtual:9633b00e55c5aebf81b0127f50addd44705c175a47a287258963782da8f9f4e66c2da6640a60ed2826e19f024f73cd554a58729ee1644f93800bbd0d7b7ddd79#npm:5.3.2"],\
+          ["eslint-visitor-keys", "npm:4.2.1"],\
+          ["espree", "npm:10.4.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["esquery", [\
+      ["npm:1.7.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/esquery-npm-1.7.0-c1e8da438a-10c0.zip/node_modules/esquery/",\
+        "packageDependencies": [\
+          ["esquery", "npm:1.7.0"],\
+          ["estraverse", "npm:5.3.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["esrecurse", [\
+      ["npm:4.3.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/esrecurse-npm-4.3.0-10b86a887a-10c0.zip/node_modules/esrecurse/",\
+        "packageDependencies": [\
+          ["esrecurse", "npm:4.3.0"],\
+          ["estraverse", "npm:5.3.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["estraverse", [\
+      ["npm:5.3.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/estraverse-npm-5.3.0-03284f8f63-10c0.zip/node_modules/estraverse/",\
+        "packageDependencies": [\
+          ["estraverse", "npm:5.3.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["esutils", [\
+      ["npm:2.0.3", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/esutils-npm-2.0.3-f865beafd5-10c0.zip/node_modules/esutils/",\
+        "packageDependencies": [\
+          ["esutils", "npm:2.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["exponential-backoff", [\
       ["npm:3.1.3", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/exponential-backoff-npm-3.1.3-28be78d98e-10c0.zip/node_modules/exponential-backoff/",\
         "packageDependencies": [\
           ["exponential-backoff", "npm:3.1.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["fast-deep-equal", [\
+      ["npm:3.1.3", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/fast-deep-equal-npm-3.1.3-790edcfcf5-10c0.zip/node_modules/fast-deep-equal/",\
+        "packageDependencies": [\
+          ["fast-deep-equal", "npm:3.1.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["fast-json-stable-stringify", [\
+      ["npm:2.1.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/fast-json-stable-stringify-npm-2.1.0-02e8905fda-10c0.zip/node_modules/fast-json-stable-stringify/",\
+        "packageDependencies": [\
+          ["fast-json-stable-stringify", "npm:2.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["fast-levenshtein", [\
+      ["npm:2.0.6", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/fast-levenshtein-npm-2.0.6-fcd74b8df5-10c0.zip/node_modules/fast-levenshtein/",\
+        "packageDependencies": [\
+          ["fast-levenshtein", "npm:2.0.6"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1222,6 +1874,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["file-entry-cache", [\
+      ["npm:8.0.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/file-entry-cache-npm-8.0.0-5b09d19a83-10c0.zip/node_modules/file-entry-cache/",\
+        "packageDependencies": [\
+          ["file-entry-cache", "npm:8.0.0"],\
+          ["flat-cache", "npm:4.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["find-up", [\
       ["npm:5.0.0", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/find-up-npm-5.0.0-e03e9b796d-10c0.zip/node_modules/find-up/",\
@@ -1238,6 +1900,26 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/flat-npm-5.0.2-12748102a5-10c0.zip/node_modules/flat/",\
         "packageDependencies": [\
           ["flat", "npm:5.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["flat-cache", [\
+      ["npm:4.0.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/flat-cache-npm-4.0.1-12bf2455f7-10c0.zip/node_modules/flat-cache/",\
+        "packageDependencies": [\
+          ["flat-cache", "npm:4.0.1"],\
+          ["flatted", "npm:3.3.3"],\
+          ["keyv", "npm:4.5.4"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["flatted", [\
+      ["npm:3.3.3", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/flatted-npm-3.3.3-ca455563b2-10c0.zip/node_modules/flatted/",\
+        "packageDependencies": [\
+          ["flatted", "npm:3.3.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1313,6 +1995,25 @@ const RAW_RUNTIME_STATE =
           ["minimatch", "npm:10.1.1"],\
           ["minipass", "npm:7.1.2"],\
           ["path-scurry", "npm:2.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["glob-parent", [\
+      ["npm:6.0.2", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/glob-parent-npm-6.0.2-2cbef12738-10c0.zip/node_modules/glob-parent/",\
+        "packageDependencies": [\
+          ["glob-parent", "npm:6.0.2"],\
+          ["is-glob", "npm:4.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["globals", [\
+      ["npm:14.0.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/globals-npm-14.0.0-5fc3d8d5da-10c0.zip/node_modules/globals/",\
+        "packageDependencies": [\
+          ["globals", "npm:14.0.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1395,6 +2096,33 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["ignore", [\
+      ["npm:5.3.2", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/ignore-npm-5.3.2-346d3ba017-10c0.zip/node_modules/ignore/",\
+        "packageDependencies": [\
+          ["ignore", "npm:5.3.2"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:7.0.5", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/ignore-npm-7.0.5-dea34ee430-10c0.zip/node_modules/ignore/",\
+        "packageDependencies": [\
+          ["ignore", "npm:7.0.5"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["import-fresh", [\
+      ["npm:3.3.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/import-fresh-npm-3.3.1-1916794950-10c0.zip/node_modules/import-fresh/",\
+        "packageDependencies": [\
+          ["import-fresh", "npm:3.3.1"],\
+          ["parent-module", "npm:1.0.1"],\
+          ["resolve-from", "npm:4.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["imurmurhash", [\
       ["npm:0.1.4", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/imurmurhash-npm-0.1.4-610c5068a0-10c0.zip/node_modules/imurmurhash/",\
@@ -1413,11 +2141,30 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["is-extglob", [\
+      ["npm:2.1.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/is-extglob-npm-2.1.1-0870ea68b5-10c0.zip/node_modules/is-extglob/",\
+        "packageDependencies": [\
+          ["is-extglob", "npm:2.1.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["is-fullwidth-code-point", [\
       ["npm:3.0.0", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/is-fullwidth-code-point-npm-3.0.0-1ecf4ebee5-10c0.zip/node_modules/is-fullwidth-code-point/",\
         "packageDependencies": [\
           ["is-fullwidth-code-point", "npm:3.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["is-glob", [\
+      ["npm:4.0.3", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/is-glob-npm-4.0.3-cb87bf1bdb-10c0.zip/node_modules/is-glob/",\
+        "packageDependencies": [\
+          ["is-extglob", "npm:2.1.1"],\
+          ["is-glob", "npm:4.0.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1559,12 +2306,69 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["json-buffer", [\
+      ["npm:3.0.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/json-buffer-npm-3.0.1-f8f6d20603-10c0.zip/node_modules/json-buffer/",\
+        "packageDependencies": [\
+          ["json-buffer", "npm:3.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["json-schema-traverse", [\
+      ["npm:0.4.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/json-schema-traverse-npm-0.4.1-4759091693-10c0.zip/node_modules/json-schema-traverse/",\
+        "packageDependencies": [\
+          ["json-schema-traverse", "npm:0.4.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["json-stable-stringify-without-jsonify", [\
+      ["npm:1.0.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/json-stable-stringify-without-jsonify-npm-1.0.1-b65772b28b-10c0.zip/node_modules/json-stable-stringify-without-jsonify/",\
+        "packageDependencies": [\
+          ["json-stable-stringify-without-jsonify", "npm:1.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["keyv", [\
+      ["npm:4.5.4", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/keyv-npm-4.5.4-4c8e2cf7f7-10c0.zip/node_modules/keyv/",\
+        "packageDependencies": [\
+          ["json-buffer", "npm:3.0.1"],\
+          ["keyv", "npm:4.5.4"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["levn", [\
+      ["npm:0.4.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/levn-npm-0.4.1-d183b2d7bb-10c0.zip/node_modules/levn/",\
+        "packageDependencies": [\
+          ["levn", "npm:0.4.1"],\
+          ["prelude-ls", "npm:1.2.1"],\
+          ["type-check", "npm:0.4.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["locate-path", [\
       ["npm:6.0.0", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/locate-path-npm-6.0.0-06a1e4c528-10c0.zip/node_modules/locate-path/",\
         "packageDependencies": [\
           ["locate-path", "npm:6.0.0"],\
           ["p-locate", "npm:5.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["lodash.merge", [\
+      ["npm:4.6.2", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/lodash.merge-npm-4.6.2-77cb4416bf-10c0.zip/node_modules/lodash.merge/",\
+        "packageDependencies": [\
+          ["lodash.merge", "npm:4.6.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1631,6 +2435,14 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@isaacs/brace-expansion", "npm:5.0.0"],\
           ["minimatch", "npm:10.1.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:3.1.2", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/minimatch-npm-3.1.2-9405269906-10c0.zip/node_modules/minimatch/",\
+        "packageDependencies": [\
+          ["brace-expansion", "npm:1.1.12"],\
+          ["minimatch", "npm:3.1.2"]\
         ],\
         "linkType": "HARD"\
       }],\
@@ -1762,6 +2574,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["natural-compare", [\
+      ["npm:1.4.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/natural-compare-npm-1.4.0-97b75b362d-10c0.zip/node_modules/natural-compare/",\
+        "packageDependencies": [\
+          ["natural-compare", "npm:1.4.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["negotiator", [\
       ["npm:1.0.0", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/negotiator-npm-1.0.0-47d727e27e-10c0.zip/node_modules/negotiator/",\
@@ -1800,6 +2621,21 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["optionator", [\
+      ["npm:0.9.4", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/optionator-npm-0.9.4-1f114b00e8-10c0.zip/node_modules/optionator/",\
+        "packageDependencies": [\
+          ["deep-is", "npm:0.1.4"],\
+          ["fast-levenshtein", "npm:2.0.6"],\
+          ["levn", "npm:0.4.1"],\
+          ["optionator", "npm:0.9.4"],\
+          ["prelude-ls", "npm:1.2.1"],\
+          ["type-check", "npm:0.4.0"],\
+          ["word-wrap", "npm:1.2.5"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["p-limit", [\
       ["npm:3.1.0", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/p-limit-npm-3.1.0-05d2ede37f-10c0.zip/node_modules/p-limit/",\
@@ -1834,6 +2670,16 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/package-json-from-dist-npm-1.0.1-4631a88465-10c0.zip/node_modules/package-json-from-dist/",\
         "packageDependencies": [\
           ["package-json-from-dist", "npm:1.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["parent-module", [\
+      ["npm:1.0.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/parent-module-npm-1.0.1-1fae11b095-10c0.zip/node_modules/parent-module/",\
+        "packageDependencies": [\
+          ["callsites", "npm:3.1.0"],\
+          ["parent-module", "npm:1.0.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1912,6 +2758,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["prelude-ls", [\
+      ["npm:1.2.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/prelude-ls-npm-1.2.1-3e4d272a55-10c0.zip/node_modules/prelude-ls/",\
+        "packageDependencies": [\
+          ["prelude-ls", "npm:1.2.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["proc-log", [\
       ["npm:6.1.0", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/proc-log-npm-6.1.0-84e609b3f4-10c0.zip/node_modules/proc-log/",\
@@ -1974,6 +2829,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/require-from-string-npm-2.0.2-8557e0db12-10c0.zip/node_modules/require-from-string/",\
         "packageDependencies": [\
           ["require-from-string", "npm:2.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["resolve-from", [\
+      ["npm:4.0.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/resolve-from-npm-4.0.0-f758ec21bf-10c0.zip/node_modules/resolve-from/",\
+        "packageDependencies": [\
+          ["resolve-from", "npm:4.0.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -2302,6 +3166,28 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["ts-api-utils", [\
+      ["npm:2.4.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/ts-api-utils-npm-2.4.0-1179124e9a-10c0.zip/node_modules/ts-api-utils/",\
+        "packageDependencies": [\
+          ["ts-api-utils", "npm:2.4.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:1438846b5a0d4b35aa484a46317af4cd9642d5f0de19c07c972381ca8c845930b454831162aed8d9854e24ac1d1f5f30bd499fac83bd154b04a42df1d80d8b48#npm:2.4.0", {\
+        "packageLocation": "./.yarn/__virtual__/ts-api-utils-virtual-07d42e3b25/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/ts-api-utils-npm-2.4.0-1179124e9a-10c0.zip/node_modules/ts-api-utils/",\
+        "packageDependencies": [\
+          ["@types/typescript", null],\
+          ["ts-api-utils", "virtual:1438846b5a0d4b35aa484a46317af4cd9642d5f0de19c07c972381ca8c845930b454831162aed8d9854e24ac1d1f5f30bd499fac83bd154b04a42df1d80d8b48#npm:2.4.0"],\
+          ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"]\
+        ],\
+        "packagePeers": [\
+          "@types/typescript",\
+          "typescript"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["tsx", [\
       ["npm:4.21.0", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/tsx-npm-4.21.0-3bc9626d81-10c0.zip/node_modules/tsx/",\
@@ -2310,6 +3196,16 @@ const RAW_RUNTIME_STATE =
           ["fsevents", "patch:fsevents@npm%3A2.3.3#optional!builtin<compat/fsevents>::version=2.3.3&hash=df0bf1"],\
           ["get-tsconfig", "npm:4.13.0"],\
           ["tsx", "npm:4.21.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["type-check", [\
+      ["npm:0.4.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/type-check-npm-0.4.0-60565800ce-10c0.zip/node_modules/type-check/",\
+        "packageDependencies": [\
+          ["prelude-ls", "npm:1.2.1"],\
+          ["type-check", "npm:0.4.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -2339,6 +3235,36 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["typescript-eslint", [\
+      ["npm:8.52.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/typescript-eslint-npm-8.52.0-af8bf5f042-10c0.zip/node_modules/typescript-eslint/",\
+        "packageDependencies": [\
+          ["typescript-eslint", "npm:8.52.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:8.52.0", {\
+        "packageLocation": "./.yarn/__virtual__/typescript-eslint-virtual-7300d5f7fa/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/typescript-eslint-npm-8.52.0-af8bf5f042-10c0.zip/node_modules/typescript-eslint/",\
+        "packageDependencies": [\
+          ["@types/eslint", null],\
+          ["@types/typescript", null],\
+          ["@typescript-eslint/eslint-plugin", "virtual:7300d5f7fad5835ac0966c5f20deaed9c87ea63f0fc267521d664695fba9bc68ea8fcb9c807e5c8b3cd5b09e037821e59bb16b40be320fc3b1c284fe4448766c#npm:8.52.0"],\
+          ["@typescript-eslint/parser", "virtual:7300d5f7fad5835ac0966c5f20deaed9c87ea63f0fc267521d664695fba9bc68ea8fcb9c807e5c8b3cd5b09e037821e59bb16b40be320fc3b1c284fe4448766c#npm:8.52.0"],\
+          ["@typescript-eslint/typescript-estree", "virtual:7300d5f7fad5835ac0966c5f20deaed9c87ea63f0fc267521d664695fba9bc68ea8fcb9c807e5c8b3cd5b09e037821e59bb16b40be320fc3b1c284fe4448766c#npm:8.52.0"],\
+          ["@typescript-eslint/utils", "virtual:7300d5f7fad5835ac0966c5f20deaed9c87ea63f0fc267521d664695fba9bc68ea8fcb9c807e5c8b3cd5b09e037821e59bb16b40be320fc3b1c284fe4448766c#npm:8.52.0"],\
+          ["eslint", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:9.39.2"],\
+          ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"],\
+          ["typescript-eslint", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:8.52.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/eslint",\
+          "@types/typescript",\
+          "eslint",\
+          "typescript"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["undici-types", [\
       ["npm:7.16.0", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/undici-types-npm-7.16.0-0e23b08124-10c0.zip/node_modules/undici-types/",\
@@ -2364,6 +3290,16 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["imurmurhash", "npm:0.1.4"],\
           ["unique-slug", "npm:6.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["uri-js", [\
+      ["npm:4.4.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/uri-js-npm-4.4.1-66d11cbcaf-10c0.zip/node_modules/uri-js/",\
+        "packageDependencies": [\
+          ["punycode", "npm:2.3.1"],\
+          ["uri-js", "npm:4.4.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -2421,6 +3357,15 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["isexe", "npm:3.1.1"],\
           ["which", "npm:6.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["word-wrap", [\
+      ["npm:1.2.5", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/word-wrap-npm-1.2.5-42d00c4b09-10c0.zip/node_modules/word-wrap/",\
+        "packageDependencies": [\
+          ["word-wrap", "npm:1.2.5"]\
         ],\
         "linkType": "HARD"\
       }]\
