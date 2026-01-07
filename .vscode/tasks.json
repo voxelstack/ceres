@@ -6,7 +6,8 @@
         {
             "label": "watch",
             "dependsOn": [
-                "npm: compile:watch",
+                "npm: compile:ts:watch",
+                "npm: compile:web:watch",
                 "npm: test:watch",
 
                 "sphinx: build:watch"
@@ -21,11 +22,23 @@
         },
         {
             "type": "npm",
-            "script": "compile:watch",
+            "script": "compile:ts:watch",
             "group": "build",
             "isBackground": true,
-            "label": "npm: compile:watch",
+            "label": "npm: compile:ts:watch",
             "problemMatcher": "$tsc-watch",
+            "presentation": {
+                "group": "watch",
+                "reveal": "never"
+            }
+        },
+        {
+            "type": "npm",
+            "script": "compile:web:watch",
+            "group": "build",
+            "isBackground": true,
+            "label": "npm: compile:web:watch",
+            "problemMatcher": "$esbuild-watch",
             "presentation": {
                 "group": "watch",
                 "reveal": "never"
@@ -51,6 +64,8 @@
                 "sphinx-autobuild",
                 ".",
                 "_build",
+                "--watch",
+                "../dist/web",
                 "--ignore",
                 "_static/js/ceres.js"
             ],

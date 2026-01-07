@@ -40,7 +40,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 ceres_js = 'https://unpkg.com/@voxelstack/ceres@latest/dist/index.js'
 if not read_the_docs_build:
-    shutil.copyfile("../dist/index.js", "./_static/js/ceres.js")
+    shutil.copyfile("../dist/web/ceres.js", "./_static/js/ceres.js")
     ceres_js = '/_static/js/ceres.js'
 
 # -- Options for HTML output -------------------------------------------------

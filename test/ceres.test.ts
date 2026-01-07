@@ -1,10 +1,8 @@
-import "./setup";
-
+import { $element, $store } from "ceres";
 import { expect } from "chai";
 import { afterEach, describe } from "mocha";
 import Sinon, { spy } from "sinon";
-
-import { $element, $store } from "ceres";
+import "./setup.ts";
 
 afterEach(function () {
     Sinon.restore();

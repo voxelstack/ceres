@@ -1,5 +1,14 @@
 {
     "extends": "../tsconfig.json",
 
+    "compilerOptions": {
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+
+        "paths": {
+            "ceres": ["../src/index.ts"]
+        }
+    },
+
     "include": ["../src", "."]
 }

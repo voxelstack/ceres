@@ -3,18 +3,12 @@
         "strict": true,
 
         "target": "ESNext",
-        "module": "nodenext",
-        "moduleResolution": "nodenext",
+        "module": "esnext",
+        "moduleResolution": "bundler",
         "lib": ["DOM", "ESNext"],
+        "types": [],
 
-        "outDir": "./dist",
-
-        "paths": {
-            "ceres": ["./src"],
-
-            "@element": ["./src/lib/element"],
-            "@observable": ["./src/lib/observable"]
-        },
+        "outDir": "./dist/lib",
 
         "sourceMap": true,
         "declaration": true,

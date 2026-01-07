@@ -1,4 +1,4 @@
-import { Observable } from "../observable/observable";
+import { Observable } from "../observable";
 import type { CeresElement } from "./element";
 
 /**

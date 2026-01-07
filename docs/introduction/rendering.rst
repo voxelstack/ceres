@@ -12,7 +12,7 @@ The simplest renderable only takes the name of the tag that will be created:
 
     import { $element } from "{{ceres_js}}";
 
-    $element("div")
+    $element("hr")
     .mount(root);
 
 Props
