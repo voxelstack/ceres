@@ -1,6 +1,6 @@
 import { use } from "chai";
-import sinonChai from "sinon-chai";
 import chaiDom from "chai-dom";
+import sinonChai from "sinon-chai";
 
 use(sinonChai);
 use(chaiDom);

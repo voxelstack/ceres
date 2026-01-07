@@ -15,10 +15,10 @@ export type Tag =
 export type TagElement<T> = T extends keyof HTMLElementTagNameMap
     ? HTMLElementTagNameMap[T]
     : T extends keyof SVGElementTagNameMap
-    ? SVGElementTagNameMap[T]
-    : T extends keyof MathMLElementTagNameMap
-    ? MathMLElementTagNameMap[T]
-    : never;
+      ? SVGElementTagNameMap[T]
+      : T extends keyof MathMLElementTagNameMap
+        ? MathMLElementTagNameMap[T]
+        : never;
 
 /**
  * A value that can be represented as a string.

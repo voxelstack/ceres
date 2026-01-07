@@ -5,7 +5,7 @@ export { CeresElement } from "./element";
 export function $element<const ElementTag extends Tag>(
     tag: ElementTag,
     props: unknown,
-    children: Children
+    children: Children,
 ) {
     return new CeresElement(tag, props, children);
 }

@@ -3,8 +3,5 @@
 
     "extension": ["ts"],
     "spec": "./test/**/*.test.ts",
-    "require": [
-        "tsx",
-        "jsdom-global/register"
-    ]
+    "require": ["tsx", "jsdom-global/register"]
 }

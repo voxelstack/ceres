@@ -27,7 +27,7 @@ export class Store<T> extends Observable<ChangeEvent<T>> {
 
     override subscribe(
         observer: Observer<ChangeEvent<T>>,
-        immediate = false
+        immediate = false,
     ): () => boolean {
         const unsubscribe = super.subscribe(observer);
 
