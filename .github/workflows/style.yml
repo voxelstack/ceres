@@ -2,6 +2,7 @@ name: style
 on:
     pull_request:
     push:
+
 jobs:
     format:
         runs-on: ubuntu-latest
