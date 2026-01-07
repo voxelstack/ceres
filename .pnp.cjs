@@ -31,10 +31,14 @@ const RAW_RUNTIME_STATE =
           ["@types/chai", "npm:5.2.3"],\
           ["@types/mocha", "npm:10.0.10"],\
           ["@types/node", "npm:25.0.3"],\
+          ["@types/sinon", "npm:21.0.0"],\
+          ["@types/sinon-chai", "npm:4.0.0"],\
           ["@voxelstack/ceres", "workspace:."],\
           ["chai", "npm:6.2.2"],\
           ["cross-env", "npm:10.1.0"],\
           ["mocha", "npm:11.7.5"],\
+          ["sinon", "npm:21.0.1"],\
+          ["sinon-chai", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:4.0.1"],\
           ["tsx", "npm:4.21.0"],\
           ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"]\
         ],\
@@ -370,6 +374,37 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@sinonjs/commons", [\
+      ["npm:3.0.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@sinonjs-commons-npm-3.0.1-bffb9f5a53-10c0.zip/node_modules/@sinonjs/commons/",\
+        "packageDependencies": [\
+          ["@sinonjs/commons", "npm:3.0.1"],\
+          ["type-detect", "npm:4.0.8"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@sinonjs/fake-timers", [\
+      ["npm:15.1.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@sinonjs-fake-timers-npm-15.1.0-7ffd112c6c-10c0.zip/node_modules/@sinonjs/fake-timers/",\
+        "packageDependencies": [\
+          ["@sinonjs/commons", "npm:3.0.1"],\
+          ["@sinonjs/fake-timers", "npm:15.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@sinonjs/samsam", [\
+      ["npm:8.0.3", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@sinonjs-samsam-npm-8.0.3-01e544055f-10c0.zip/node_modules/@sinonjs/samsam/",\
+        "packageDependencies": [\
+          ["@sinonjs/commons", "npm:3.0.1"],\
+          ["@sinonjs/samsam", "npm:8.0.3"],\
+          ["type-detect", "npm:4.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/chai", [\
       ["npm:5.2.3", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@types-chai-npm-5.2.3-5f61dbddda-10c0.zip/node_modules/@types/chai/",\
@@ -409,6 +444,36 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/sinon", [\
+      ["npm:21.0.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@types-sinon-npm-21.0.0-b272ececd3-10c0.zip/node_modules/@types/sinon/",\
+        "packageDependencies": [\
+          ["@types/sinon", "npm:21.0.0"],\
+          ["@types/sinonjs__fake-timers", "npm:15.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/sinon-chai", [\
+      ["npm:4.0.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@types-sinon-chai-npm-4.0.0-2b21bf62d9-10c0.zip/node_modules/@types/sinon-chai/",\
+        "packageDependencies": [\
+          ["@types/chai", "npm:5.2.3"],\
+          ["@types/sinon", "npm:21.0.0"],\
+          ["@types/sinon-chai", "npm:4.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/sinonjs__fake-timers", [\
+      ["npm:15.0.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/@types-sinonjs__fake-timers-npm-15.0.1-ecffad48e8-10c0.zip/node_modules/@types/sinonjs__fake-timers/",\
+        "packageDependencies": [\
+          ["@types/sinonjs__fake-timers", "npm:15.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@voxelstack/ceres", [\
       ["workspace:.", {\
         "packageLocation": "./",\
@@ -416,10 +481,14 @@ const RAW_RUNTIME_STATE =
           ["@types/chai", "npm:5.2.3"],\
           ["@types/mocha", "npm:10.0.10"],\
           ["@types/node", "npm:25.0.3"],\
+          ["@types/sinon", "npm:21.0.0"],\
+          ["@types/sinon-chai", "npm:4.0.0"],\
           ["@voxelstack/ceres", "workspace:."],\
           ["chai", "npm:6.2.2"],\
           ["cross-env", "npm:10.1.0"],\
           ["mocha", "npm:11.7.5"],\
+          ["sinon", "npm:21.0.1"],\
+          ["sinon-chai", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:4.0.1"],\
           ["tsx", "npm:4.21.0"],\
           ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"]\
         ],\
@@ -696,6 +765,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/diff-npm-7.0.0-dcfd888f89-10c0.zip/node_modules/diff/",\
         "packageDependencies": [\
           ["diff", "npm:7.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:8.0.2", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/diff-npm-8.0.2-8e9bd0086d-10c0.zip/node_modules/diff/",\
+        "packageDependencies": [\
+          ["diff", "npm:8.0.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1548,6 +1624,46 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["sinon", [\
+      ["npm:21.0.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/sinon-npm-21.0.1-f3d8f4ef24-10c0.zip/node_modules/sinon/",\
+        "packageDependencies": [\
+          ["@sinonjs/commons", "npm:3.0.1"],\
+          ["@sinonjs/fake-timers", "npm:15.1.0"],\
+          ["@sinonjs/samsam", "npm:8.0.3"],\
+          ["diff", "npm:8.0.2"],\
+          ["sinon", "npm:21.0.1"],\
+          ["supports-color", "npm:7.2.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["sinon-chai", [\
+      ["npm:4.0.1", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/sinon-chai-npm-4.0.1-931bd14bd4-10c0.zip/node_modules/sinon-chai/",\
+        "packageDependencies": [\
+          ["sinon-chai", "npm:4.0.1"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:4.0.1", {\
+        "packageLocation": "./.yarn/__virtual__/sinon-chai-virtual-226ff68738/4/C:/Users/voxel/AppData/Local/Yarn/Berry/cache/sinon-chai-npm-4.0.1-931bd14bd4-10c0.zip/node_modules/sinon-chai/",\
+        "packageDependencies": [\
+          ["@types/chai", "npm:5.2.3"],\
+          ["@types/sinon", "npm:21.0.0"],\
+          ["chai", "npm:6.2.2"],\
+          ["sinon", "npm:21.0.1"],\
+          ["sinon-chai", "virtual:75fc6cea4342192b3b3aceb9dcb9beef15445cc1c1e27292712a7dd96d261cf3f68c857c4920348394eb4f14f725589ff18eb0419cac269904eacd37d240e050#npm:4.0.1"]\
+        ],\
+        "packagePeers": [\
+          "@types/chai",\
+          "@types/sinon",\
+          "chai",\
+          "sinon"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["smart-buffer", [\
       ["npm:4.2.0", {\
         "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/smart-buffer-npm-4.2.0-5ac3f668bb-10c0.zip/node_modules/smart-buffer/",\
@@ -1690,6 +1806,22 @@ const RAW_RUNTIME_STATE =
           ["fsevents", "patch:fsevents@npm%3A2.3.3#optional!builtin<compat/fsevents>::version=2.3.3&hash=df0bf1"],\
           ["get-tsconfig", "npm:4.13.0"],\
           ["tsx", "npm:4.21.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["type-detect", [\
+      ["npm:4.0.8", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/type-detect-npm-4.0.8-8d8127b901-10c0.zip/node_modules/type-detect/",\
+        "packageDependencies": [\
+          ["type-detect", "npm:4.0.8"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:4.1.0", {\
+        "packageLocation": "../../../C:/Users/voxel/AppData/Local/Yarn/Berry/cache/type-detect-npm-4.1.0-171d011a73-10c0.zip/node_modules/type-detect/",\
+        "packageDependencies": [\
+          ["type-detect", "npm:4.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
