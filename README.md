@@ -1,4 +1,4 @@
-[![npm](https://github.com/voxelstack/ceres/actions/workflows/npm.yml/badge.svg)](https://www.npmjs.com/package/@voxelstack/ceres)
+[![NPM Version](https://img.shields.io/npm/v/%40voxelstack%2Fceres)](https://www.npmjs.com/package/@voxelstack/ceres)
 [![Documentation Status](https://readthedocs.org/projects/voxelstackceres/badge/?version=latest)](https://voxelstackceres.readthedocs.io/en/latest/)
 [![Coverage Status](https://coveralls.io/repos/github/voxelstack/ceres/badge.svg?branch=rewrite)](https://coveralls.io/github/voxelstack/ceres?branch=rewrite)
 

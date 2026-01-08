@@ -45,6 +45,11 @@ It works by making small changes to the DOM whenever your data changes, and it f
    introduction/rendering
 
 .. toctree::
+   :caption: API
+   
+   TypeDoc <https://voxelstack.github.io/ceres/modules.html>
+
+.. toctree::
    :caption: Notes
    :maxdepth: 2
 

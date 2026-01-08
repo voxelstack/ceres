@@ -27,7 +27,7 @@ project = "ceres"
 copyright = "2025, voxelstack"
 author = "voxelstack"
 release = subprocess.run(
-    ["npm", "pkg", "get", "version"],
+    "npm pkg get version",
     capture_output=True,
     encoding="utf-8",
     check=True,

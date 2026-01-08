@@ -35,8 +35,6 @@ class CeresDirective(CodeBlock):
         [highlight] = super().run()
         highlight['classes'] += ['ceres-snippet']
 
-        print("why")
-        print('\n'.join(raw_content))
         source_ts = '\n'.join(raw_content).replace("{{ceres_js}}", ceres_js)
         source_id = uid(source_ts)
 
