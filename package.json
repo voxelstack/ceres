@@ -22,8 +22,8 @@
         "compile:web": "node ./esbuild.js",
         "compile:web:watch": "node ./esbuild.js --watch",
         "compile": "run-p compile:ts compile:web",
-        "test": "cross-env TSX_TSCONFIG_PATH=./test/tsconfig.json mocha",
-        "test:watch": "cross-env TSX_TSCONFIG_PATH=./test/tsconfig.json mocha --watch",
+        "test": "cross-env TSX_TSCONFIG_PATH=./test/tsconfig.json nyc mocha",
+        "test:watch": "cross-env TSX_TSCONFIG_PATH=./test/tsconfig.json nyc mocha --watch",
         "format": "prettier . --check",
         "lint": "eslint ./src ./test"
     },
@@ -39,6 +39,7 @@
         "@types/sinon-chai": "^4.0.0",
         "chai": "^6.2.2",
         "chai-dom": "^1.12.1",
+        "coveralls": "^3.1.1",
         "cross-env": "^10.1.0",
         "esbuild": "^0.27.2",
         "eslint": "^9.39.2",
