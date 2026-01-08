@@ -11,11 +11,11 @@ jobs:
             - uses: actions/checkout@v5
             - uses: actions/setup-node@v6
               with:
-                  cache: "yarn"
+                  cache: "pnpm"
             - name: Run prettier
               run: |
-                  yarn
-                  yarn run format
+                  pnpm install
+                  pnpm run format
     lint:
         runs-on: ubuntu-latest
         steps:
@@ -23,8 +23,8 @@ jobs:
             - uses: actions/checkout@v5
             - uses: actions/setup-node@v6
               with:
-                  cache: "yarn"
+                  cache: "pnpm"
             - name: Run eslint
               run: |
-                  yarn
-                  yarn run lint
+                  pnpm install
+                  pnpm run lint

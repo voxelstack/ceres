@@ -1,10 +1,7 @@
 {
-    "search.exclude": {
-        "**/.yarn": true,
-        "**/.pnp.*": true
-    },
-    "typescript.tsdk": ".yarn/sdks/typescript/lib",
-    "typescript.enablePromptUseWorkspaceTsdk": true,
-    "eslint.nodePath": ".yarn/sdks",
-    "prettier.prettierPath": ".yarn/sdks/prettier/index.cjs"
+    "mocha.files.glob": "test/**/*.test.ts",
+    "mocha.requires": ["tsx", "jsdom-global/register"],
+    "mocha.env": {
+        "TSX_TSCONFIG_PATH": "./test/tsconfig.json"
+    }
 }

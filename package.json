@@ -47,6 +47,7 @@
         "jsdom-global": "^3.0.2",
         "mocha": "^11.7.5",
         "npm-run-all": "^4.1.5",
+        "nyc": "^17.1.0",
         "prettier": "3.7.4",
         "prettier-plugin-organize-imports": "^4.3.0",
         "sinon": "^21.0.1",
@@ -55,5 +56,5 @@
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.52.0"
     },
-    "packageManager": "yarn@4.12.0+sha512.f45ab632439a67f8bc759bf32ead036a1f413287b9042726b7cc4818b7b49e14e9423ba49b18f9e06ea4941c1ad062385b1d8760a8d5091a1a31e5f6219afca8"
+    "packageManager": "pnpm@10.27.0+sha512.72d699da16b1179c14ba9e64dc71c9a40988cbdc65c264cb0e489db7de917f20dcf4d64d8723625f2969ba52d4b7e2a1170682d9ac2a5dcaeaab732b7e16f04a"
 }
